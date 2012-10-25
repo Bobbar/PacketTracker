@@ -1,0 +1,65 @@
+Private Sub PrintFlexGrid(ByVal ptr As Object, ByVal flx As _
+    MSFlexGrid, ByVal xmin As Single, ByVal ymin As Single)
+Const GAP = 60
+
+Dim xmax As Single
+Dim ymax As Single
+Dim X As Single
+Dim c As Integer
+Dim r As Integer
+
+    With ptr.Font
+        .Name = flxData.Font.Name
+        .Size = flxData.Font.Size
+    End With
+
+    With flxData
+        ' See how wide the whole thing is.
+        xmax = xmin + GAP
+        For c = 0 To .Cols - 1
+            xmax = xmax + .ColWidth(c) + 2 * GAP
+        Next c
+
+        ' Print each row.
+        ptr.CurrentY = ymin
+        For r = 0 To .Rows - 1
+            ' Draw a line above this row.
+            If r > 0 Then ptr.Line (xmin, _
+                ptr.CurrentY)-(xmax, ptr.CurrentY)
+            ptr.CurrentY = ptr.CurrentY + GAP
+
+            ' Print the entries on this row.
+            X = xmin + GAP
+            For c = 0 To .Cols - 1
+                ptr.CurrentX = X
+                ptr.Print BoundedText(ptr, .TextMatrix(r, _
+                    c), .ColWidth(c));
+                X = X + .ColWidth(c) + 2 * GAP
+            Next c
+            ptr.CurrentY = ptr.CurrentY + GAP
+
+            ' Move to the next line.
+            ptr.Print
+        Next r
+        ymax = ptr.CurrentY
+
+        ' Draw a box around everything.
+        ptr.Line (xmin, ymin)-(xmax, ymax), , B
+
+        ' Draw lines between the columns.
+        X = xmin
+        For c = 0 To .Cols - 2
+            X = X + .ColWidth(c) + 2 * GAP
+            ptr.Line (X, ymin)-(X, ymax)
+        Next c
+    End With
+End Sub
+
+' Truncate the string so it fits within the width.
+Private Function BoundedText(ByVal ptr As Object, ByVal txt _
+    As String, ByVal max_wid As Single) As String
+    Do While ptr.TextWidth(txt) > max_wid
+        txt = Left$(txt, Len(txt) - 1)
+    Loop
+    BoundedText = txt
+End Function

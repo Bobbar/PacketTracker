@@ -1,0 +1,12 @@
+SELECT Count(Distinct ticketdatabase_0.idTicketJobNum)
+FROM ticketdb.ticketdatabase ticketdatabase_0
+
+
+SHOW TABLE STATUS FROM ticketdb LIKE 'ticketdatabase'
+
+
+
+cmbUsers.ComboItems.Item(1).Selected = True
+
+= GetINISetting("I/O PATHS", "DESTINATION", App.Path & "\config.ini")
+

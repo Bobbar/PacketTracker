@@ -1,0 +1,4 @@
+- Fixed color coding and action text in custom reports. (Filed packets were not highlighted blue. Action text was missing.) 
+- Fixed typo in ticket action confirmation pop-up. ("Ticked" changed to "Packet")
+- Fixed 'filed' filtering in custom reports. (Filed packets were being filtered as closed packets, not open.)
+- Reformatted packet status filters in custom reports to reflect recent procedure changes. (Filed packets are now listed under Open status)
