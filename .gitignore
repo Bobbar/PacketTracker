@@ -62,6 +62,13 @@ local.properties
 *.vspscc
 .builds
 *.dotCover
+*.frx
+*.old
+*.PDM
+*.rpt
+*.cab
+*.exe
+*.tmp
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
 #packages/
