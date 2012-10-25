@@ -20,8 +20,7 @@ End Type
 
 Public dLine()      As tLine
 Public dGrid()      As tLine
-Public dDayLine() As tLine
-
+Public dDayLine()   As tLine
 
 Public strSQLDriver As String
 

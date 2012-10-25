@@ -26,7 +26,7 @@ Begin VB.Form frmTimeLine
       Caption         =   "Done"
       Height          =   240
       Left            =   5400
-      TabIndex        =   5
+      TabIndex        =   4
       Top             =   6450
       Width           =   2295
    End
@@ -34,7 +34,7 @@ Begin VB.Form frmTimeLine
       Align           =   2  'Align Bottom
       Height          =   360
       Left            =   0
-      TabIndex        =   4
+      TabIndex        =   3
       Top             =   8400
       Width           =   13395
       _ExtentX        =   23627
@@ -48,11 +48,20 @@ Begin VB.Form frmTimeLine
       Height          =   6975
       Left            =   0
       ScaleHeight     =   6975
-      ScaleWidth      =   11895
-      TabIndex        =   1
+      ScaleWidth      =   13395
+      TabIndex        =   0
       TabStop         =   0   'False
       Top             =   0
-      Width           =   11895
+      Width           =   13395
+      Begin VB.VScrollBar VScroll1 
+         Height          =   6400
+         Left            =   12000
+         Max             =   1000
+         SmallChange     =   2
+         TabIndex        =   14
+         Top             =   0
+         Width           =   255
+      End
       Begin VB.PictureBox pbDrawArea 
          Appearance      =   0  'Flat
          AutoRedraw      =   -1  'True
@@ -65,7 +74,7 @@ Begin VB.Form frmTimeLine
          Left            =   0
          ScaleHeight     =   9855
          ScaleWidth      =   11895
-         TabIndex        =   2
+         TabIndex        =   1
          TabStop         =   0   'False
          Top             =   0
          Width           =   11895
@@ -80,7 +89,7 @@ Begin VB.Form frmTimeLine
             ForeColor       =   &H80000008&
             Height          =   1095
             Left            =   120
-            TabIndex        =   8
+            TabIndex        =   7
             Top             =   5800
             Width           =   4215
             Begin VB.CheckBox chkDayLines 
@@ -88,8 +97,9 @@ Begin VB.Form frmTimeLine
                Caption         =   "Show Day Lines"
                Height          =   195
                Left            =   240
-               TabIndex        =   13
+               TabIndex        =   12
                Top             =   720
+               Value           =   1  'Checked
                Width           =   1575
             End
             Begin VB.CheckBox chkShowAll 
@@ -97,7 +107,7 @@ Begin VB.Form frmTimeLine
                Caption         =   "Show All Actions"
                Height          =   195
                Left            =   2040
-               TabIndex        =   12
+               TabIndex        =   11
                Top             =   720
                Width           =   1575
             End
@@ -109,7 +119,7 @@ Begin VB.Form frmTimeLine
                ForeColor       =   &H0000FFFF&
                Height          =   195
                Left            =   1680
-               TabIndex        =   11
+               TabIndex        =   10
                Top             =   480
                Width           =   2415
             End
@@ -120,7 +130,7 @@ Begin VB.Form frmTimeLine
                ForeColor       =   &H00404040&
                Height          =   195
                Left            =   1800
-               TabIndex        =   10
+               TabIndex        =   9
                Top             =   240
                Width           =   2280
             End
@@ -140,7 +150,7 @@ Begin VB.Form frmTimeLine
                EndProperty
                Height          =   195
                Left            =   75
-               TabIndex        =   9
+               TabIndex        =   8
                Top             =   255
                Width           =   1620
             End
@@ -172,7 +182,7 @@ Begin VB.Form frmTimeLine
             Height          =   210
             Index           =   0
             Left            =   1470
-            TabIndex        =   14
+            TabIndex        =   13
             Top             =   360
             Visible         =   0   'False
             Width           =   615
@@ -207,7 +217,7 @@ Begin VB.Form frmTimeLine
             ForeColor       =   &H00000000&
             Height          =   195
             Left            =   5640
-            TabIndex        =   6
+            TabIndex        =   5
             Top             =   5880
             Width           =   810
          End
@@ -239,26 +249,17 @@ Begin VB.Form frmTimeLine
             Height          =   210
             Index           =   0
             Left            =   1500
-            TabIndex        =   3
+            TabIndex        =   2
             Top             =   150
             Width           =   555
          End
       End
    End
-   Begin VB.VScrollBar VScroll1 
-      Height          =   6400
-      Left            =   12000
-      Max             =   1000
-      SmallChange     =   2
-      TabIndex        =   0
-      Top             =   0
-      Width           =   255
-   End
    Begin VB.CommandButton cmdCantSeeMe 
       Caption         =   "Command1"
       Height          =   195
       Left            =   11760
-      TabIndex        =   7
+      TabIndex        =   6
       Top             =   4800
       Width           =   135
    End
@@ -300,7 +301,6 @@ Public Sub ReDrawTimeLine()
     On Error Resume Next
    
     LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime + TicketHours(Entry - 1))
- 
     
     dGrid(0).Width = frmTimeLine.Width + 20
     
@@ -310,17 +310,14 @@ Public Sub ReDrawTimeLine()
     For i = 0 To Entry ' - 1
 
         With frmTimeLine
-           
             
             dGrid(i).Width = .Width
             If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
-                
            
                 dLine(i).Width = 38
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
                 
             Else
-                
                 
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
@@ -375,7 +372,6 @@ Public Sub ReDrawTimeLine()
         
         dDayLine(0).X1 = frmTimeLine.lnVisScale.X1
         dDayLine(0).X2 = frmTimeLine.lnVisScale.X1
-      
     
         For i = 1 To Days
         
@@ -401,7 +397,6 @@ Public Sub ReDrawTimeLine()
     
     DrawLines
 
-
 End Sub
 Public Sub DrawLines()
     Dim i As Integer
@@ -418,20 +413,18 @@ Public Sub DrawLines()
 
         Next
     
-    If chkDayLines.Value = 1 Then
-    .pbDrawArea.DrawMode = 3
+        If chkDayLines.Value = 1 Then
+            .pbDrawArea.DrawMode = 3
     
-        For i = 0 To UBound(dDayLine) 'draw day lines
+            For i = 0 To UBound(dDayLine) 'draw day lines
 
-            .pbDrawArea.DrawStyle = 2
+                .pbDrawArea.DrawStyle = 2
         
-            .pbDrawArea.Line (dDayLine(i).X1, dDayLine(i).Y1)-(dDayLine(i).X2, dDayLine(i).Y2), &H404040
+                .pbDrawArea.Line (dDayLine(i).X1, dDayLine(i).Y1)-(dDayLine(i).X2, dDayLine(i).Y2), &H404040
 
-        Next
- .pbDrawArea.DrawMode = 13
-    End If
-    
-    
+            Next
+            .pbDrawArea.DrawMode = 13
+        End If
 
         For i = 0 To UBound(dLine) 'draw bars
           
@@ -461,7 +454,7 @@ Private Sub chkDayLines_Click()
 
     If chkDayLines.Value = 1 Then
         DrawDayLines = True
-       ' DayLine(0).Visible = True
+        ' DayLine(0).Visible = True
 
         Form1.DrawTimeLine
         ReDrawTimeLine
@@ -506,7 +499,7 @@ Private Sub Form_Load()
     VScroll1.Max = pbDrawArea.Height - picWindow.Height
     VScroll1.SmallChange = 100
     VScroll1.LargeChange = picWindow.Height
-    VScroll1.Left = (frmTimeLine.Width - VScroll1.Width) - 225
+    VScroll1.Left = (frmTimeLine.Width - VScroll1.Width) ' - 225
     VScroll1.Top = 0
     
     pbDrawArea.Left = 0
@@ -542,24 +535,24 @@ Private Sub Form_Resize()
     'Me.Height = 7320
 
     picWindow.Left = 0
-    picWindow.Width = (frmTimeLine.Width - VScroll1.Width) - 100
-    picWindow.Height = frmTimeLine.Height
+    picWindow.Width = (frmTimeLine.Width) ' - VScroll1.Width)
+    picWindow.Height = frmTimeLine.Height - StatusBar1.Height
     'pbDrawArea.Height = picWindow.Height
     pbDrawArea.Left = 0
-    pbDrawArea.Width = picWindow.Width
+    pbDrawArea.Width = picWindow.Width - VScroll1.Width * 2
     
     VScroll1.Height = frmTimeLine.Height - StatusBar1.Height - 500
    
     VScroll1.SmallChange = 2
     VScroll1.LargeChange = picWindow.Height
-    VScroll1.Left = (frmTimeLine.Width - VScroll1.Width) - 100
+    VScroll1.Left = picWindow.Width - VScroll1.Width * 2 '(frmTimeLine.Width - VScroll1.Width * 2) '- 100
     VScroll1.Top = 0
 
     lnScale.X2 = pbDrawArea.Width - 500
 
     lblPacketAge.Left = (lnScale.X2 / 2) - (lblPacketAge.Width / 2)
 
-    cmdDone.Left = (Me.Width / 2) - 500
+    cmdDone.Left = (StatusBar1.Width / 2) - (cmdDone.Width / 2)
     cmdDone.Top = frmTimeLine.Height - cmdDone.Height - 550
 
     'Form1.DrawTimeLine
@@ -567,7 +560,7 @@ Private Sub Form_Resize()
 
     'Me.Refresh
     pbDrawArea.Refresh
-    cmdCantSeeMe.SetFocus
+    'cmdCantSeeMe.SetFocus
 
 End Sub
 

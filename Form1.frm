@@ -2827,7 +2827,6 @@ Public Sub DrawTimeLine()
     frmTimeLine.lblAction(0).Left = dLine(0).Left + dLine(0).Width + 200
 
     frmTimeLine.lblAction(0).Top = dLine(0).Top + 20
-    
 
     dGrid(0).Width = frmTimeLine.Width
  
@@ -2837,7 +2836,6 @@ Public Sub DrawTimeLine()
     For i = 0 To Entry - 1
 
         With frmTimeLine
-    
            
             If i Mod 2 <> 0 Then 'number is odd
                
@@ -2848,14 +2846,11 @@ Public Sub DrawTimeLine()
             End If
          
             dGrid(i).Width = .Width + 200
-          
               
             dGrid(i).Top = dGrid(i - 1).Top + dGrid(0).Height
-              
             
             dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             dLine(i).Top = dLine(i - 1).Top + dLine(0).Height
-            
 
             If TicketAction(i) = "CREATED" Then
                
@@ -2884,7 +2879,6 @@ Public Sub DrawTimeLine()
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
                 
             Else
-                
                 
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
@@ -2915,12 +2909,9 @@ Public Sub DrawTimeLine()
                 .lblAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
 
             End If
-
-            
             
             .lblAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - .lblAction(i).Height / 2
             .lblAction(i).BackColor = dLine(i).Color
-           
            
             If frmTimeLine.chkShowAll.Value = 1 Then
                 .lblAction(i).Visible = True
@@ -2947,16 +2938,17 @@ Public Sub DrawTimeLine()
 
     End If
     
-    If Days >= 70 And frmTimeLine.chkDayLines.Value = 0 Then
+    If Days >= 70 And frmTimeLine.chkDayLines.Value = 1 Then
         frmTimeLine.chkDayLines.Value = 0
         DrawDayLines = False
         
-      
-        
-    Else
+    ElseIf Days <= 70 And frmTimeLine.chkDayLines.Value = 0 Then
+        'frmTimeLine.chkDayLines.Value = 0
+        DrawDayLines = False
+    ElseIf Days <= 70 And frmTimeLine.chkDayLines.Value = 1 Then
+    
         frmTimeLine.chkDayLines.Value = 1
         DrawDayLines = True
-        
       
         ReDim dDayLine(Days)
         dDayLine(0).Y1 = frmTimeLine.lnVisScale.Y1
@@ -2965,16 +2957,12 @@ Public Sub DrawTimeLine()
         dDayLine(0).X1 = frmTimeLine.lnVisScale.X1
         dDayLine(0).X2 = frmTimeLine.lnVisScale.X1
         For i = 1 To Days
-         
-            
             
             dDayLine(i).Y1 = frmTimeLine.lnScale.Y1
             dDayLine(i).Y2 = dGrid(0).Top
             
-            
             dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
             dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
-
 
         Next i
     
@@ -2983,10 +2971,8 @@ Public Sub DrawTimeLine()
     'Zorders
 
     With frmTimeLine
-
        
         frmTimeLine.DrawLines
-    
         
         .lnPoint.ZOrder 0
 
@@ -3012,8 +2998,12 @@ Public Sub DrawTimeLine()
         frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
 
     End If
-
-    frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
+    
+    If frmTimeLine.Visible = True Then
+        frmTimeLine.VScroll1.Max = frmTimeLine.VScroll1.Max
+    Else
+        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
+    End If
 
     frmTimeLine.Frame1.Top = frmTimeLine.lnVisScale.Y1 + 200
 
@@ -4115,7 +4105,7 @@ Private Sub cmdTimeLine_Click()
     GetTimeLineData
 
     DrawDayLines = True
-    frmTimeLine.chkDayLines.Value = 0
+    frmTimeLine.chkDayLines.Value = 1
 
     DrawTimeLine
     frmTimeLine.tmrActionShow.Enabled = True
@@ -7773,6 +7763,7 @@ Private Sub SetupAdmin()
     'FlexGridHist.HighLight = flexHighlightWithFocus
 
 End Sub
+
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
 
     Call WheelUnHook

@@ -1,0 +1,6 @@
+[History]
+1=#P0#=mb	#P1#=DrawTimeLine	#P2#=TicketTracker/Form1/DrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121025163418	#P7#=0	#P8#=131	.
+2=#P0#=mb	#P1#=chkDayLines_Click	#P2#=TicketTracker/frmTimeLine/chkDayLines_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163349	#P7#=0	#P8#=8	.
+3=#P0#=mb	#P1#=cmdTimeLine_Click	#P2#=TicketTracker/Form1/cmdTimeLine_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163153	#P7#=0	#P8#=15	.
+4=#P0#=mb	#P1#=Form_Resize	#P2#=TicketTracker/frmTimeLine/Form_Resize	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025162217	#P7#=0	#P8#=7	.
+5=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163542	#P7#=0	#P8#=25	.
