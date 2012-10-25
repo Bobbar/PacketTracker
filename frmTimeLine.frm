@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTimeLine 
    BackColor       =   &H00808080&
    Caption         =   "History Timeline"
@@ -55,8 +55,10 @@ Begin VB.Form frmTimeLine
       Width           =   11895
       Begin VB.PictureBox pbDrawArea 
          Appearance      =   0  'Flat
+         AutoRedraw      =   -1  'True
          BackColor       =   &H00808080&
          BorderStyle     =   0  'None
+         FillStyle       =   0  'Solid
          FontTransparent =   0   'False
          ForeColor       =   &H80000008&
          Height          =   9855
@@ -190,15 +192,6 @@ Begin VB.Form frmTimeLine
             Y1              =   5760
             Y2              =   5760
          End
-         Begin VB.Line DayLine 
-            BorderColor     =   &H00404040&
-            BorderStyle     =   3  'Dot
-            Index           =   0
-            X1              =   470
-            X2              =   470
-            Y1              =   5640
-            Y2              =   120
-         End
          Begin VB.Image Image1 
             Height          =   300
             Left            =   0
@@ -206,16 +199,6 @@ Begin VB.Form frmTimeLine
             Stretch         =   -1  'True
             Top             =   120
             Width           =   445
-         End
-         Begin VB.Shape Lines 
-            BorderColor     =   &H00000000&
-            FillColor       =   &H00FFFFFF&
-            FillStyle       =   0  'Solid
-            Height          =   300
-            Index           =   0
-            Left            =   470
-            Top             =   120
-            Width           =   315
          End
          Begin VB.Label lblPacketAge 
             AutoSize        =   -1  'True
@@ -259,17 +242,6 @@ Begin VB.Form frmTimeLine
             TabIndex        =   3
             Top             =   150
             Width           =   555
-         End
-         Begin VB.Shape Grid 
-            BackColor       =   &H00E0E0E0&
-            BorderColor     =   &H00E0E0E0&
-            FillColor       =   &H00E0E0E0&
-            FillStyle       =   0  'Solid
-            Height          =   300
-            Index           =   0
-            Left            =   0
-            Top             =   120
-            Width           =   11895
          End
       End
    End
@@ -326,53 +298,54 @@ Public Sub ReDrawTimeLine()
     Dim DStep As Single
 
     On Error Resume Next
-    'pbDrawArea.AutoRedraw
+   
     LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime + TicketHours(Entry - 1))
-    'LStep = Round(LStep, 5)
+ 
     
-    frmTimeLine.Grid(0).Width = frmTimeLine.Width + 20
+    dGrid(0).Width = frmTimeLine.Width + 20
     
     Days = (TotalTime + TicketHours(Entry - 1)) / 1440
     Days = Round(Days, 1)
-
+    
     For i = 0 To Entry ' - 1
 
         With frmTimeLine
            
-            .Grid(i).Width = .Width
             
+            dGrid(i).Width = .Width
             If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
-                .Lines(i).Width = 38    'Make bar 3 pixels wide (to show backcolor)
-                ' .Lines(i).Width = TicketHours(i) * LStep
-                .Lines(i).Left = .Lines(i - 1).Left + .Lines(i - 1).Width - 38
-                ' .Lines(i).BorderColor = .Grid(i - 1).FillColor '.Lines(i).FillColor + 1
+                
+           
+                dLine(i).Width = 38
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
                 
             Else
-                .Lines(i).Width = TicketHours(i) * LStep
-                .Lines(i).Left = .Lines(i - 1).Left + .Lines(i - 1).Width ' - 38
-                ' .Lines(i).BorderColor = .Grid(i - 1).FillColor '.Lines(i).FillColor + 1 'vbBlack
+                
+                
+                dLine(i).Width = TicketHours(i) * LStep
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
                 
             End If
 
             If chkShowAll.Value = 1 Then
 
-                .lblAction(i).Top = Grid(i).Top + Grid(i).Height / 2 - .lblAction(i).Height / 2
+                .lblAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - .lblAction(i).Height / 2
                 
-                If .Lines(i).Left - .lblAction(i).Width - 240 < 0 And (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 < .Width Then
+                If dLine(i).Left - .lblAction(i).Width - 240 < 0 And (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 < .Width Then
 
-                    .lblAction(i).Left = (.Lines(i).Left + .Lines(i).Width) + 200
+                    .lblAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
 
-                ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 > .Width And .Lines(i).Left - .lblAction(i).Width - 240 > 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 > .Width And dLine(i).Left - .lblAction(i).Width - 240 > 0 Then
 
-                    .lblAction(i).Left = .Lines(i).Left - .lblAction(i).Width - 200
+                    .lblAction(i).Left = dLine(i).Left - .lblAction(i).Width - 200
 
-                ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 > .Width And .Lines(i).Left - .lblAction(i).Width - 240 < 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 > .Width And dLine(i).Left - .lblAction(i).Width - 240 < 0 Then
 
-                    .lblAction(i).Left = ((.Lines(i).Left + .Lines(i).Width) / 2) - (.lblAction(i).Width / 2)  '+  .Lines(i).X1
+                    .lblAction(i).Left = ((dLine(i).Left + dLine(i).Width) / 2) - (.lblAction(i).Width / 2)  '+  dLine(i).X1
 
-                ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 < .Width And .Lines(i).Left - .lblAction(i).Width - 240 > 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 < .Width And dLine(i).Left - .lblAction(i).Width - 240 > 0 Then
 
-                    .lblAction(i).Left = (.Lines(i).Left + .Lines(i).Width) + 200
+                    .lblAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
 
                 End If
 
@@ -389,28 +362,33 @@ Public Sub ReDrawTimeLine()
     If DrawDayLines = True Then
   
         If Days > 0 Then
-            DStep = ((frmTimeLine.Lines(frmTimeLine.Lines.UBound).Left + frmTimeLine.Lines(frmTimeLine.Lines.UBound).Width) - frmTimeLine.lnScale.X1) / Days
+            DStep = ((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width) - frmTimeLine.lnScale.X1) / Days
             DStep = Round(DStep, 0)
             
         Else
 
         End If
     
-        frmTimeLine.DayLine(0).Y1 = frmTimeLine.lnVisScale.Y1 - 55
-        'frmTimeLine.DayLine(0).Y2 = 0
-
+        dDayLine(0).Y1 = frmTimeLine.lnVisScale.Y1
+      
+        dDayLine(0).Y2 = dGrid(0).Top
+        
+        dDayLine(0).X1 = frmTimeLine.lnVisScale.X1
+        dDayLine(0).X2 = frmTimeLine.lnVisScale.X1
+      
+    
         For i = 1 To Days
         
-            frmTimeLine.DayLine(i).Y1 = frmTimeLine.lnVisScale.Y1 - 55
-     
-            frmTimeLine.DayLine(i).X1 = frmTimeLine.DayLine(i - 1).X1 + DStep
-            frmTimeLine.DayLine(i).X2 = frmTimeLine.DayLine(i - 1).X2 + DStep
+            dDayLine(i).Y1 = frmTimeLine.lnVisScale.Y1
+            dDayLine(i).Y2 = dGrid(0).Top
+            dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
+            dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
         
         Next i
   
     End If
-  
-    lnVisScale.X2 = (frmTimeLine.Lines(frmTimeLine.Lines.UBound).Left + frmTimeLine.Lines(frmTimeLine.Lines.UBound).Width)
+    
+    lnVisScale.X2 = (dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width)
 
     If frmTimeLine.lblPacketAge.Top + 1100 >= frmTimeLine.Height Then
         frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 2500
@@ -420,15 +398,59 @@ Public Sub ReDrawTimeLine()
     End If
 
     frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight
+    
+    DrawLines
+
 
 End Sub
+Public Sub DrawLines()
+    Dim i As Integer
+    With frmTimeLine
 
+        .pbDrawArea.Cls
+
+        For i = 0 To UBound(dGrid) 'draw grid
+
+            .pbDrawArea.DrawStyle = 0
+            .pbDrawArea.FillColor = dGrid(i).Color
+
+            .pbDrawArea.Line (dGrid(i).Left, dGrid(i).Top)-(dGrid(i).Left + dGrid(i).Width, dGrid(i).Top + dGrid(0).Height), dGrid(i).Color, B
+
+        Next
+    
+    If chkDayLines.Value = 1 Then
+    .pbDrawArea.DrawMode = 3
+    
+        For i = 0 To UBound(dDayLine) 'draw day lines
+
+            .pbDrawArea.DrawStyle = 2
+        
+            .pbDrawArea.Line (dDayLine(i).X1, dDayLine(i).Y1)-(dDayLine(i).X2, dDayLine(i).Y2), &H404040
+
+        Next
+ .pbDrawArea.DrawMode = 13
+    End If
+    
+    
+
+        For i = 0 To UBound(dLine) 'draw bars
+          
+            .pbDrawArea.DrawStyle = 0
+            .pbDrawArea.FillColor = dLine(i).Color
+
+            .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+
+        Next
+
+    End With
+
+End Sub
 Private Sub UnloadControls()
 
     Dim i As Integer
 
-    For i = 1 To Lines.UBound
-        Unload Lines(i)
+    For i = 1 To UBound(dLine)
+     
         Unload lblAction(i)
 
     Next
@@ -439,13 +461,13 @@ Private Sub chkDayLines_Click()
 
     If chkDayLines.Value = 1 Then
         DrawDayLines = True
-        DayLine(0).Visible = True
+       ' DayLine(0).Visible = True
 
         Form1.DrawTimeLine
         ReDrawTimeLine
     Else
         DrawDayLines = False
-        DayLine(0).Visible = False
+        'DayLine(0).Visible = False
 
         Form1.DrawTimeLine
         ReDrawTimeLine
@@ -573,9 +595,9 @@ Private Sub tmrActionShow_Timer()
             MouseXPrev = MouseX
             MouseYPrev = MouseY
         
-            For i = 0 To Grid.UBound
-
-                If MouseY > Lines(i).Top And MouseY < (Lines(i).Top + Lines(i).Height) And MouseX > Lines(i).Left - intOffset And MouseX < (Lines(i).Left + Lines(i).Width) + intOffset Then
+            For i = 0 To UBound(dGrid)
+                'If MouseY > Lines(i).Top And MouseY < (Lines(i).Top + Lines(i).Height) And MouseX > Lines(i).Left - intOffset And MouseX < (Lines(i).Left + Lines(i).Width) + intOffset Then
+                If MouseY > dLine(i).Top And MouseY < (dLine(i).Top + dLine(0).Height) And MouseX > dLine(i).Left - intOffset And MouseX < (dLine(i).Left + dLine(i).Width) + intOffset Then
                 
                     If MouseX + 20 + lblAction(i).Width >= frmTimeLine.pbDrawArea.Width Then
                         lblAction(i).Left = (MouseX - lblAction(i).Width) - 300
@@ -595,8 +617,8 @@ Private Sub tmrActionShow_Timer()
                     If lblNote(i).Caption <> "" Then lblNote(i).Visible = True
                 
                     'DoEvents
-                    lnPoint.X1 = Lines(i).Left + Lines(i).Width / 2
-                    lnPoint.Y1 = Lines(i).Top + Lines(i).Height / 2
+                    lnPoint.X1 = dLine(i).Left + dLine(i).Width / 2
+                    lnPoint.Y1 = dLine(i).Top + dLine(0).Height / 2
                     lnPoint.X2 = lblAction(i).Left + lblAction(i).Width / 2 'MouseX
                     lnPoint.Y2 = lblAction(i).Top + lblAction(i).Height / 2 'MouseY
                 
@@ -611,7 +633,7 @@ Private Sub tmrActionShow_Timer()
 
             Next i
      
-            If intNumofActions > Grid.UBound Then 'if no actions are visible, hide pointer line.
+            If intNumofActions > UBound(dGrid) Then 'if no actions are visible, hide pointer line.
         
                 lnPoint.Visible = False
             Else
@@ -622,7 +644,7 @@ Private Sub tmrActionShow_Timer()
         End If
     Else
 
-        For i = 0 To Grid.UBound
+        For i = 0 To UBound(dGrid)
 
             lblAction(i).Visible = True
 

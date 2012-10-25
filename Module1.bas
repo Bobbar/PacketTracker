@@ -1,5 +1,28 @@
 Attribute VB_Name = "MyMod"
 Option Explicit
+
+Public Type tLine
+
+    X1 As Integer
+    Y1 As Integer
+
+    X2 As Integer
+    Y2 As Integer
+
+    Left As Long
+    Top As Long
+    Width As Long
+
+    Height As Integer
+    Color As Long
+        
+End Type
+
+Public dLine()      As tLine
+Public dGrid()      As tLine
+Public dDayLine() As tLine
+
+
 Public strSQLDriver As String
 
 Public bolHook      As Boolean
@@ -95,7 +118,7 @@ Public Type Stats
         
 End Type
 
-Public Declare Function GetTickCount Lib "KERNEL32" () As Long
+Public Declare Function GetTickCount Lib "kernel32" () As Long
 
 Public StartTime As Long
 
@@ -177,7 +200,7 @@ Public sngShapeResize        As Single
 
 Public intShpTimerStartWidth As Integer
 
-Public Declare Sub Sleep Lib "KERNEL32" (ByVal dwMilliseconds As Long)
+Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
 
 Public EditMode              As Boolean
 
@@ -263,7 +286,7 @@ Private Declare Function RegEnumValue _
                                        lpData As Any, _
                                        lpcbData As Long) As Long
 Private Declare Sub CopyMemory _
-                Lib "KERNEL32" _
+                Lib "kernel32" _
                 Alias "RtlMoveMemory" (dest As Any, _
                                        Source As Any, _
                                        ByVal numBytes As Long)
@@ -281,6 +304,22 @@ Public Type UserInfo
     FullName As String
         
 End Type
+Declare Function QueryPerformanceCounter Lib "kernel32" (X As Currency) As Boolean
+Declare Function QueryPerformanceFrequency Lib "kernel32" (X As Currency) As Boolean
+Public total As Currency
+Public Ctr1  As Currency, Ctr2 As Currency, Freq As Currency
+Public Sub StartTimer()
+    total = 0
+    QueryPerformanceFrequency Freq
+    QueryPerformanceCounter Ctr1
+End Sub
+Public Function StopTimer() As Double
+    StopTimer = 0
+    QueryPerformanceCounter Ctr2
+    total = total + (Ctr2 - Ctr1)
+    StopTimer = Round(CDbl(total / Freq) * 1000, 3)
+End Function
+
 Public Function ReturnEmpInfo(strUserName As Variant) As UserInfo
     ReturnEmpInfo.UserName = vbNull
     ReturnEmpInfo.FullName = vbNull

@@ -36,13 +36,13 @@ Private m_lLastReturnCode As Long
 #If Win32 Then
     ' Profile String functions:
     Private Declare Function WritePrivateProfileString _
-                    Lib "KERNEL32" _
+                    Lib "kernel32" _
                     Alias "WritePrivateProfileStringA" (ByVal lpApplicationName As String, _
                                                         ByVal lpKeyName As Any, _
                                                         ByVal lpString As Any, _
                                                         ByVal lpFileName As String) As Long
     Private Declare Function GetPrivateProfileString _
-                    Lib "KERNEL32" _
+                    Lib "kernel32" _
                     Alias "GetPrivateProfileStringA" (ByVal lpApplicationName As Any, _
                                                       ByVal lpKeyName As Any, _
                                                       ByVal lpDefault As Any, _

@@ -1,0 +1,276 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|Dep File 1|Root]
+SubWizProgID=PDWizard.DepPkgSubWiz
+BuildFolder=C:\Users\lovellb\Desktop\Packet Tracker\Dep
+
+[Package|Dep File 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Dep File 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Dep File 1|Files Found]
+
+[Package|Dep File 1|Files Released]
+
+[Package|Dep File 1|Missing Dependency Information]
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=
+
+[Package|Dep File 1|Out-of-Date Dependency Information]
+
+[Package|Dep File 1|Files Added]
+
+[Package|Dep File 1|Files Removed]
+
+[Package|Dep File 1|Files In Project]
+C:\Users\lovellb\Desktop\Packet Tracker\PacketTracker Test.exe=Yes
+C:\Windows\System32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Windows\System32\MSRDO20.DLL=Yes
+C:\Windows\System32\RDOCURS.DLL=Yes
+C:\Windows\System32\odbc32.dll=Yes
+C:\Windows\System32\dao360.dll=Yes
+C:\Windows\System32\msjet40.dll=Yes
+C:\Windows\System32\msjter40.dll=Yes
+C:\Windows\System32\msjint40.dll=Yes
+C:\Windows\System32\vbajet32.dll=Yes
+C:\Windows\System32\expsrv.dll=Yes
+C:\Windows\System32\mswstr10.dll=Yes
+C:\Windows\System32\mswdat10.dll=Yes
+C:\Windows\System32\msrd2x40.dll=Yes
+C:\Windows\System32\msrd3x40.dll=Yes
+C:\Windows\System32\msrepl40.dll=Yes
+C:\Windows\System32\msjtes40.dll=Yes
+C:\Windows\System32\VB5DB.DLL=Yes
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=Yes
+C:\Windows\System32\MSSTDFMT.DLL=Yes
+C:\Program Files\Common Files\System\ado\msado15.dll=Yes
+C:\Windows\System32\MSHFLXGD.OCX=Yes
+C:\Windows\System32\MSCOMM32.OCX=Yes
+C:\Windows\System32\MSDATGRD.OCX=Yes
+C:\Windows\System32\COMDLG32.OCX=Yes
+C:\Windows\System32\COMCT232.OCX=Yes
+C:\Windows\System32\MSCOMCT2.OCX=Yes
+C:\Windows\System32\COMCT332.OCX=Yes
+C:\Windows\System32\comctl32.ocx=Yes
+C:\Windows\System32\MSCOMCTL.OCX=Yes
+C:\Windows\System32\TABCTL32.OCX=Yes
+C:\Windows\System32\RICHTX32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+
+[Package|Dep File 1|Configure Registry Files]
+Applicable=
+
+[Package|Dep File 1|Configure Remote Servers]
+Applicable=
+
+[Package|Dep File 1|Install Locations]
+C:\Users\lovellb\Desktop\Packet Tracker\PacketTracker Test.exe=$(AppPath)
+C:\Windows\System32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\MSRDO20.DLL=$(WinSysPath)
+C:\Windows\System32\RDOCURS.DLL=$(WinSysPath)
+C:\Windows\System32\odbc32.dll=$(WinSysPathSysFile)
+C:\Windows\System32\dao360.dll=$(MSDAOPath)
+C:\Windows\System32\msjet40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjter40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjint40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\vbajet32.dll=$(WinSysPathSysFile)
+C:\Windows\System32\expsrv.dll=$(WinSysPathSysFile)
+C:\Windows\System32\mswstr10.dll=$(WinSysPathSysFile)
+C:\Windows\System32\mswdat10.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrd2x40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrd3x40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrepl40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjtes40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\VB5DB.DLL=$(WinSysPath)
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=$(WinSysPath)
+C:\Windows\System32\MSSTDFMT.DLL=$(WinSysPath)
+C:\Program Files\Common Files\System\ado\msado15.dll=$(CommonFilesSys)\ADO
+C:\Windows\System32\MSHFLXGD.OCX=$(WinSysPath)
+C:\Windows\System32\MSCOMM32.OCX=$(WinSysPath)
+C:\Windows\System32\MSDATGRD.OCX=$(WinSysPath)
+C:\Windows\System32\COMDLG32.OCX=$(WinSysPath)
+C:\Windows\System32\COMCT232.OCX=$(WinSysPath)
+C:\Windows\System32\MSCOMCT2.OCX=$(WinSysPath)
+C:\Windows\System32\COMCT332.OCX=$(WinSysPath)
+C:\Windows\System32\comctl32.ocx=$(WinSysPath)
+C:\Windows\System32\MSCOMCTL.OCX=$(WinSysPath)
+C:\Windows\System32\TABCTL32.OCX=$(WinSysPath)
+C:\Windows\System32\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+
+[Package|Dep File 1|Configure Shared Files]
+Applicable=
+
+[Package|Dep File 1|DepFile]
+DepCabFile=PacketTracker Test.CAB
+DepCabRun=PacketTracker Test.INF
+
+[Package|Dep File 1|Package]
+PackageFolder=C:\Users\lovellb\Desktop\Packet Tracker\Dep
+ProjectFolder=C:\Users\lovellb\Desktop\Packet Tracker
+ServerSideCab=
+File1=C:\Users\lovellb\Desktop\Packet Tracker\Dep\PacketTracker Test.DEP
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\Users\lovellb\Desktop\Packet Tracker\Dep
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+
+[Package|Standard Setup Package 1|Files Added]
+
+[Package|Standard Setup Package 1|Files Removed]
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\Users\lovellb\Desktop\Packet Tracker\PacketTracker Test.exe=Yes
+C:\Windows\System32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Windows\System32\MSRDO20.DLL=Yes
+C:\Windows\System32\RDOCURS.DLL=Yes
+C:\Windows\System32\dao360.dll=Yes
+C:\Windows\System32\msjet40.dll=Yes
+C:\Windows\System32\msjter40.dll=Yes
+C:\Windows\System32\msjint40.dll=Yes
+C:\Windows\System32\vbajet32.dll=Yes
+C:\Windows\System32\expsrv.dll=Yes
+C:\Windows\System32\mswstr10.dll=Yes
+C:\Windows\System32\mswdat10.dll=Yes
+C:\Windows\System32\msrd2x40.dll=Yes
+C:\Windows\System32\msrd3x40.dll=Yes
+C:\Windows\System32\msrepl40.dll=Yes
+C:\Windows\System32\msjtes40.dll=Yes
+C:\Windows\System32\VB5DB.DLL=Yes
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=Yes
+C:\Windows\System32\MSSTDFMT.DLL=Yes
+C:\Windows\System32\MSHFLXGD.OCX=Yes
+C:\Windows\System32\MSCOMM32.OCX=Yes
+C:\Windows\System32\MSDATGRD.OCX=Yes
+C:\Windows\System32\COMDLG32.OCX=Yes
+C:\Windows\System32\COMCT232.OCX=Yes
+C:\Windows\System32\MSCOMCT2.OCX=Yes
+C:\Windows\System32\COMCT332.OCX=Yes
+C:\Windows\System32\comctl32.ocx=Yes
+C:\Windows\System32\MSCOMCTL.OCX=Yes
+C:\Windows\System32\TABCTL32.OCX=Yes
+C:\Windows\System32\RICHTX32.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\Windows\System32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+C:\Users\lovellb\Desktop\Packet Tracker\PacketTracker Test.exe=$(AppPath)
+C:\Windows\System32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\Windows\System32\MSRDO20.DLL=$(WinSysPath)
+C:\Windows\System32\RDOCURS.DLL=$(WinSysPath)
+C:\Windows\System32\odbc32.dll=$(WinSysPathSysFile)
+C:\Windows\System32\dao360.dll=$(MSDAOPath)
+C:\Windows\System32\msjet40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjter40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjint40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\vbajet32.dll=$(WinSysPathSysFile)
+C:\Windows\System32\expsrv.dll=$(WinSysPathSysFile)
+C:\Windows\System32\mswstr10.dll=$(WinSysPathSysFile)
+C:\Windows\System32\mswdat10.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrd2x40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrd3x40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msrepl40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\msjtes40.dll=$(WinSysPathSysFile)
+C:\Windows\System32\VB5DB.DLL=$(WinSysPath)
+C:\Program Files\Business Objects\Common\3.5\crystalreportviewers115\ActiveXControls\PrintControl.dll=$(WinSysPath)
+C:\Windows\System32\MSSTDFMT.DLL=$(WinSysPath)
+C:\Program Files\Common Files\System\ado\msado15.dll=$(CommonFilesSys)\ADO
+C:\Windows\System32\MSHFLXGD.OCX=$(WinSysPath)
+C:\Windows\System32\MSCOMM32.OCX=$(WinSysPath)
+C:\Windows\System32\MSDATGRD.OCX=$(WinSysPath)
+C:\Windows\System32\COMDLG32.OCX=$(WinSysPath)
+C:\Windows\System32\COMCT232.OCX=$(WinSysPath)
+C:\Windows\System32\MSCOMCT2.OCX=$(WinSysPath)
+C:\Windows\System32\COMCT332.OCX=$(WinSysPath)
+C:\Windows\System32\comctl32.ocx=$(WinSysPath)
+C:\Windows\System32\MSCOMCTL.OCX=$(WinSysPath)
+C:\Windows\System32\TABCTL32.OCX=$(WinSysPath)
+C:\Windows\System32\RICHTX32.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\RICHED32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\Windows\System32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+C:\Users\lovellb\Desktop\Packet Tracker\PacketTracker Test.exe=No
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\MDAC_TYP.EXE=No
+
+[Package|Standard Setup Package 1|DepFile]
+DepCabFile=PacketTracker Test.CAB
+DepCabRun=PacketTracker Test.INF
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=Job Packet Tracker
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=Job Packet Tracker
+PrivateGroup0=-1
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=C:\Users\lovellb\Desktop\Packet Tracker\Dep
+ProjectFolder=C:\Users\lovellb\Desktop\Packet Tracker
+ServerSideCab=
+File1=C:\Users\lovellb\Desktop\Packet Tracker\Dep\setup.exe
+File2=C:\Users\lovellb\Desktop\Packet Tracker\Dep\Setup.Lst
+File3=C:\Users\lovellb\Desktop\Packet Tracker\Dep\PacketTracker Test.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

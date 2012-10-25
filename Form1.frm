@@ -2105,8 +2105,8 @@ Private Declare Function ScreenToClientAny _
 
 Private Declare Function MoveWindow _
                 Lib "user32" (ByVal hwnd As Long, _
-                              ByVal x As Long, _
-                              ByVal y As Long, _
+                              ByVal X As Long, _
+                              ByVal Y As Long, _
                               ByVal nWidth As Long, _
                               ByVal nHeight As Long, _
                               ByVal bRepaint As Long) As Long
@@ -2119,7 +2119,6 @@ Private Declare Function TranslateColor _
 Private bolNoHits As Boolean
 
 Private intRowSel As Integer
-
     
 Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
     Dim R As Long
@@ -2803,16 +2802,34 @@ Public Sub DrawTimeLine()
 
     LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime + TicketHours(Entry - 1))
  
-    frmTimeLine.Lines(0).FillColor = &H80C0FF
+    frmTimeLine.pbDrawArea.FillColor = &H80C0FF
+
+    ReDim dLine(Entry - 1)
+
+    dLine(0).Color = &H80C0FF
+    dLine(0).Height = 300
+    dLine(0).Left = 470
+    dLine(0).Top = 120
+    dLine(0).Width = 315
+
+    ReDim dGrid(Entry - 1)
+
+    dGrid(0).Color = &HE0E0E0
+    dGrid(0).Height = 300
+    dGrid(0).Left = 0
+    dGrid(0).Top = 120
+    dGrid(0).Width = 11895
+
     frmTimeLine.lblNote(0).Caption = strTimelineComments(0)
-    
+
     frmTimeLine.lblAction(0).Caption = TicketActionText(0)
     frmTimeLine.lblAction(0).BackColor = &H80C0FF
-    frmTimeLine.lblAction(0).Left = frmTimeLine.Lines(0).Left + frmTimeLine.Lines(0).Width + 200
-    frmTimeLine.lblAction(0).Top = frmTimeLine.Lines(0).Top + 20
-    'frmTimeLine.lblAction(0).Visible = True
+    frmTimeLine.lblAction(0).Left = dLine(0).Left + dLine(0).Width + 200
 
-    frmTimeLine.Grid(0).Width = frmTimeLine.Width
+    frmTimeLine.lblAction(0).Top = dLine(0).Top + 20
+    
+
+    dGrid(0).Width = frmTimeLine.Width
  
     Days = (TotalTime + TicketHours(Entry - 1)) / 1440
     Days = Round(Days, 1)
@@ -2821,54 +2838,56 @@ Public Sub DrawTimeLine()
 
         With frmTimeLine
     
-            Load frmTimeLine.Grid(i)
-
+           
             If i Mod 2 <> 0 Then 'number is odd
-                .Grid(i).FillColor = &HC0C0C0
+               
+                dGrid(i).Color = &HC0C0C0
             Else
-                .Grid(i).FillColor = &HE0E0E0
-
+                
+                dGrid(i).Color = &HE0E0E0
             End If
+         
+            dGrid(i).Width = .Width + 200
+          
+              
+            dGrid(i).Top = dGrid(i - 1).Top + dGrid(0).Height
+              
             
-            .Grid(i).BorderColor = .Grid(i).FillColor
-            .Grid(i).Top = .Grid(i - 1).Top + .Grid(i - 1).Height
-            .Grid(i).Width = .Width + 200
-            .Grid(i).Visible = True
+            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
+            dLine(i).Top = dLine(i - 1).Top + dLine(0).Height
             
-            Load frmTimeLine.Lines(i)
-            .Lines(i).Left = .Lines(i - 1).Left + .Lines(i - 1).Width ' + 200
-            .Lines(i).Top = .Lines(i - 1).Top + .Lines(i - 1).Height
-
-            If i = Entry Then
-                .Lines(i).Visible = False
-            Else
-                .Lines(i).Visible = True
-
-            End If
 
             If TicketAction(i) = "CREATED" Then
-                .Lines(i).FillColor = &H80C0FF
+               
+                dLine(i).Color = &H80C0FF
             ElseIf TicketAction(i) = "INTRANSIT" Then
-                .Lines(i).FillColor = &H80FF80
+                
+                dLine(i).Color = &H80FF80
             ElseIf TicketAction(i) = "RECEIVED" Then
-                .Lines(i).FillColor = &H80FFFF
+               
+                dLine(i).Color = &H80FFFF
             ElseIf TicketAction(i) = "NULL" Then
-                .Lines(i).FillColor = &H8080FF
+                
+                dLine(i).Color = &H8080FF
             ElseIf TicketAction(i) = "FILED" Then
-                .Lines(i).FillColor = &HFF8080
+                
+                dLine(i).Color = &HFF8080
             ElseIf TicketAction(i) = "REOPENED" Then
-                .Lines(i).FillColor = &HFF80FF
+                
+                dLine(i).Color = &HFF80FF
 
             End If
         
             If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
-                .Lines(i).Width = 38    'Make bar 3 pixels wide (to show backcolor)
-               
-                .Lines(i).Left = .Lines(i - 1).Left + .Lines(i - 1).Width - 38
+              
+                dLine(i).Width = 38
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
                 
             Else
-                .Lines(i).Width = TicketHours(i) * LStep
-                .Lines(i).Left = .Lines(i - 1).Left + .Lines(i - 1).Width ' - 38
+                
+                
+                dLine(i).Width = TicketHours(i) * LStep
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
                 
             End If
             
@@ -2879,26 +2898,29 @@ Public Sub DrawTimeLine()
             
             .lblAction(i).Caption = TicketActionText(i)
            
-            If .Lines(i).Left - .lblAction(i).Width - 240 < 0 And (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 < .Width Then
+            If dLine(i).Left - .lblAction(i).Width - 240 < 0 And (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 < .Width Then
            
-                .lblAction(i).Left = (.Lines(i).Left + .Lines(i).Width) + 200
+                .lblAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
         
-            ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 > .Width And .Lines(i).Left - .lblAction(i).Width - 240 > 0 Then
+            ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 > .Width And dLine(i).Left - .lblAction(i).Width - 240 > 0 Then
              
-                .lblAction(i).Left = .Lines(i).Left - .lblAction(i).Width - 200
+                .lblAction(i).Left = dLine(i).Left - .lblAction(i).Width - 200
              
-            ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 > .Width And .Lines(i).Left - .lblAction(i).Width - 240 < 0 Then
+            ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 > .Width And dLine(i).Left - .lblAction(i).Width - 240 < 0 Then
            
-                .lblAction(i).Left = ((.Lines(i).Left + .Lines(i).Width) / 2) - (.lblAction(i).Width / 2)  '+  .Lines(i).X1
+                .lblAction(i).Left = ((dLine(i).Left + dLine(i).Width) / 2) - (.lblAction(i).Width / 2)  '+  dLine(i).X1
           
-            ElseIf (.Lines(i).Left + .Lines(i).Width) + .lblAction(i).Width + 400 < .Width And .Lines(i).Left - .lblAction(i).Width - 240 > 0 Then
+            ElseIf (dLine(i).Left + dLine(i).Width) + .lblAction(i).Width + 400 < .Width And dLine(i).Left - .lblAction(i).Width - 240 > 0 Then
          
-                .lblAction(i).Left = (.Lines(i).Left + .Lines(i).Width) + 200
+                .lblAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
 
             End If
 
-            .lblAction(i).Top = .Lines(i).Top + 20
-            .lblAction(i).BackColor = .Lines(i).FillColor
+            
+            
+            .lblAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - .lblAction(i).Height / 2
+            .lblAction(i).BackColor = dLine(i).Color
+           
            
             If frmTimeLine.chkShowAll.Value = 1 Then
                 .lblAction(i).Visible = True
@@ -2913,13 +2935,14 @@ Public Sub DrawTimeLine()
         
     Next i
 
-    frmTimeLine.lnVisScale.Y1 = frmTimeLine.Grid(frmTimeLine.Grid.UBound).Top + frmTimeLine.Grid(frmTimeLine.Grid.UBound).Height + 200
-    frmTimeLine.lnVisScale.Y2 = frmTimeLine.Grid(frmTimeLine.Grid.UBound).Top + frmTimeLine.Grid(frmTimeLine.Grid.UBound).Height + 200
+    frmTimeLine.lnVisScale.Y1 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200
+    frmTimeLine.lnVisScale.Y2 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200
 
     'Day lines
     
     If Days > 0 Then
-        DStep = (frmTimeLine.Lines(frmTimeLine.Lines.UBound).Left + frmTimeLine.Lines(frmTimeLine.Lines.UBound).Width) - frmTimeLine.lnScale.X1 / Days
+        
+        DStep = ((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width) - frmTimeLine.lnScale.X1) / Days
     Else
 
     End If
@@ -2927,32 +2950,31 @@ Public Sub DrawTimeLine()
     If Days >= 70 And frmTimeLine.chkDayLines.Value = 0 Then
         frmTimeLine.chkDayLines.Value = 0
         DrawDayLines = False
-        frmTimeLine.DayLine(0).Visible = False
-
-        For i = 0 To frmTimeLine.DayLine.UBound
-            Unload frmTimeLine.DayLine(i)
-        Next i
+        
+      
         
     Else
         frmTimeLine.chkDayLines.Value = 1
         DrawDayLines = True
-        frmTimeLine.DayLine(0).Visible = True
+        
       
-        frmTimeLine.DayLine(0).Y1 = frmTimeLine.lnVisScale.Y1 - 55
-   
+        ReDim dDayLine(Days)
+        dDayLine(0).Y1 = frmTimeLine.lnVisScale.Y1
+        dDayLine(0).Y2 = dGrid(0).Top
+        
+        dDayLine(0).X1 = frmTimeLine.lnVisScale.X1
+        dDayLine(0).X2 = frmTimeLine.lnVisScale.X1
         For i = 1 To Days
-            Load frmTimeLine.DayLine(i)
-            frmTimeLine.DayLine(i).Y1 = frmTimeLine.lnScale.Y1 - 55
-       
-            frmTimeLine.DayLine(i).X1 = frmTimeLine.DayLine(i - 1).X1 + DStep
-            frmTimeLine.DayLine(i).X2 = frmTimeLine.DayLine(i - 1).X2 + DStep
+         
+            
+            
+            dDayLine(i).Y1 = frmTimeLine.lnScale.Y1
+            dDayLine(i).Y2 = dGrid(0).Top
+            
+            
+            dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
+            dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
 
-            If DrawDayLines = True Then
-                frmTimeLine.DayLine(i).Visible = True
-            Else
-                frmTimeLine.DayLine(i).Visible = False
-
-            End If
 
         Next i
     
@@ -2962,17 +2984,10 @@ Public Sub DrawTimeLine()
 
     With frmTimeLine
 
-        For i = 0 To .Grid.UBound
-            .Grid(i).ZOrder 1
-        Next
-
-        For i = 0 To .DayLine.UBound
-            .DayLine(i).ZOrder 0
-        Next
+       
+        frmTimeLine.DrawLines
     
-        For i = 0 To .Lines.UBound
-            .Lines(i).ZOrder 0
-        Next
+        
         .lnPoint.ZOrder 0
 
         For i = 0 To .lblAction.UBound
@@ -4101,8 +4116,7 @@ Private Sub cmdTimeLine_Click()
 
     DrawDayLines = True
     frmTimeLine.chkDayLines.Value = 0
-    frmTimeLine.DayLine(0).Visible = True
-    
+
     DrawTimeLine
     frmTimeLine.tmrActionShow.Enabled = True
 
@@ -4365,7 +4379,7 @@ Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
     ymin = 2000
     ymax = 11000
 
-    Dim x As Single
+    Dim X As Single
 
     Dim c As Integer
 
@@ -4395,12 +4409,12 @@ Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
             Printer.CurrentY = Printer.CurrentY + GAP
 
             ' Print the entries on this row.
-            x = xmin + GAP
+            X = xmin + GAP
 
             For c = 0 To .Cols - 1
-                Printer.CurrentX = x
+                Printer.CurrentX = X
                 Printer.Print BoundedText(Printer, .TextMatrix(R, c), .ColWidth(c));
-                x = x + .ColWidth(c) + 2 * GAP
+                X = X + .ColWidth(c) + 2 * GAP
             Next c
 
             Printer.CurrentY = Printer.CurrentY + GAP
@@ -4424,11 +4438,11 @@ Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
             
                 Printer.Line (xmin, ymin)-(xmax, Printer.CurrentY), , B
             
-                x = xmin
+                X = xmin
 
                 For c = 0 To .Cols - 2
-                    x = x + .ColWidth(c) + 2 * GAP
-                    Printer.Line (x, ymin)-(x, Printer.CurrentY)
+                    X = X + .ColWidth(c) + 2 * GAP
+                    Printer.Line (X, ymin)-(X, Printer.CurrentY)
                 Next c
             
                 Printer.NewPage
@@ -4451,11 +4465,11 @@ Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
         Printer.Line (xmin, ymin)-(xmax, ymax), , B
 
         ' Draw lines between the columns.
-        x = xmin
+        X = xmin
 
         For c = 0 To .Cols - 2
-            x = x + .ColWidth(c) + 2 * GAP
-            Printer.Line (x, ymin)-(x, Printer.CurrentY)
+            X = X + .ColWidth(c) + 2 * GAP
+            Printer.Line (X, ymin)-(X, Printer.CurrentY)
         Next c
         
     End With
@@ -4537,7 +4551,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
     '    Printer.Print ""
     Printer.Font.Size = 9
     Printer.DrawStyle = vbSolid
-    Dim x As Single, XFirstColumn As Single
+    Dim X As Single, XFirstColumn As Single
     Dim c As Integer, cc As Integer
     Dim R As Integer
     intMidStart = 1
@@ -4559,10 +4573,10 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
         Printer.CurrentY = Printer.CurrentY + GAP
         
         'If FlexGrid.Header = True Then
-        x = xmin + GAP
+        X = xmin + GAP
             
         For c = 1 To .Cols
-            Printer.CurrentX = x
+            Printer.CurrentX = X
             TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
             PrevY = Printer.CurrentY
             If c = .Cols Then
@@ -4584,7 +4598,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                 
             Printer.Print BoundedText(Printer, .ColHeader(c), TwipPix);
             TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-            x = x + TwipPix + 2 * GAP
+            X = X + TwipPix + 2 * GAP
         Next c
         Printer.CurrentY = Printer.CurrentY + GAP
         Printer.Print
@@ -4602,7 +4616,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
             End If
             Printer.CurrentY = Printer.CurrentY + GAP
             ' Print the entries on this row.
-            x = xmin + GAP
+            X = xmin + GAP
             For c = 1 To .Cols ' - 1
                 If frmPrinters.optCenterJust And c < .Cols Then
                 
@@ -4610,7 +4624,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                 Else
                     intCenterOffset = 0
                 End If
-                Printer.CurrentX = x
+                Printer.CurrentX = X
                 
                 If .TextMatrix(R, c) <> "" And Printer.TextWidth(.TextMatrix(R, c)) + intPadding >= xmax - Printer.CurrentX Then           '.ColWidth(c)
                     lngStartY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c))
@@ -4639,11 +4653,11 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                         Printer.CurrentY = PrevY + 5
                         If Printer.CurrentY >= ymax Then ' new page
                             Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY + GAP), vbBlack, B
-                            x = xmin
+                            X = xmin
                             For cc = 1 To .Cols - 1
                                 TwipPix = .ColWidth(cc) * Screen.TwipsPerPixelX
-                                x = x + TwipPix + 2 * GAP
-                                Printer.Line (x, lngYTopOfGrid)-(x, Printer.CurrentY), vbBlack
+                                X = X + TwipPix + 2 * GAP
+                                Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack
                             Next cc
                             Printer.NewPage
                             Printer.CurrentX = xmax - 600
@@ -4657,7 +4671,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                             Printer.CurrentY = ymin
                             lngStartY = Printer.CurrentY '+ Printer.TextHeight(.CellText(R, c))
                         End If
-                        Printer.CurrentX = x + GAP
+                        Printer.CurrentX = X + GAP
                         strSizedTxt = ""
                     
                     Loop
@@ -4678,7 +4692,7 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                     '                        .ColSel = .Cols - 1
                     '                        Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
                     '                    End If
-                    Printer.CurrentX = x + intCenterOffset
+                    Printer.CurrentX = X + intCenterOffset
                     TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
                     '                    Printer.Font.Underline = .CellFontUnderline(R, c)
                     '                    If .CellFontUnderline(R, c) = True Then
@@ -4686,12 +4700,12 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                     '                    Else
                     '                        Printer.ForeColor = &H404040   '&H808080
                     '                    End If
-                    Printer.CurrentX = x + intCenterOffset
+                    Printer.CurrentX = X + intCenterOffset
                     Printer.CurrentY = PrevY + GAP
                     Printer.Print BoundedText(Printer, .TextMatrix(R, c), TwipPix);
                 End If
                 TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-                x = x + TwipPix + 2 * GAP
+                X = X + TwipPix + 2 * GAP
             Next c
             Printer.CurrentY = Printer.CurrentY + GAP
             ' Move to the next line.
@@ -4704,11 +4718,11 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
             ' if near end of page, start a new one
             If Printer.CurrentY >= ymax And R < .Rows Then
                 Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY), vbBlack, B
-                x = xmin
+                X = xmin
                 For c = 1 To .Cols - 1 '3
                     TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX '+ GAP
-                    x = x + TwipPix + 2 * GAP
-                    Printer.Line (x, lngYTopOfGrid)-(x, Printer.CurrentY), vbBlack 'ymax
+                    X = X + TwipPix + 2 * GAP
+                    Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'ymax
                 Next c
                 Printer.NewPage
                 Printer.CurrentX = xmax - 600
@@ -4726,13 +4740,13 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
         ymax = Printer.CurrentY
         'Draw a box around everything.
         Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, ymax), vbBlack, B
-        x = xmin
+        X = xmin
         ' Draw lines between the columns.
         For c = 1 To .Cols - 1 '3
             TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-            x = x + TwipPix + 2 * GAP
+            X = X + TwipPix + 2 * GAP
             'vbBlack
-            Printer.Line (x, lngYTopOfGrid)-(x, Printer.CurrentY), vbBlack 'Printer.CurrentY
+            Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'Printer.CurrentY
         Next c
     End With
 
@@ -4753,10 +4767,10 @@ Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
 
     On Error Resume Next
 
-    Dim z, y As Integer
+    Dim z, Y As Integer
    
     z = 1
-    y = 600
+    Y = 600
     
     TargetGrid.ScrollBars = flexScrollBarNone
 
@@ -4776,10 +4790,10 @@ Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
     For b = 0 To TargetGrid.Cols - 1
         
         If b = 4 Then
-            TargetGrid.ColWidth(b) = (col(b) * z) + y
+            TargetGrid.ColWidth(b) = (col(b) * z) + Y
         Else
         
-            TargetGrid.ColWidth(b) = (col(b) * z) + y
+            TargetGrid.ColWidth(b) = (col(b) * z) + Y
 
         End If
         
@@ -7351,46 +7365,39 @@ End Sub
 
 Private Sub FlexGridHist_MouseDown(Button As Integer, _
                                    Shift As Integer, _
-                                   x As Single, _
-                                   y As Single)
-
-   
+                                   X As Single, _
+                                   Y As Single)
     
     If Button = 1 Then
-    intRowSel = FlexGridHist.RowSel
+        intRowSel = FlexGridHist.RowSel
     
-    
-    
-     If FlexGridHist.TextMatrix(FlexGridHist.RowSel, 4) = "com" Then
+        If FlexGridHist.TextMatrix(FlexGridHist.RowSel, 4) = "com" Then
      
-     FlexGridHist.col = 0
+            FlexGridHist.col = 0
 
-    FlexGridHist.Row = intRowSel - 1
-    FlexGridHist.ColSel = FlexGridHist.Cols - 1
-    FlexGridHist.RowSel = intRowSel
-    ElseIf (FlexGridHist.RowSel + 1) < FlexGridHist.Rows And FlexGridHist.TextMatrix((FlexGridHist.RowSel + 1), 4) = "com" Then
-    intRowSel = FlexGridHist.RowSel
+            FlexGridHist.Row = intRowSel - 1
+            FlexGridHist.ColSel = FlexGridHist.Cols - 1
+            FlexGridHist.RowSel = intRowSel
+        ElseIf (FlexGridHist.RowSel + 1) < FlexGridHist.Rows And FlexGridHist.TextMatrix((FlexGridHist.RowSel + 1), 4) = "com" Then
+            intRowSel = FlexGridHist.RowSel
     
-    FlexGridHist.Row = 0
-    FlexGridHist.col = 0
+            FlexGridHist.Row = 0
+            FlexGridHist.col = 0
     
-    FlexGridHist.ColSel = 0
-    FlexGridHist.RowSel = 0
+            FlexGridHist.ColSel = 0
+            FlexGridHist.RowSel = 0
     
+            FlexGridHist.col = 0
+            FlexGridHist.Row = intRowSel
+            FlexGridHist.ColSel = FlexGridHist.Cols - 1
+            FlexGridHist.RowSel = intRowSel + 1
     
-    FlexGridHist.col = 0
-    FlexGridHist.Row = intRowSel
-    FlexGridHist.ColSel = FlexGridHist.Cols - 1
-    FlexGridHist.RowSel = intRowSel + 1
+            Debug.Print intRowSel
+            Debug.Print FlexGridHist.RowSel & vbCrLf
     
-    Debug.Print intRowSel
-    Debug.Print FlexGridHist.RowSel & vbCrLf
-    
-    
-     End If
+        End If
 
     End If
-    
     
     If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
 
@@ -7560,7 +7567,7 @@ Private Sub Form_Load()
     
     picOlder.Top = FlexGridHist.Top + FlexGridHist.Height - picOlder.Height
     
-    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     
     intQryIndex = 0
     
@@ -7782,8 +7789,8 @@ End Sub
 
 Private Sub Frame1_MouseMove(Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
     Dim i As Integer
 
     For i = 0 To frmKey.UBound
@@ -7801,8 +7808,8 @@ End Sub
 
 Private Sub Frame4_MouseMove(Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
     Dim i As Integer
 
     For i = 0 To frmKey.UBound
@@ -7814,8 +7821,8 @@ End Sub
 
 Private Sub Frame5_MouseMove(Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
     Dim i As Integer
 
     For i = 0 To frmKey.UBound
@@ -7827,8 +7834,8 @@ End Sub
 
 Private Sub Frame6_MouseMove(Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
     Dim i As Integer
 
     For i = 0 To frmKey.UBound
@@ -7846,8 +7853,8 @@ End Sub
 Private Sub frmKey_MouseMove(index As Integer, _
                              Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
     Dim i As Integer
 
     For i = 0 To frmKey.UBound
@@ -7955,8 +7962,8 @@ End Sub
 Private Sub lblColorKey_MouseMove(index As Integer, _
                                   Button As Integer, _
                                   Shift As Integer, _
-                                  x As Single, _
-                                  y As Single)
+                                  X As Single, _
+                                  Y As Single)
     frmKey(index).Top = lblColorKey(index).Top - frmKey(index).Height
     frmKey(index).Left = lblColorKey(index).Left + (lblColorKey(index).Width / 2) - (frmKey(index).Width / 2)
 
@@ -7987,7 +7994,7 @@ Private Sub List1_KeyDown(KeyCode As Integer, Shift As Integer)
 
 End Sub
 
-Private Sub List1_MouseDown(Button As Integer, Shift As Integer, x As Single, y As Single)
+Private Sub List1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y As Single)
     txtJobNo.Text = List1.Text
     Call cmdSearch_Click
     List1.Visible = False
@@ -8251,8 +8258,8 @@ End Sub
 
 Private Sub SSTab1_MouseDown(Button As Integer, _
                              Shift As Integer, _
-                             x As Single, _
-                             y As Single)
+                             X As Single, _
+                             Y As Single)
 
     If bolOpenForm = True Then
     
