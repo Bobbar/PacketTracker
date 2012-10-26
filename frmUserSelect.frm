@@ -47,27 +47,17 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub cmbUsers_Click()
-
     If strUserIndex(0, cmbUsers.ListIndex) <> "" Then
-
         strLocalUser = UCase$(strUserIndex(0, cmbUsers.ListIndex))
         Form1.txtLocalUser.Enabled = True
         Form1.txtLocalUser.Locked = True
-
         Form1.txtLocalUser.BackColor = &HFF&
         Form1.txtLocalUser.Text = strLocalUser
         'Form1.lblFauxUser.Visible = True
-
         Form1.GetMyPackets
         Form1.SetControls
-
         frmUserSelect.Hide
-
         Form1.mnuFauxUser.Checked = True
-
         ShowBanner colClosed, "Faux user set to " & strLocalUser
-
     End If
-
 End Sub
-

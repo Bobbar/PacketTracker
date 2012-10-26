@@ -75,38 +75,23 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
 Private Sub cmdClear_Click()
     txtComment.Text = ""
-
 End Sub
-
 Private Sub cmdOK_Click()
     frmComments.Hide
-
 End Sub
-
 Private Sub Form_Activate()
     frmComments.txtComment.SetFocus
-
 End Sub
-
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Cancel = True
-
     Me.Hide
-
 End Sub
-
 Private Sub txtComment_Change()
     strTicketComment = Replace(txtComment.Text, vbCrLf, " ")
-
     lblChars.Caption = Len(txtComment.Text) & " / 200"
-
 End Sub
-
 Private Sub txtComment_KeyPress(KeyAscii As Integer)
-
     If KeyAscii = 13 Then frmComments.Hide
-
 End Sub

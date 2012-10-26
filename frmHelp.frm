@@ -59,65 +59,40 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
 ' Index in collection of tip currently being displayed.
 Dim CurrentTip As Long
-
 Private Sub DoNextTip()
     CurrentTip = CurrentTip + 1
-
     If CurrentTip > UBound(HelpPics) Then
         HelpClosed = True
-
         Unload Me
     Else
-
         Picture1.Picture = HelpPics(CurrentTip)
-
     End If
-    
 End Sub
-
 Private Sub chkLoadTipsAtStartup_Click()
     ' save whether or not this form should be displayed at startup
     SaveSetting App.EXEName, "Options", "Show Tips at Startup", chkLoadTipsAtStartup.Value
-
 End Sub
-
 Private Sub cmdNextTip_Click()
     DoNextTip
-    
 End Sub
-
 Private Sub cmdOK_Click()
     HelpClosed = True
-
     Unload Me
-
 End Sub
-
 Private Sub Form_Load()
-
     Dim ShowAtStartup As Long
-
     HelpClosed = False
-    
     ' See if we should be shown at startup
     ShowAtStartup = GetSetting(App.EXEName, "Options", "Show Tips at Startup", 1)
-
     If ShowAtStartup = 0 Then
         HelpClosed = True
         Unload Me
-        
         Exit Sub
-
     End If
-        
     ' Set the checkbox, this will force the value to be written back out to the registry
     Me.chkLoadTipsAtStartup.Value = vbChecked
-    
     Picture1.Picture = HelpPics(1)
     CurrentTip = 1
-    
 End Sub
-

@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   221642755
+            Format          =   208601091
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   221642755
+            Format          =   208601091
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -572,18 +572,13 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
-
 Private Sub ClearFields()
-
     On Error Resume Next
-
     chkAllTickets.Value = 0
     MonthStart.Enabled = True
     MonthEnd.Enabled = True
-
     MonthStart.Value = Date
     MonthEnd.Value = Date
-
     chkClosed.Value = 0
     chkFiled.Value = 0
     chkOpened.Value = 0
@@ -591,7 +586,6 @@ Private Sub ClearFields()
     chkReceived.Value = 0
     chkCreated.Value = 0
     chkReOpened.Value = 0
-
     chkClosed.Enabled = True
     chkFiled.Enabled = True
     chkOpened.Enabled = True
@@ -599,14 +593,12 @@ Private Sub ClearFields()
     chkReceived.Enabled = True
     chkCreated.Enabled = True
     chkReOpened.Enabled = True
-
     chkSF.Value = 0
     chkN.Value = 0
     chkRMT.Value = 0
     chkC.Value = 0
     chkW.Value = 0
     chkIM.Value = 0
-
     txtSearchJobNum.Text = ""
     txtSearchDesc.Text = ""
     txtSearchPart.Text = ""
@@ -614,209 +606,136 @@ Private Sub ClearFields()
     txtSearchDraw.Text = ""
     txtSearchCust.Text = ""
     txtSearchSales.Text = ""
-
     cmbUsers.Enabled = True
-
     'cmbUsers.ComboItems.Item(1).Selected = True
     'cmbUsers.Enabled = False
     chkHeatMap.Value = 0
-
 End Sub
-
 Private Sub chkAllTickets_Click()
-
     If chkAllTickets.Value = 1 Then
         MonthStart.Enabled = False
         MonthEnd.Enabled = False
     Else
         MonthStart.Enabled = True
         MonthEnd.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkCreated_MouseDown(Button As Integer, _
                                  Shift As Integer, _
                                  X As Single, _
                                  Y As Single)
-
     If chkCreated.Value = 0 Then
-
         chkOpened.Value = 1
         chkOpened.Enabled = False
-
     ElseIf chkCreated.Value = 1 And chkInTransit.Value = 0 And chkReceived.Value = 0 And chkFiled.Value = 0 And chkReOpened.Value = 0 Then
-
         chkOpened.Value = 0
         chkOpened.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkFiled_MouseDown(Button As Integer, _
                                Shift As Integer, _
                                X As Single, _
                                Y As Single)
-
     If chkFiled.Value = 0 Then
-
         chkOpened.Value = 1
         chkOpened.Enabled = False
-
     ElseIf chkCreated.Value = 0 And chkInTransit.Value = 0 And chkReceived.Value = 0 And chkFiled.Value = 1 And chkReOpened.Value = 0 Then
         chkOpened.Value = 0
         chkOpened.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkInTransit_MouseDown(Button As Integer, _
                                    Shift As Integer, _
                                    X As Single, _
                                    Y As Single)
-
     If chkInTransit.Value = 0 Then
-
         chkOpened.Value = 1
         chkOpened.Enabled = False
-
     ElseIf chkCreated.Value = 0 And chkInTransit.Value = 1 And chkReceived.Value = 0 And chkFiled.Value = 0 And chkReOpened.Value = 0 Then
         chkOpened.Value = 0
         chkOpened.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkOpened_MouseDown(Button As Integer, _
                                 Shift As Integer, _
                                 X As Single, _
                                 Y As Single)
-
     If chkOpened.Value = 0 Then
         chkReceived.Value = 1
         chkReceived.Enabled = False
-
         chkCreated.Value = 1
         chkCreated.Enabled = False
-
         chkInTransit.Value = 1
         chkInTransit.Enabled = False
-
         chkFiled.Value = 1
         chkFiled.Enabled = False
-        
         chkReOpened.Value = 1
         chkReOpened.Enabled = False
-        
     Else
-
         chkReceived.Value = 0
         chkReceived.Enabled = True
-
         chkCreated.Value = 0
         chkCreated.Enabled = True
-
         chkInTransit.Value = 0
         chkInTransit.Enabled = True
-
         chkFiled.Value = 0
         chkFiled.Enabled = True
-        
         chkReOpened.Value = 0
         chkReOpened.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkReceived_MouseDown(Button As Integer, _
                                   Shift As Integer, _
                                   X As Single, _
                                   Y As Single)
-
     If chkReceived.Value = 0 Then
-
         chkOpened.Value = 1
         chkOpened.Enabled = False
-
     ElseIf chkCreated.Value = 0 And chkInTransit.Value = 0 And chkReceived.Value = 1 And chkFiled.Value = 0 And chkReOpened.Value = 0 Then
-
         chkOpened.Value = 0
         chkOpened.Enabled = True
-
     End If
-
 End Sub
-
 Private Sub chkReOpened_MouseDown(Button As Integer, _
                                   Shift As Integer, _
                                   X As Single, _
                                   Y As Single)
-
     If chkReOpened.Value = 0 Then
-
         chkOpened.Value = 1
         chkOpened.Enabled = False
-
     ElseIf chkCreated.Value = 0 And chkInTransit.Value = 0 And chkReceived.Value = 0 And chkFiled.Value = 0 And chkReOpened.Value = 1 Then
         chkOpened.Value = 0
         chkOpened.Enabled = True
-
     End If
 End Sub
-
 Private Sub cmbUsers_Click()
     strSearchUser = UCase$(strUserIndex(0, frmReportFilter.cmbUsers.ListIndex))
-
 End Sub
-
 Private Sub cmdRunReport_Click()
-
     Unload frmReportFilter
-    
     dtStartDate = (MonthStart.Year & "-" & (IIf(Len(MonthStart.Month) < 2, "0" & MonthStart.Month, MonthStart.Month)) & "-" & (IIf(Len(MonthStart.Day) < 2, "0" & MonthStart.Day, MonthStart.Day)))
     dtEndDate = (MonthEnd.Year & "-" & (IIf(Len(MonthEnd.Month) < 2, "0" & MonthEnd.Month, MonthEnd.Month)) & "-" & (IIf(Len(MonthEnd.Day) < 2, "0" & MonthEnd.Day, MonthEnd.Day)))
-
     DateRangeReport
-
     sAddlMsg = "Filtered by : " & (IIf(chkCreated.Value = 1, "Created, ", "")) & (IIf(chkReceived.Value = 1, "Received, ", "")) & (IIf(chkInTransit.Value = 1, "In transit, ", "")) & (IIf(chkOpened.Value = 1, "Opened, ", "")) & (IIf(chkFiled.Value = 1, "Filed, ", "")) & (IIf(chkClosed.Value = 1, "Closed ", "")) & vbCrLf & "      Plants: " & (IIf(chkSF.Value = 1, "Steel Fab, ", "")) & (IIf(chkN.Value = 1, "Nuclear, ", "")) & (IIf(chkRMT.Value = 1, "Rocky Mt, ", "")) & (IIf(chkC.Value = 1, "Controls, ", "")) & (IIf(chkW.Value = 1, "Wooster, ", "")) & (IIf(chkIM.Value = 1, "Industrial Mach, ", "")) & vbCrLf & "      User: " & (IIf(cmbUsers.Text <> "", cmbUsers.Text, "All"))
-
     ClearFields
-
 End Sub
-
 Private Sub Form_Load()
     MonthStart.Value = Date
     MonthEnd.Value = Date
     chkAllTickets.Value = 1
     cmbPacketType.Clear
-    
     cmbPacketType.AddItem "", 0
     cmbPacketType.AddItem "Owned by:", 1
     cmbPacketType.AddItem "In transit to:", 2
     cmbPacketType.AddItem "Sent by:", 3
-
 End Sub
-
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Cancel = True
     frmReportFilter.Hide
-
 End Sub
-
 Private Sub MonthEnd_Change()
-
     dtEndDate = MonthEnd.Value
-
 End Sub
-
 Private Sub MonthStart_Change()
-
     dtStartDate = MonthStart.Value
-
 End Sub
-

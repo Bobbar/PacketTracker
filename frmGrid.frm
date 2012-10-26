@@ -106,7 +106,6 @@ Private Declare Function SendMessage _
                                       lParam As Any) As Long
 Private LeftOffset, TopOffset As Integer
 Sub FlexSort(Mode As String)
-            
     If FlexGrid.MouseRow = 0 And Mode = "A" Then
         FlexGrid.col = FlexGrid.MouseCol
         If FlexGrid.col = 10 Then
@@ -114,192 +113,129 @@ Sub FlexSort(Mode As String)
         Else
             FlexGrid.Sort = flexSortStringAscending
         End If
-        
     Else
         'do nothing
-             
     End If
-        
     If FlexGrid.MouseRow = 0 And Mode = "D" Then
         FlexGrid.col = FlexGrid.MouseCol
-        
         If FlexGrid.col = 10 Then
             FlexGrid.Sort = flexSortGenericDescending
         Else
             FlexGrid.Sort = flexSortStringDescending
         End If
-        
     Else
         'do nothing
-             
     End If
-
 End Sub
 Private Sub FlexGrid_Click()
     On Error Resume Next
     Set WhichGrid = frmGrid.FlexGrid
-
     If bolNewHistWindow = True Then Exit Sub
-
     If strSortMode = "A" Then
         Call FlexSort("D")
         strSortMode = "D"
-
     ElseIf strSortMode = "D" Then
         Call FlexSort("A")
         strSortMode = "A"
-
     End If
 End Sub
-
 Private Sub FlexGrid_DblClick()
     On Error Resume Next
     If bolNewHistWindow = True Then Exit Sub
     Screen.MousePointer = vbHourglass
-
     DoEvents
-
     'ClearFields
-    
     Form1.OpenPacket FlexGrid.TextMatrix(FlexGrid.RowSel, 1)
     Form1.SSTab1.Tab = 0
     'Form1.Show
-
     Form1.tmrRefresher.Enabled = True
-
     Screen.MousePointer = vbDefault
 End Sub
-
 Private Sub FlexGrid_KeyPress(KeyAscii As Integer)
     On Error Resume Next
-
     If KeyAscii = 13 Then
-        
         Form1.OpenPacket FlexGrid.TextMatrix(FlexGrid.RowSel, 1)
         Form1.SSTab1.Tab = 0
-
     End If
-
 End Sub
-
 Private Sub Form_Load()
     If bolHook Then Call WheelHook(frmGrid)
-
     LeftOffset = frmGrid.Width - (FlexGrid.Left + FlexGrid.Width)
     TopOffset = frmGrid.Height - (FlexGrid.Top + FlexGrid.Height)
-
 End Sub
 Public Sub FlexGridRedrawHeight()
-
     Dim ColLoop As Long
-
     Dim RowLoop As Long
-
     'Turn off redrawing to avoid flickering
     FlexGrid.Redraw = False
-
     'For ColLoop = 0 To FlexGridHist.Cols - 1
     'FlexGridHist.ColWidth(ColLoop) = 2500
-
     For RowLoop = 0 To FlexGrid.Rows - 1
         ReSizeCellHeight RowLoop, 1
     Next RowLoop
-
     'Next ColLoop
-
     'Turn redrawing back on
     FlexGrid.Redraw = True
-
 End Sub
 Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
-
     Dim LinesOfText  As Long
-
     Dim HeightOfLine As Long
-
     On Error Resume Next
-
     'Set MSFlexGrid to appropriate Cell
     FlexGrid.Row = MyRow
     FlexGrid.col = MyCol
-
     'Set textbox width to match current width of selected cell
     Text1.Width = FlexGrid.ColWidth(MyCol)
     Text1.FontSize = FlexGrid.CellFontSize
     Text1.FontBold = FlexGrid.CellFontBold
     Text1.FontItalic = FlexGrid.CellFontItalic
-    
     Text1.Text = FlexGrid.Text
-    
     'Get the height of the text in the textbox
     HeightOfLine = 285 'Me.TextHeight(Text1.Text) '285
-
     'Call API to determine how many lines of text are in text box
     LinesOfText = SendMessage(Text1.hwnd, EM_GETLINECOUNT, 0&, 0&)
-
     'Check to see if row is not tall enough
-        
     ' If FlexGrid.RowHeight(MyRow) < (LinesOfText * HeightOfLine) Then
     'Adjust the RowHeight based on the number of lines in textbox
     FlexGrid.RowHeight(MyRow) = LinesOfText * HeightOfLine + 200
-
     ' End If
-
 End Sub
 Private Sub Form_Resize()
     On Error Resume Next
-
     FlexGrid.Width = frmGrid.Width - LeftOffset
     FlexGrid.Height = frmGrid.Height - TopOffset
-
     If bolNewHistWindow = True Then
         Dim ColW, i As Integer
-
         For i = 0 To FlexGrid.Cols - 1
             ColW = ColW + FlexGrid.ColWidth(i)
-
         Next i
-
         If FlexGrid.Width < ColW + 600 Then
-    
             FlexGrid.ColWidth(1) = FlexGrid.Width - 1500
             FlexGridRedrawHeight
-
         Else
-
             'If FlexGrid.ColWidth(1) >= 12615 Then
             ' FlexGrid.ColWidth(1) = 12615
             ' Else
             FlexGrid.ColWidth(1) = FlexGrid.Width - 1500
             FlexGridRedrawHeight
             ' End If
-
         End If
     End If
-
 End Sub
-
 Private Sub tmrGridResize_Timer()
     Dim ColW, i As Integer
-
     For i = 0 To FlexGrid.Cols - 1
         ColW = ColW + FlexGrid.ColWidth(i)
-
     Next i
-
     If FlexGrid.Width < ColW + 600 Then
-    
         FlexGrid.ColWidth(1) = FlexGrid.Width - 1200
         FlexGridRedrawHeight
-
     Else
-
         If FlexGrid.ColWidth(1) >= 12615 Then
             FlexGrid.ColWidth(1) = 12615
         Else
             FlexGrid.ColWidth(1) = FlexGrid.Width - 1200
             FlexGridRedrawHeight
         End If
-
     End If
 End Sub

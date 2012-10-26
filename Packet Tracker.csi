@@ -1,6 +1,13 @@
 [History]
-1=#P0#=mb	#P1#=DrawTimeLine	#P2#=TicketTracker/Form1/DrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121025163418	#P7#=0	#P8#=131	.
-2=#P0#=mb	#P1#=chkDayLines_Click	#P2#=TicketTracker/frmTimeLine/chkDayLines_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163349	#P7#=0	#P8#=8	.
-3=#P0#=mb	#P1#=cmdTimeLine_Click	#P2#=TicketTracker/Form1/cmdTimeLine_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163153	#P7#=0	#P8#=15	.
-4=#P0#=mb	#P1#=Form_Resize	#P2#=TicketTracker/frmTimeLine/Form_Resize	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025162217	#P7#=0	#P8#=7	.
-5=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163542	#P7#=0	#P8#=25	.
+1=#P0#=mb	#P1#=text_length	#P2#=TicketTracker/MyMod/text_length	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026152322	#P7#=0	#P8#=0	.
+2=#P0#=mb	#P1#=StartTimer	#P2#=TicketTracker/MyMod/StartTimer	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121026152536	#P7#=0	#P8#=3	.
+3=#P0#=mb	#P1#=pbDrawArea_MouseMove	#P2#=TicketTracker/frmTimeLine/pbDrawArea_MouseMove	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026162140	#P7#=0	#P8#=52	.
+4=#P0#=mb	#P1#=tmrActionShow_Timer	#P2#=TicketTracker/frmTimeLine/tmrActionShow_Timer	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026161751	#P7#=0	#P8#=0	.
+5=#P0#=mb	#P1#=PrintFlexGridColor	#P2#=TicketTracker/Form1/PrintFlexGridColor	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121026150414	#P7#=0	#P8#=90	.
+6=#P0#=mb	#P1#=ReDrawTimeLine	#P2#=TicketTracker/frmTimeLine/ReDrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121026161736	#P7#=0	#P8#=7	.
+7=#P0#=mb	#P1#=DrawLines	#P2#=TicketTracker/frmTimeLine/DrawLines	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121026161509	#P7#=0	#P8#=66	.
+8=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026162233	#P7#=0	#P8#=16	.
+9=#P0#=mb	#P1#=DrawTimeLine	#P2#=TicketTracker/Form1/DrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20121026161557	#P7#=0	#P8#=13	.
+10=#P0#=mb	#P1#=chkDayLines_Click	#P2#=TicketTracker/frmTimeLine/chkDayLines_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026153340	#P7#=0	#P8#=6	.
+11=#P0#=mb	#P1#=cmdTimeLine_Click	#P2#=TicketTracker/Form1/cmdTimeLine_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121025163153	#P7#=0	#P8#=15	.
+12=#P0#=mb	#P1#=Form_Resize	#P2#=TicketTracker/frmTimeLine/Form_Resize	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20121026141901	#P7#=0	#P8#=22	.
