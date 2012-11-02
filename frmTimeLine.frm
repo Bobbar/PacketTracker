@@ -265,24 +265,28 @@ Public Sub ReDrawTimeLine()
     For i = 0 To Entry ' - 1
         With frmTimeLine
             dGrid(i).Width = .Width
-            If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
-                dLine(i).Width = 38
-                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+            If TicketHours(i) * LStep < 30 Then 'Less than 1 pixel wide
+                dLine(i).Width = 30
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 30
             Else
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
+
             If chkShowAll.Value = 1 Then
                 dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
-                If dLine(i).Left - dAction(i).Width - 240 < 0 And (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width Then
+                If dLine(i).Left - dAction(i).Width - 200 < 0 And (dLine(i).Left + dLine(i).Width) + dAction(i).Width + VScroll1.Width + 200 < pbDrawArea.Width Then
                     dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
-                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + VScroll1.Width > pbDrawArea.Width And dLine(i).Left - dAction(i).Width - 200 > 0 Then
                     dAction(i).Left = dLine(i).Left - dAction(i).Width - 200
-                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 < 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width > pbDrawArea.Width And dLine(i).Left - dAction(i).Width - 200 < 0 Then
                     dAction(i).Left = ((dLine(i).Left + dLine(i).Width) / 2) - (dAction(i).Width / 2)  '+  dLine(i).X1
-                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
+                ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + VScroll1.Width < pbDrawArea.ScaleWidth And dLine(i).Left - dAction(i).Width - 200 > 0 Then
                     dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
+                Else
+                    'dAction(i).Left = pbDrawArea.Width / 2 - dAction(i).Width / 2
                 End If
+                If dAction(i).Left < 0 Or (dAction(i).Left + dAction(i).Width) > pbDrawArea.Width Then dAction(i).Left = pbDrawArea.Width / 2 - dAction(i).Width / 2
             Else
             End If
         End With

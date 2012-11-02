@@ -5785,6 +5785,7 @@ Private Sub Form_Load()
     End With
     bolInitialLoad = True
     FindMySQLDriver
+    Debug.Print strSQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
     picOlder.Top = FlexGridHist.Top + FlexGridHist.Height - picOlder.Height
