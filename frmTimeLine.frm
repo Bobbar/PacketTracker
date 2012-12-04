@@ -58,7 +58,7 @@ Begin VB.Form frmTimeLine
          Left            =   12000
          Max             =   1000
          SmallChange     =   2
-         TabIndex        =   13
+         TabIndex        =   12
          Top             =   0
          Width           =   255
       End
@@ -99,7 +99,7 @@ Begin VB.Form frmTimeLine
             Height          =   1095
             Left            =   120
             TabIndex        =   6
-            Top             =   5800
+            Top             =   5840
             Width           =   4215
             Begin VB.CheckBox chkDayLines 
                BackColor       =   &H00808080&
@@ -119,6 +119,81 @@ Begin VB.Form frmTimeLine
                TabIndex        =   10
                Top             =   720
                Width           =   1575
+            End
+            Begin VB.Label Label1 
+               Alignment       =   2  'Center
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Visual Time"
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   -1  'True
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   195
+               Left            =   120
+               TabIndex        =   7
+               Top             =   255
+               Width           =   1560
+            End
+            Begin VB.Shape Cls 
+               BorderColor     =   &H00C0C0FF&
+               BorderStyle     =   0  'Transparent
+               FillColor       =   &H00C0C0FF&
+               FillStyle       =   0  'Solid
+               Height          =   240
+               Left            =   1430
+               Top             =   250
+               Width           =   265
+            End
+            Begin VB.Shape UFl 
+               BorderColor     =   &H00FFC0FF&
+               FillColor       =   &H00FFC0FF&
+               FillStyle       =   0  'Solid
+               Height          =   230
+               Left            =   1170
+               Top             =   250
+               Width           =   262
+            End
+            Begin VB.Shape Fil 
+               BorderColor     =   &H00FFC0C0&
+               FillColor       =   &H00FFC0C0&
+               FillStyle       =   0  'Solid
+               Height          =   230
+               Left            =   916
+               Top             =   250
+               Width           =   262
+            End
+            Begin VB.Shape Rec 
+               BorderColor     =   &H00C0FFFF&
+               FillColor       =   &H00C0FFFF&
+               FillStyle       =   0  'Solid
+               Height          =   230
+               Left            =   654
+               Top             =   255
+               Width           =   262
+            End
+            Begin VB.Shape Snd 
+               BorderColor     =   &H00C0FFC0&
+               FillColor       =   &H00C0FFC0&
+               FillStyle       =   0  'Solid
+               Height          =   230
+               Left            =   392
+               Top             =   250
+               Width           =   265
+            End
+            Begin VB.Shape Cr 
+               BorderColor     =   &H00C0E0FF&
+               FillColor       =   &H00C0E0FF&
+               FillStyle       =   0  'Solid
+               Height          =   230
+               Left            =   130
+               Top             =   250
+               Width           =   262
             End
             Begin VB.Label Label3 
                Alignment       =   2  'Center
@@ -143,67 +218,23 @@ Begin VB.Form frmTimeLine
                Top             =   240
                Width           =   2280
             End
-            Begin VB.Label Label1 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackStyle       =   0  'Transparent
-               Caption         =   "Visual Time"
-               BeginProperty Font 
-                  Name            =   "Tahoma"
-                  Size            =   8.25
-                  Charset         =   0
-                  Weight          =   400
-                  Underline       =   0   'False
-                  Italic          =   -1  'True
-                  Strikethrough   =   0   'False
-               EndProperty
-               Height          =   195
-               Left            =   75
-               TabIndex        =   7
-               Top             =   255
-               Width           =   1620
-            End
             Begin VB.Shape Shape1 
                BackColor       =   &H00808080&
                BackStyle       =   1  'Opaque
+               FillColor       =   &H000080FF&
                Height          =   255
                Left            =   120
                Top             =   240
                Width           =   1575
             End
          End
-         Begin VB.Label lblNote 
-            Alignment       =   2  'Center
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            Caption         =   "Note"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   9
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   -1  'True
-               Strikethrough   =   0   'False
-            EndProperty
-            ForeColor       =   &H00404040&
-            Height          =   210
-            Index           =   0
-            Left            =   1470
-            TabIndex        =   12
-            Top             =   360
-            Visible         =   0   'False
-            Width           =   615
-            WordWrap        =   -1  'True
-         End
          Begin VB.Image Image1 
-            Height          =   300
+            Height          =   240
             Left            =   0
             Picture         =   "frmTimeLine.frx":0CCA
-            Stretch         =   -1  'True
             Top             =   120
-            Width           =   445
+            Visible         =   0   'False
+            Width           =   315
          End
          Begin VB.Label lblPacketAge 
             AutoSize        =   -1  'True
@@ -461,6 +492,11 @@ Private Sub Form_Resize()
     pbDrawArea.Refresh
     'cmdCantSeeMe.SetFocus
 End Sub
+
+Private Sub lblNote_Click(Index As Integer)
+
+End Sub
+
 Private Sub pbDrawArea_MouseMove(Button As Integer, _
                                  Shift As Integer, _
                                  X As Single, _

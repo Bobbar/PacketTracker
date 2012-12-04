@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   208601091
+            Format          =   201981955
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   208601091
+            Format          =   201981955
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -709,6 +709,7 @@ Private Sub chkReOpened_MouseDown(Button As Integer, _
     End If
 End Sub
 Private Sub cmbUsers_Click()
+
     strSearchUser = UCase$(strUserIndex(0, frmReportFilter.cmbUsers.ListIndex))
 End Sub
 Private Sub cmdRunReport_Click()

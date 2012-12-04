@@ -125,6 +125,7 @@ Begin VB.Form Form1
          Top             =   1920
       End
       Begin VB.Timer tmrDateTime 
+         Enabled         =   0   'False
          Interval        =   1000
          Left            =   120
          Top             =   2400
@@ -239,6 +240,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -254,14 +256,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":124E
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Frame1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":177E
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1BF0
@@ -644,7 +646,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   44
          Top             =   480
          Width           =   11775
@@ -870,7 +872,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   39
          Top             =   480
          Width           =   11775
@@ -1124,6 +1126,21 @@ Begin VB.Form Form1
          TabIndex        =   75
          Top             =   2730
          Width           =   2175
+         Begin VB.PictureBox pbData 
+            Appearance      =   0  'Flat
+            AutoRedraw      =   -1  'True
+            AutoSize        =   -1  'True
+            BorderStyle     =   0  'None
+            ForeColor       =   &H80000008&
+            Height          =   750
+            Left            =   1320
+            ScaleHeight     =   750
+            ScaleWidth      =   765
+            TabIndex        =   124
+            TabStop         =   0   'False
+            Top             =   360
+            Width           =   765
+         End
          Begin VB.CommandButton cmdRefresh 
             Caption         =   "Refresh"
             Height          =   360
@@ -1165,32 +1182,6 @@ Begin VB.Form Form1
             ToolTipText     =   "Avg. Query Time"
             Top             =   960
             Width           =   1080
-         End
-         Begin VB.Image imgNoData 
-            Height          =   750
-            Left            =   1320
-            Picture         =   "Form1.frx":B05B
-            ToolTipText     =   "No Connection. Comms Suspended."
-            Top             =   360
-            Visible         =   0   'False
-            Width           =   765
-         End
-         Begin VB.Image imgData 
-            Appearance      =   0  'Flat
-            Height          =   750
-            Left            =   1320
-            Picture         =   "Form1.frx":B84E
-            Top             =   360
-            Visible         =   0   'False
-            Width           =   765
-         End
-         Begin VB.Image imgDataOff 
-            Height          =   750
-            Left            =   1320
-            Picture         =   "Form1.frx":BF09
-            ToolTipText     =   "Communications are idle."
-            Top             =   360
-            Width           =   765
          End
       End
       Begin VB.PictureBox pbScrollBox 
@@ -1809,7 +1800,7 @@ Begin VB.Form Form1
          Appearance      =   0  'Flat
          Height          =   555
          Left            =   4080
-         Picture         =   "Form1.frx":C3F8
+         Picture         =   "Form1.frx":B05B
          ToolTipText     =   "Add Note"
          Top             =   2520
          Width           =   540
@@ -2101,6 +2092,7 @@ Private Declare Function TranslateColor _
                                            col As Long) As Long
 Private bolNoHits As Boolean
 Private intRowSel As Integer
+Private strCommentText As String
 Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
     Dim R As Long
     R = TranslateColor(Color, 0, GetRealColor)
@@ -2392,11 +2384,11 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
         cmbPlant.Text = strPlant
         If !idTicketComment <> "" Then
             TheX = pbScrollBox.ScaleWidth
-            lblText.Caption = !idTicketComment
+            strCommentText = !idTicketComment
             tmrScroll.Enabled = True
         Else
             pbScrollBox.Cls
-            lblText.Caption = ""
+            strCommentText = ""
             tmrScroll.Enabled = False
         End If
         If rs.RecordCount >= 1 Then
@@ -2474,7 +2466,7 @@ errhandle:
         optFile.Enabled = False
         If bolBannerOpen = False Then ShowBanner &HFFFFC0, "No Job Packet found with that job number. Click here to create a new one.", 1000, "NEWPACK"
         lblChars.Visible = False
-        imgNoData.Visible = False
+        Set pbData.Picture = picDataPics(0)
         Err.Clear
         HideData
     ElseIf Err.Number = -2147467259 Then
@@ -2584,7 +2576,6 @@ Public Sub DrawTimeLine()
     dGrid(0).Left = 0
     dGrid(0).Top = 120
     dGrid(0).Width = 11895
-    frmTimeLine.lblNote(0).Caption = strTimelineComments(0)
     ReDim dAction(Entry - 1)
     ReDim dNote(Entry - 1)
     dAction(0).Text = TicketActionText(0)
@@ -2683,7 +2674,7 @@ Public Sub DrawTimeLine()
     Else
         frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
     End If
-    frmTimeLine.Frame1.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200 + 200
+    frmTimeLine.Frame1.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 500
 End Sub
 Public Sub GetMyPackets()
     Dim rs      As New ADODB.Recordset
@@ -2853,15 +2844,15 @@ Public Sub DisplayArrows()
     If FlexGridHist.Rows <= 14 Then picOlder.Visible = False
 End Sub
 Public Sub ShowData()
-    imgData.Visible = True
+
+    Set pbData.Picture = picDataPics(2)
     DoEvents
-    lngQryStart = GetTickCount
+    StartTimer
 End Sub
 Public Sub HideData()
-    Dim lngCurQry, lngAddQry, lngAvgQry As Long
+    Dim lngCurQry As Double, lngAddQry As Double, lngAvgQry As Double
     Dim i As Integer
-    lngQryEnd = GetTickCount
-    lngCurQry = lngQryEnd - lngQryStart
+    lngCurQry = StopTimer
     If intQryIndex >= 20 Then
         intQryIndex = 0
         lngQryTimes(intQryIndex) = lngCurQry
@@ -2874,9 +2865,7 @@ Public Sub HideData()
     Next i
     lngAvgQry = lngAddQry / UBound(lngQryTimes)
     lblQryTime.Caption = Round(lngAvgQry, 2) & " ms"
-    imgData.Visible = False
-    DoEvents
-    ' imgNoData.Visible = False
+    Set pbData.Picture = picDataPics(0)
 End Sub
 Public Sub RefreshAll() 'Main Idle Loop - Refreshes Fields and History, only when newer entries are detected. Always refreshes MyPackets.
     Dim b As Integer
@@ -2961,11 +2950,11 @@ GetFields:
             FlexGridHist.Visible = True
         End If
         If !idTicketComment <> "" Then
-            lblText.Caption = !idTicketComment
+            strCommentText = !idTicketComment
             tmrScroll.Enabled = True
         Else
             pbScrollBox.Cls
-            lblText.Caption = ""
+            strCommentText = ""
             tmrScroll.Enabled = False
         End If
     End With
@@ -3121,7 +3110,7 @@ errs:
     'Resume Next
 End Sub
 Public Sub CommsDown()
-    imgNoData.Visible = True
+    Set pbData.Picture = picDataPics(1)
     optReceive.Enabled = False
     optMove.Enabled = False
     cmbUsers.Visible = False
@@ -3153,7 +3142,7 @@ Public Sub CommsUp()
         bolMessageDelivered = False
     Else
     End If
-    imgNoData.Visible = False
+    Set pbData.Picture = picDataPics(0)
     cmdRefreshHist.Enabled = True
     cmdTimeLine.Enabled = True
     cmdFilterReport.Enabled = True
@@ -3242,6 +3231,7 @@ End Sub
 Private Sub cmdCommand1_Click()
     DeletePacket "TESTPACKET"
 End Sub
+
 Private Sub cmdEdit_Click()
     On Error GoTo errs
     Dim blah
@@ -4643,11 +4633,11 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
         End If
         If !idTicketComment <> "" Then
             TheX = pbScrollBox.ScaleWidth
-            lblText.Caption = !idTicketComment
+            strCommentText = !idTicketComment
             tmrScroll.Enabled = True
         Else
             pbScrollBox.Cls
-            lblText.Caption = ""
+            strCommentText = ""
             tmrScroll.Enabled = False
         End If
     End With
@@ -4852,7 +4842,7 @@ Public Sub ClearAllButJobN()
     bolHasTicket = False
     HideOpts
     tmrScroll.Enabled = False
-    lblText.Caption = False
+    strCommentText = ""
     pbScrollBox.Cls
     SetBoxesForEdit "All"
     EditMode = False
@@ -4921,7 +4911,7 @@ Public Sub ClearFields()
     FlexGridHist.Rows = 0
     lblChars.Visible = False
     tmrScroll.Enabled = False
-    lblText.Caption = False
+    strCommentText = ""
     pbScrollBox.Cls
     picOlder.Visible = False
     cmdEdit.Visible = False
@@ -5772,6 +5762,7 @@ Private Sub Form_Initialize()
     DoEvents
 End Sub
 Private Sub Form_Load()
+    
     Dim i          As Integer
     Dim Commands() As String
     Dim ErrToss    As Boolean
@@ -5875,6 +5866,11 @@ Private Sub Form_Load()
     SSTab1.TabPicture(1) = TabPics(1)
     SSTab1.TabPicture(2) = TabPics(2)
     SSTab1.TabPicture(3) = TabPics(3)
+    
+    Set picDataPics(0) = LoadPicture(App.Path & "\Images\DataOff2Light.gif")
+    Set picDataPics(1) = LoadPicture(App.Path & "\Images\NoData2.gif")
+    Set picDataPics(2) = LoadPicture(App.Path & "\Images\Data2.gif")
+    
     frmSplash.lblStatus.Caption = "Loading user lists..."
     DoEvents
     GetUserIndex
@@ -5974,7 +5970,7 @@ End Sub
 Private Sub frmConfirm_Click()
     BannerClick strConfirmClickCase
 End Sub
-Private Sub frmKey_MouseMove(index As Integer, _
+Private Sub frmKey_MouseMove(Index As Integer, _
                              Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
@@ -6046,14 +6042,14 @@ Private Sub Label12_Click()
         End If
     End If
 End Sub
-Private Sub lblColorKey_MouseMove(index As Integer, _
+Private Sub lblColorKey_MouseMove(Index As Integer, _
                                   Button As Integer, _
                                   Shift As Integer, _
                                   X As Single, _
                                   Y As Single)
-    frmKey(index).Top = lblColorKey(index).Top - frmKey(index).Height
-    frmKey(index).Left = lblColorKey(index).Left + (lblColorKey(index).Width / 2) - (frmKey(index).Width / 2)
-    frmKey(index).Visible = True
+    frmKey(Index).Top = lblColorKey(Index).Top - frmKey(Index).Height
+    frmKey(Index).Left = lblColorKey(Index).Left + (lblColorKey(Index).Width / 2) - (frmKey(Index).Width / 2)
+    frmKey(Index).Visible = True
 End Sub
 Private Sub lblConfirm_Click()
     BannerClick strConfirmClickCase
@@ -6337,7 +6333,7 @@ Private Sub tmrConfirmSlider_Timer()
 End Sub
 Private Sub tmrDateTime_Timer()
     txtDateTime.Text = Date & " " & Time
-    Me.Refresh
+    'Me.Refresh
 End Sub
 Private Sub tmrLiveSearch_Timer()
     On Error Resume Next
@@ -6363,6 +6359,7 @@ Private Sub tmrRefresher_Timer()
     If chkAutoRefresh.Value = 0 Then Exit Sub
     If EditMode = True Then Exit Sub
     RefreshAll
+    txtDateTime.Text = Date & " " & Time
 End Sub
 Private Sub tmrReSizer_Timer()
     On Error Resume Next
@@ -6406,14 +6403,14 @@ Private Sub tmrScroll_Timer()
     On Error Resume Next
     pbScrollBox.Cls ' so we don't get text trails
     ' Scroll from right to left
-    If TheX <= 0 - lblText.Width Then
+    If TheX <= 0 - pbScrollBox.TextWidth(strCommentText) Then
         TheX = pbScrollBox.ScaleWidth
     Else
         TheX = TheX - 15 ' larger number means faster scrolling
     End If
     pbScrollBox.CurrentX = TheX
     pbScrollBox.CurrentY = 22 'TheY
-    pbScrollBox.Print lblText.Caption
+    pbScrollBox.Print strCommentText
 End Sub
 Private Sub tmrWindowFlasher_Timer()
     FlashWindow Me.hwnd, Invert

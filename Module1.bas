@@ -61,6 +61,7 @@ Public HistoryIcons()       As StdPicture
 Public HelpPics()           As StdPicture
 Public ButtonPics()         As StdPicture
 Public TabPics(3)           As StdPicture
+Public picDataPics(2)       As StdPicture
 Public WhichGrid            As MSHFlexGrid
 Public TicketHours(99)      As Single
 Public TicketAction(99)     As String
