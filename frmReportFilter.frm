@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "mscomct2.ocx"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Begin VB.Form frmReportFilter 
    BorderStyle     =   3  'Fixed Dialog
    Caption         =   "Custom Search"
@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   201981955
+            Format          =   197656579
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   201981955
+            Format          =   197656579
             CurrentDate     =   40405
             MinDate         =   40405
          End

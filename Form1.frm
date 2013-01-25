@@ -3228,10 +3228,6 @@ Private Sub SetBoxesForEdit(EnabledControl As String)
         EditMode = False
     End If
 End Sub
-Private Sub cmdCommand1_Click()
-    DeletePacket "TESTPACKET"
-End Sub
-
 Private Sub cmdEdit_Click()
     On Error GoTo errs
     Dim blah
@@ -5652,6 +5648,7 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
                                    Shift As Integer, _
                                    X As Single, _
                                    Y As Single)
+    On Error Resume Next
     If Button = 1 Then
         intRowSel = FlexGridHist.RowSel
         If FlexGridHist.TextMatrix(FlexGridHist.RowSel, 4) = "com" Then
@@ -5669,8 +5666,7 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
             FlexGridHist.Row = intRowSel
             FlexGridHist.ColSel = FlexGridHist.Cols - 1
             FlexGridHist.RowSel = intRowSel + 1
-            Debug.Print intRowSel
-            Debug.Print FlexGridHist.RowSel & vbCrLf
+    
         End If
     End If
     If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
@@ -5806,7 +5802,7 @@ Private Sub Form_Load()
     strSortMode = "A"
     frmSplash.lblStatus.Caption = "Connecting to server..."
     DoEvents
-    strServerAddress = "EPICAPP" '"10.0.1.232"
+    strServerAddress = "10.35.1.40" '"10.0.1.232"
     strUserName = "TicketApp"
     strPassword = "yb4w4"
     intFormHMax = 10500 '10620 '10500
