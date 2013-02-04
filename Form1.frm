@@ -22,6 +22,7 @@ Begin VB.Form Form1
    EndProperty
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   10140
    ScaleWidth      =   12210
@@ -240,7 +241,6 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -256,14 +256,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":124E
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Frame1"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":177E
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Frame4"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1BF0
@@ -646,7 +646,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   44
          Top             =   480
          Width           =   11775
@@ -872,7 +872,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   39
          Top             =   480
          Width           =   11775
@@ -2188,7 +2188,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | Job packet was CREATED by " & strCreator
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | Job packet was created by " & strCreator
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(1)
@@ -2216,7 +2216,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUserFrom & " SENT the job packet to " & strUserTo
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUserFrom & " sent the job packet to " & strUserTo
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(2)
@@ -2244,7 +2244,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " RECEIVED the job packet from " & strUserFrom
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " received the job packet from " & strUserFrom
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(3)
@@ -2272,7 +2272,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " CLOSED the job packet."
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " closed the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(5)
@@ -2300,7 +2300,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " FILED the job packet."
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " filed the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(4)
@@ -2328,7 +2328,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 5) = strGUID
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
-        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " REOPENED the job packet."
+        FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " reopened the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(7)
@@ -2353,7 +2353,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
     ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -2365,9 +2365,9 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
         txtDrawNoRev.Text = !idTicketDrawingNum
         txtCustPoNo.Text = !idTicketCustPoNum
         txtSalesNo.Text = !idTicketSalesNum
-        txtCreator.Text = !idTicketCreator
+        txtCreator.Text = GetFullName(!idTicketCreator)
         txtCreateDate.Text = !idTicketCreateDate
-        txtTicketOwner.Text = !idTicketUser
+        txtTicketOwner.Text = GetFullName(!idTicketUser)
         txtActionDate.Text = !idTicketDate
         strTicketAction = !idTicketAction
         strUserFrom = !idTicketUserFrom
@@ -2406,7 +2406,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     rs.MoveLast
     Do Until rs.BOF
         With rs
-            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, !idTicketCreator, !idTicketUserFrom, !idTicketUserTo, !idTicketUser, !idGUID)
+            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, GetFullName(!idTicketCreator), GetFullName(!idTicketUserFrom), GetFullName(!idTicketUserTo), GetFullName(!idTicketUser), !idGUID)
             rs.MovePrevious
         End With
     Loop
@@ -2420,7 +2420,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     FlexGridHist.RowHeight(0) = 0
     FlexGridHist.TopRow = FlexHistLastTopRow
     Call FlexFlipHist("D")
-    DisplayArrows
+   ' DisplayArrows
     FlexBoldFirst FlexGridHist
     'FlexGridHist.Rows = FlexGridHist.Rows - 1
     FlexGridRedrawHeight
@@ -2507,7 +2507,7 @@ Public Sub GetTimeLineData()
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     Entry = 0
@@ -2685,7 +2685,7 @@ Public Sub GetMyPackets()
     strSQL1 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     FlexGridOUT.Clear
     FlexGridOUT.Redraw = False
@@ -2835,14 +2835,14 @@ errs:
     End If
     Resume Next
 End Sub
-Public Sub DisplayArrows()
-    If FlexGridHist.Rows - FlexGridHist.TopRow <= 14 Then
-        picOlder.Visible = False
-    Else
-        picOlder.Visible = True
-    End If
-    If FlexGridHist.Rows <= 14 Then picOlder.Visible = False
-End Sub
+'Public Sub DisplayArrows()
+'    If FlexGridHist.Rows - FlexGridHist.TopRow <= 14 Then
+'        picOlder.Visible = False
+'    Else
+'        picOlder.Visible = True
+'    End If
+'    If FlexGridHist.Rows <= 14 Then picOlder.Visible = False
+'End Sub
 Public Sub ShowData()
 
     Set pbData.Picture = picDataPics(2)
@@ -2879,7 +2879,7 @@ Public Sub RefreshAll() 'Main Idle Loop - Refreshes Fields and History, only whe
     strSQL3 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     If txtJobNo.Text = "" Or optCreate.Value = True Or bolHasTicket = False Then GoTo GetMyPackets
     ShowData
@@ -2900,7 +2900,8 @@ Public Sub RefreshAll() 'Main Idle Loop - Refreshes Fields and History, only whe
     '
     Do Until rs.EOF
         With rs
-            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, !idTicketCreator, !idTicketUserFrom, !idTicketUserTo, !idTicketUser, !idGUID)
+            'Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, !idTicketCreator, !idTicketUserFrom, !idTicketUserTo, !idTicketUser, !idGUID)
+            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, GetFullName(!idTicketCreator), GetFullName(!idTicketUserFrom), GetFullName(!idTicketUserTo), GetFullName(!idTicketUser), !idGUID)
             rs.MoveNext
         End With
     Loop
@@ -2914,7 +2915,7 @@ Public Sub RefreshAll() 'Main Idle Loop - Refreshes Fields and History, only whe
     FlexGridHist.TopRow = FlexHistLastTopRow
     FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     Call FlexFlipHist("D")
-    DisplayArrows
+    'DisplayArrows
     FlexBoldFirst FlexGridHist
     FlexGridRedrawHeight
     'FlexGridHist.Rows = FlexGridHist.Rows - 1
@@ -2927,7 +2928,7 @@ GetFields:
         txtDrawNoRev.Text = !idTicketDrawingNum
         txtCustPoNo.Text = !idTicketCustPoNum
         txtSalesNo.Text = !idTicketSalesNum
-        txtCreator.Text = !idTicketCreator
+        txtCreator.Text = GetFullName(!idTicketCreator)
         txtCreateDate.Text = !idTicketCreateDate
         txtActionDate.Text = !idTicketDate
         strTicketAction = !idTicketAction
@@ -2936,7 +2937,7 @@ GetFields:
         strCurUser = !idTicketUser
         strTicketStatus = !idTicketStatus
         txtTicketAction.Text = !idTicketAction
-        txtTicketOwner.Text = !idTicketUser
+        txtTicketOwner.Text = GetFullName(!idTicketUser)
         txtTicketDescription.Text = !idTicketDescription
         txtTicketStatus.Text = !idTicketStatus
         strPlant = !idTicketPlant
@@ -3287,7 +3288,7 @@ Private Sub cmdEdit_Click()
         strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
         Set rs = New ADODB.Recordset
         Set cn = New ADODB.Connection
-        cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+        cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
         cn.CursorLocation = adUseClient
         rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
         Do Until rs.EOF
@@ -3942,7 +3943,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
     FlexGridHist.Redraw = False
@@ -3958,7 +3959,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     rs.MoveLast
     Do Until rs.BOF
         With rs
-            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, !idTicketCreator, !idTicketUserFrom, !idTicketUserTo, !idTicketUser, !idGUID)
+            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, GetFullName(!idTicketCreator), GetFullName(!idTicketUserFrom), GetFullName(!idTicketUserTo), GetFullName(!idTicketUser), !idGUID)
             rs.MovePrevious
         End With
     Loop
@@ -3973,7 +3974,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     FlexGridHist.TopRow = FlexHistLastTopRow
     FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     Call FlexFlipHist("D")
-    DisplayArrows
+    'DisplayArrows
     FlexBoldFirst FlexGridHist
     FlexGridRedrawHeight
     FlexGridHist.Redraw = True
@@ -4001,7 +4002,7 @@ Public Sub SetControls()
         optReOpen.Enabled = True
         optFile.Enabled = False
         bolCanEdit = False
-        StatusBar1.Panels.Item(1).Text = "This packet has been Filed by " & strCurUser & ". Please re-open the packet if on hand"
+        StatusBar1.Panels.Item(1).Text = "This packet has been Filed by " & GetFullName(strCurUser) & ". Please re-open the packet if on hand"
         Exit Sub
     ElseIf strTicketAction = "FILED" And strCurUser = strLocalUser Then
         optReceive.Enabled = False
@@ -4026,7 +4027,7 @@ Public Sub SetControls()
         optReOpen.Enabled = False
         optFile.Enabled = False
         bolCanEdit = False
-        StatusBar1.Panels.Item(1).Text = strCurUser & " has reopened this packet and currently has it on hand."
+        StatusBar1.Panels.Item(1).Text = GetFullName(strCurUser) & " has reopened this packet and currently has it on hand."
     ElseIf strTicketAction = "REOPENED" And strCurUser = strLocalUser Then
         optReceive.Enabled = False
         optMove.Enabled = True
@@ -4047,7 +4048,7 @@ Public Sub SetControls()
         optReOpen.Enabled = False
         optFile.Enabled = False
         bolCanEdit = False
-        StatusBar1.Panels.Item(1).Text = "This packet is in transit to " & strUserTo & "."
+        StatusBar1.Panels.Item(1).Text = "This packet is in transit to " & GetFullName(strUserTo) & "."
     ElseIf strTicketAction = "INTRANSIT" And strUserTo = strLocalUser Then
         optReceive.Enabled = True
         optMove.Enabled = False
@@ -4070,7 +4071,7 @@ Public Sub SetControls()
         optReOpen.Enabled = False
         bolCanEdit = False
         optFile.Enabled = False
-        StatusBar1.Panels.Item(1).Text = strCurUser & " currently has this packet onhand."
+        StatusBar1.Panels.Item(1).Text = GetFullName(strCurUser) & " currently has this packet onhand."
     ElseIf strTicketAction = "RECEIVED" And strCurUser = strLocalUser Then
         optMove.Enabled = True
         optReceive.Enabled = False
@@ -4103,7 +4104,7 @@ Public Sub SetControls()
         optReOpen.Enabled = False
         optFile.Enabled = False
         bolCanEdit = False
-        StatusBar1.Panels.Item(1).Text = "The job packet creator, " & strCurUser & ", has not Sent this job packet to anyone."
+        StatusBar1.Panels.Item(1).Text = "The job packet creator, " & GetFullName(strCurUser) & ", has not yet Sent this job packet to anyone."
     ElseIf strTicketAction = "CREATED" And strCurUser = strLocalUser Then
         optMove.Enabled = True
         optReceive.Enabled = False
@@ -4147,7 +4148,7 @@ Public Sub LiveSearch(ByVal strSearchString As String) '
     ShowData
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT idTicketJobNum From ticketdatabase Where idTicketJobNum Like '" & strSearchString & "%' AND idTicketIsActive = '1' Order By ticketdatabase.idTicketJobNum"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -4183,7 +4184,7 @@ Public Sub SubmitFile()
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     With rs
@@ -4244,7 +4245,7 @@ Public Sub SubmitReOpen()
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     With rs
@@ -4309,7 +4310,7 @@ Public Sub SubmitClose()
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     With rs
@@ -4370,7 +4371,7 @@ Public Sub SubmitReceive()
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     With rs
@@ -4439,7 +4440,7 @@ Public Sub SubmitMove()
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
     With rs
@@ -4510,7 +4511,7 @@ Public Sub SubmitCreate()
     strSQL1 = "INSERT INTO TicketDatabase (idTicketCreateDate,idTicketCreator,idTicketUser,idTicketAction,idTicketStatus,idTicketuserFrom,idTicketUserTo,idTicketComment,idTicketJobNum,idTicketPartNum,idTicketDrawingNum,idTicketCustPoNum,idTicketSalesNum,idTicketDescription,idTicketPlant,idTicketIsActive) VALUES ('" & FormatDate & " " & FormatTime & "','" & strLocalUser & "','" & strLocalUser & "','CREATED','OPEN','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "','" & Replace$(txtJobNo.Text, "'", "''") & "','" & Replace$(txtPartNoRev.Text, "'", "''") & "','" & Replace$(txtDrawNoRev.Text, "'", "''") & "','" & Replace$(txtCustPoNo.Text, "'", "''") & "','" & Replace$(txtSalesNo.Text, "'", "''") & "','" & Replace$(txtTicketDescription.Text, "'", "''") & "','" & cmbPlant.Text & "','1')"
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL2, cn, adOpenKeyset, adLockOptimistic
     If rs.RecordCount > 0 Then
@@ -4596,7 +4597,7 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
     ShowData
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' AND idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
     strSQL2 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
@@ -4606,7 +4607,7 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
         txtDrawNoRev.Text = !idTicketDrawingNum
         txtCustPoNo.Text = !idTicketCustPoNum
         txtSalesNo.Text = !idTicketSalesNum
-        txtCreator.Text = !idTicketCreator
+        txtCreator.Text = GetFullName(!idTicketCreator)
         txtCreateDate.Text = !idTicketCreateDate
         txtActionDate.Text = !idTicketDate
         strTicketAction = !idTicketAction
@@ -4615,7 +4616,7 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
         strCurUser = !idTicketUser
         strTicketStatus = !idTicketStatus
         txtTicketAction.Text = !idTicketAction
-        txtTicketOwner.Text = !idTicketUser
+        txtTicketOwner.Text = GetFullName(!idTicketUser)
         txtTicketDescription.Text = !idTicketDescription
         txtTicketStatus.Text = !idTicketStatus
         strPlant = !idTicketPlant
@@ -4845,7 +4846,7 @@ Public Sub ClearAllButJobN()
     lblChars.Visible = False
     StatusBar1.Panels.Item(1).Text = ""
     FlexGridHist.Visible = False
-    picOlder.Visible = False
+    'picOlder.Visible = False
     bolCanEdit = False
     FlexHistLastTopRow = 0
 End Sub
@@ -4909,7 +4910,7 @@ Public Sub ClearFields()
     tmrScroll.Enabled = False
     strCommentText = ""
     pbScrollBox.Cls
-    picOlder.Visible = False
+    'picOlder.Visible = False
     cmdEdit.Visible = False
     cmdEdit.Picture = ButtonPics(1)
     cmdEdit.ToolTipText = "Edit Field"
@@ -5044,7 +5045,7 @@ Private Sub GetUserIndex()
     ShowData
     Set rs = New ADODB.Recordset
     Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenKeyset
     i = 1
@@ -5133,7 +5134,7 @@ Private Sub ShowAllClosed()
     strReportType = "All Closed Job Packets"
     sAddlMsg = ""
     ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'CLOSED' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -5246,7 +5247,7 @@ Private Sub ShowAllOpenHeatMap()
     strReportType = "All Open Job Packets"
     sAddlMsg = ""
     ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -5364,7 +5365,7 @@ Private Sub ShowAllOpen()
     strReportType = "All Open Job Packets"
     sAddlMsg = ""
     ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'OPEN' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -5673,7 +5674,7 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
 End Sub
 Private Sub FlexGridHist_Scroll()
     FlexHistLastTopRow = FlexGridHist.TopRow
-    DisplayArrows
+   ' DisplayArrows
 End Sub
 Private Sub FlexGridIN_Click()
     Set WhichGrid = FlexGridIN
@@ -5775,7 +5776,7 @@ Private Sub Form_Load()
     Debug.Print strSQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    picOlder.Top = FlexGridHist.Top + FlexGridHist.Height - picOlder.Height
+    'picOlder.Top = FlexGridHist.Top + FlexGridHist.Height - picOlder.Height
     bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
@@ -5803,7 +5804,7 @@ Private Sub Form_Load()
     frmSplash.lblStatus.Caption = "Connecting to server..."
     DoEvents
     strServerAddress = "10.35.1.40" '"10.0.1.232"
-    strUserName = "TicketApp"
+    strUsername = "TicketApp"
     strPassword = "yb4w4"
     intFormHMax = 10500 '10620 '10500
     intFormHMin = 5535 '5535 '5025
@@ -5893,7 +5894,7 @@ Private Sub Form_Load()
         End If
     Next
     TheX = pbScrollBox.ScaleWidth
-    picOlder.Left = FlexGridHist.Left + FlexGridHist.Width / 2 - (picOlder.Width / 2) - 120
+   ' picOlder.Left = FlexGridHist.Left + FlexGridHist.Width / 2 - (picOlder.Width / 2) - 120
     bolInitialLoad = False
     lblQryTime.Caption = "0 ms"
     frmpBar.Top = SSTab1.Top + SSTab1.Height / 2 - frmpBar.Height / 2 + SSTab1.TabHeight - 250
@@ -6127,7 +6128,7 @@ Private Sub mnuStats_Click()
     strSQL1 = "SELECT Count(Distinct ticketdatabase_0.idTicketJobNum) FROM ticketdb.ticketdatabase ticketdatabase_0"
     strSQL2 = "SELECT COUNT(*) FROM ticketdb.ticketdatabase"
     strSQL3 = "SHOW TABLE STATUS FROM ticketdb LIKE 'ticketdatabase'"
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
     TotalPackets = rs.Fields(0)

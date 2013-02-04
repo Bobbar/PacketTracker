@@ -187,7 +187,7 @@ Public Sub GetPacket()
     On Error Resume Next
     'cmbPlant.Enabled = True
     Form1.ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & Form1.txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
@@ -249,7 +249,7 @@ Private Sub cmdGo_Click()
     On Error Resume Next
     FormatDateTime = Format$(Form1.txtCreateDate.Text, strDBDateTimeFormat)
     Form1.ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "INSERT INTO TicketDatabase" & " (idTicketCreateDate,idTicketCreator,idTicketUser,idTicketAction,idTicketStatus,idTicketuserFrom,idTicketUserTo,idTicketComment,idTicketJobNum," & "idTicketPartNum,idTicketDrawingNum,idTicketCustPoNum,idTicketSalesNum,idTicketDescription,idTicketPlant,idTicketIsActive) VALUES" & " ('" & FormatDateTime & "','" & Form1.txtCreator.Text & "','" & UCase$(strUserIndex(0, cmbOwner.ListIndex)) & "','" & (IIf(cmbAction.Text = "CLOSED", "NULL", cmbAction.Text)) & "','" & (IIf(cmbAction.Text <> "CLOSED", "OPEN", "CLOSED")) & "','" & strUserFrom & "','" & strUserTo & "','" & "Packet redirected by " & strLocalUser & "','" & Form1.txtJobNo.Text & "','" & Form1.txtPartNoRev.Text & "','" & Form1.txtDrawNoRev.Text & "','" & Form1.txtCustPoNo.Text & "','" & Form1.txtSalesNo.Text & "','" & Form1.txtTicketDescription.Text & "','" & strPlant & "','1')"
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic

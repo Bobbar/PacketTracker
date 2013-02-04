@@ -21,6 +21,7 @@ Public Type tTxtBox
     Text As String
     Visible As Boolean
 End Type
+
 Public dLine()      As tLine
 Public dGrid()      As tLine
 Public dDayLine()   As tLine
@@ -33,7 +34,7 @@ Public strINILoc    As String
 Public strUserTo    As String, strSelectUserTo As String, strUserFrom As String, strCurUser As String
 Public strTicketAction, strTicketStatus As String
 Public bolHasTicket      As Boolean
-Public strServerAddress  As String, strUserName As String, strPassword As String, strSearchUser As String, strPlant As String
+Public strServerAddress  As String, strUsername As String, strPassword As String, strSearchUser As String, strPlant As String
 Public strUserIndex()    As String
 Public bolOpenForm       As Boolean, bolOpenConfirm    As Boolean
 Public intFormHMax       As Integer, intFormHMin As Integer
@@ -204,6 +205,29 @@ Declare Function QueryPerformanceCounter Lib "kernel32" (X As Currency) As Boole
 Declare Function QueryPerformanceFrequency Lib "kernel32" (X As Currency) As Boolean
 Public total As Currency
 Public Ctr1  As Currency, Ctr2 As Currency, Freq As Currency
+Public Function GetFullName(strUsername As String) As String
+Dim i As Integer
+
+
+For i = 0 To UBound(strUserIndex, 2)
+
+If strUserIndex(0, i) = strUsername Then
+GetFullName = UCase(strUserIndex(1, i))
+Exit Function
+End If
+
+
+
+
+
+
+Next i
+
+
+
+
+End Function
+
 Public Sub StartTimer()
     total = 0
     QueryPerformanceFrequency Freq
@@ -215,18 +239,18 @@ Public Function StopTimer() As Double
     total = total + (Ctr2 - Ctr1)
     StopTimer = Round(CDbl(total / Freq) * 1000, 3)
 End Function
-Public Function ReturnEmpInfo(strUserName As Variant) As UserInfo
+Public Function ReturnEmpInfo(strUsername As Variant) As UserInfo
     ReturnEmpInfo.UserName = vbNull
     ReturnEmpInfo.FullName = vbNull
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
-        If strUserIndex(0, i) = strUserName Then
+        If strUserIndex(0, i) = strUsername Then
             ReturnEmpInfo.UserName = strUserIndex(0, i)
             ReturnEmpInfo.FullName = strUserIndex(1, i)
             Exit Function
         End If
     Next i
-    MsgBox (strUserName & " not found")
+    MsgBox (strUsername & " not found")
 End Function
 Public Sub MySort(ByRef pvarArray As Variant)
     Dim i               As Long
@@ -302,7 +326,7 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     ElseIf blah = vbYes Then
     End If
     Form1.ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idGUID = '" & strGUID & "'"
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
@@ -341,7 +365,7 @@ Public Sub DeletePacket(JobNum As String)
     Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Form1.ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
@@ -362,7 +386,7 @@ Public Sub SetLeadTicketActive(JobNum As String)
     Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Form1.ShowData
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
@@ -387,7 +411,7 @@ Public Sub SetPrevTicketInactive(JobNum As String)
     Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     On Error Resume Next
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
     rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
@@ -410,7 +434,7 @@ End Sub
 ' element(0) is the value name, element(1) is the value's value
 Function EnumRegistryValues(ByVal hKey As Long, ByVal KeyName As String) As Collection
     Dim handle            As Long
-    Dim index             As Long
+    Dim Index             As Long
     Dim valueType         As Long
     Dim Name              As String
     Dim nameLen           As Long
@@ -436,11 +460,11 @@ Function EnumRegistryValues(ByVal hKey As Long, ByVal KeyName As String) As Coll
         ReDim resBinary(0 To dataLen - 1) As Byte
         ' read the value's name and data
         ' exit the loop if not found
-        retVal = RegEnumValue(hKey, index, Name, nameLen, ByVal 0&, valueType, resBinary(0), dataLen)
+        retVal = RegEnumValue(hKey, Index, Name, nameLen, ByVal 0&, valueType, resBinary(0), dataLen)
         ' enlarge the buffer if you need more space
         If retVal = ERROR_MORE_DATA Then
             ReDim resBinary(0 To dataLen - 1) As Byte
-            retVal = RegEnumValue(hKey, index, Name, nameLen, ByVal 0&, valueType, resBinary(0), dataLen)
+            retVal = RegEnumValue(hKey, Index, Name, nameLen, ByVal 0&, valueType, resBinary(0), dataLen)
         End If
         ' exit the loop if any other error (typically, no more values)
         If retVal Then Exit Do
@@ -473,7 +497,7 @@ Function EnumRegistryValues(ByVal hKey As Long, ByVal KeyName As String) As Coll
         ' add the array to the result collection
         ' the element's key is the value's name
         EnumRegistryValues.Add valueInfo, valueInfo(0)
-        index = index + 1
+        Index = Index + 1
     Loop
     ' Close the key, if it was actually opened
     If handle Then RegCloseKey handle
@@ -527,7 +551,7 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Dim strSQL1 As String
     Dim i
     strSQL1 = "SELECT idAdmins FROM users"
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
     With rs
@@ -678,7 +702,7 @@ Public Sub QryEntryNumbers()
     Dim strSQL1 As String
     Dim i
     strSQL1 = "SELECT idTicketJobNum, COUNT(*) FROM ticketdatabase GROUP BY idTicketJobNum"
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     cn.CursorLocation = adUseClient
     rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
     For i = 0 To rs.RecordCount
