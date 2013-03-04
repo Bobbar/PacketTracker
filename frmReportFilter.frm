@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   256376835
+            Format          =   269811715
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   256376835
+            Format          =   269811715
             CurrentDate     =   40405
             MinDate         =   40405
          End
