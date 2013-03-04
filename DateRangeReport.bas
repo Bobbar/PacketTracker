@@ -5,7 +5,6 @@ Public Sub DateRangeReport()
     Dim StartTime2 As Long
     StartTime2 = GetTickCount
     Dim rs As New ADODB.Recordset
-    Dim cn As New ADODB.Connection
     Dim Line, Row, s As Integer
     Dim Found            As Boolean
     Dim strUsedJobNums() As String
@@ -32,8 +31,6 @@ Public Sub DateRangeReport()
         Form1.Flexgrid1.Cols = 10
     End If
     Line = 1
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
     strQry = "SELECT * From ticketdatabase WHERE idTicketIsActive = '1' AND" & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " ticketdatabase.idTicketJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " ticketdatabase.idTicketDescription LIKE '%" & _
        frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " ticketdatabase.idTicketPartNum LIKE '%" & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " ticketdatabase.idTicketSalesNum LIKE '%" & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " ticketdatabase.idTicketDrawingNum LIKE '%" & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " ticketdatabase.idTicketCustPONum LIKE '%" & frmReportFilter.txtSearchCust.Text & "%' AND", "")) & (IIf(frmReportFilter.chkAllTickets.Value = 1, "", " Group By ticketdatabase.idTicketDate")) & " Order By ticketdatabase.idTicketDate Desc"
     'strQry = "SELECT * From ticketdatabase WHERE idTicketIsActive = '1' AND" & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " ticketdatabase.idTicketJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " ticketdatabase.idTicketDescription LIKE '%" & _
@@ -53,15 +50,12 @@ Public Sub DateRangeReport()
         End If
     Next s
 SkipQryRebuild:
-    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strQry, cn, adOpenForwardOnly, adLockReadOnly
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strQry)
     If rs.RecordCount <= 0 Then
         Screen.MousePointer = vbDefault
         ShowBanner &HC0FFFF, "No packets were found that meet the specified criteria.", 300
         bolRunning = False
-        rs.Close
-        cn.Close
         Form1.HideData
         TotT = lngQryTimes(intQryIndex) * 0.001
         Form1.StatusBar1.Panels.Item(1).Text = "Custom search returned " & Line - 1 & " results in " & TotT & " seconds"
@@ -229,15 +223,11 @@ ContNext:
         Form1.SizeTheSheet Form1.Flexgrid1
         Screen.MousePointer = vbDefault
         bolRunning = False
-        rs.Close
-        cn.Close
         Form1.HideData
         TotT = lngQryTimes(intQryIndex) * 0.001
         Form1.StatusBar1.Panels.Item(1).Text = "Custom search returned " & Line - 1 & " results in " & TotT & " seconds"
     Else
         bolRunning = False
-        rs.Close
-        cn.Close
         Form1.HideData
         Screen.MousePointer = vbDefault
         TotT = lngQryTimes(intQryIndex) * 0.001

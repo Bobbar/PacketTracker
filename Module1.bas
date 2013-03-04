@@ -21,7 +21,6 @@ Public Type tTxtBox
     Text As String
     Visible As Boolean
 End Type
-
 Public dLine()      As tLine
 Public dGrid()      As tLine
 Public dDayLine()   As tLine
@@ -203,29 +202,18 @@ Public Type UserInfo
 End Type
 Declare Function QueryPerformanceCounter Lib "kernel32" (X As Currency) As Boolean
 Declare Function QueryPerformanceFrequency Lib "kernel32" (X As Currency) As Boolean
-Public total As Currency
-Public Ctr1  As Currency, Ctr2 As Currency, Freq As Currency
+Public total     As Currency
+Public Ctr1      As Currency, Ctr2 As Currency, Freq As Currency
+Global cn_global As New ADODB.Connection
+
 Public Function GetFullName(strUsername As String) As String
-Dim i As Integer
-
-
-For i = 0 To UBound(strUserIndex, 2)
-
-If strUserIndex(0, i) = strUsername Then
-GetFullName = UCase(strUserIndex(1, i))
-Exit Function
-End If
-
-
-
-
-
-
-Next i
-
-
-
-
+    Dim i As Integer
+    For i = 0 To UBound(strUserIndex, 2)
+        If strUserIndex(0, i) = strUsername Then
+            GetFullName = UCase(strUserIndex(1, i))
+            Exit Function
+        End If
+    Next i
 End Function
 
 Public Sub StartTimer()
@@ -316,7 +304,6 @@ Public Sub CreateINI()
 End Sub
 Public Sub DeleteEntry(strGUID As String, strDesc As String)
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     On Error Resume Next
     Dim blah
@@ -326,23 +313,16 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     ElseIf blah = vbYes Then
     End If
     Form1.ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idGUID = '" & strGUID & "'"
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
-    'Do Until rdoRS.EOF
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         .Delete
         .Update
-        'rdoRS.MoveNext
     End With
-    'Loop
-    rs.Close
-    cn.Close
     SetLeadTicketActive Form1.txtJobNo.Text
     Form1.HideData
     ShowBanner colInTransit, "Single entry deleted successfully."
-    'MsgBox ("Single entry deleted successfully.")
     Form1.RefreshAfterEdit
     Form1.GetMyPackets
     Form1.SetControls
@@ -362,37 +342,29 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
 End Sub
 Public Sub DeletePacket(JobNum As String)
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Form1.ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     Do Until rs.EOF
         With rs
             .Delete
             .MoveNext
         End With
     Loop
-    rs.Close
-    cn.Close
     Form1.HideData
     Form1.ClearFields
     ShowBanner colInTransit, "Packet Deleted!"
 End Sub
 Public Sub SetLeadTicketActive(JobNum As String)
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Form1.ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
-    ' Do Until rdoRS.EOF
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
-        'rdoRS.MoveNext
         If !idTicketIsActive <> "1" Then
             !idTicketIsActive = "1"
             .Update
@@ -401,29 +373,20 @@ Public Sub SetLeadTicketActive(JobNum As String)
             .Close
         End If
     End With
-    ' Loop
-    ' rs.Close
-    cn.Close
     Form1.HideData
 End Sub
 Public Sub SetPrevTicketInactive(JobNum As String)
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     On Error Resume Next
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
-    ' Do Until rdoRS.EOF
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         .MoveNext
         !idTicketIsActive = "0"
         .Update
     End With
-    ' Loop
-    rs.Close
-    cn.Close
 End Sub
 ' KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not
 ' SYNCHRONIZE))
@@ -547,21 +510,17 @@ End Sub
 Public Function CheckForAdmin(strLocalUser As String) As Boolean
     CheckForAdmin = False
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim i
     strSQL1 = "SELECT idAdmins FROM users"
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     With rs
         Do Until .EOF
             If UCase$(!idAdmins) = UCase$(strLocalUser) Then CheckForAdmin = True
             .MoveNext
         Loop
     End With
-    rs.Close
-    cn.Close
 End Function
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     Dim R, c As Integer
@@ -698,13 +657,11 @@ Public Function CheckForBlanks(CurrentControl As String) As Boolean
 End Function
 Public Sub QryEntryNumbers()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim i
     strSQL1 = "SELECT idTicketJobNum, COUNT(*) FROM ticketdatabase GROUP BY idTicketJobNum"
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     For i = 0 To rs.RecordCount
         ReDim Preserve strEntries(i + 1)
         ReDim Preserve intNumOfEntries(i + 1)
@@ -713,8 +670,6 @@ Public Sub QryEntryNumbers()
         rs.MoveNext
         If rs.EOF Then Exit For
     Next i
-    rs.Close
-    cn.Close
 End Sub
 Public Function GetNumberOfEntries(JobNum As String) As Integer
     Dim iPos As Integer

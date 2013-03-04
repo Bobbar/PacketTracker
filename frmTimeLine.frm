@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
 Begin VB.Form frmTimeLine 
    BackColor       =   &H00808080&
    Caption         =   "History Timeline"
@@ -303,7 +303,6 @@ Public Sub ReDrawTimeLine()
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
-
             If chkShowAll.Value = 1 Then
                 dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
                 If dLine(i).Left - dAction(i).Width - 200 < 0 And (dLine(i).Left + dLine(i).Width) + dAction(i).Width + VScroll1.Width + 200 < pbDrawArea.Width Then
@@ -494,7 +493,6 @@ Private Sub Form_Resize()
 End Sub
 
 Private Sub lblNote_Click(Index As Integer)
-
 End Sub
 
 Private Sub pbDrawArea_MouseMove(Button As Integer, _

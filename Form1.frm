@@ -2090,8 +2090,8 @@ Private Declare Function TranslateColor _
                 Alias "OleTranslateColor" (ByVal clr As OLE_COLOR, _
                                            ByVal palet As Long, _
                                            col As Long) As Long
-Private bolNoHits As Boolean
-Private intRowSel As Integer
+Private bolNoHits      As Boolean
+Private intRowSel      As Integer
 Private strCommentText As String
 Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
     Dim R As Long
@@ -2339,7 +2339,6 @@ Public Sub FillFlexHist(strAction As String, _
 End Sub
 Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills Fields, Does not refresh MyPackets
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim b       As Integer
     Dim R       As Integer
@@ -2350,13 +2349,10 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     SetBoxesForEdit "All"
     txtJobNo.Text = UCase$(txtJobNo.Text)
     Screen.MousePointer = vbHourglass
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
     ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    Set rs = cn_global.Execute(strSQL1)
     List1.Clear
     If rs.RecordCount <= 0 Then Err.Raise vbObjectError + 513, "ADO Open", "Zero Records Returned For Query"
     With rs
@@ -2420,14 +2416,12 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     FlexGridHist.RowHeight(0) = 0
     FlexGridHist.TopRow = FlexHistLastTopRow
     Call FlexFlipHist("D")
-   ' DisplayArrows
+    ' DisplayArrows
     FlexBoldFirst FlexGridHist
     'FlexGridHist.Rows = FlexGridHist.Rows - 1
     FlexGridRedrawHeight
     FlexGridHist.Redraw = True
     FlexGridHist.Visible = True
-    rs.Close
-    cn.Close
     HideData
     DisableBoxes
     SetControls
@@ -2499,17 +2493,13 @@ Public Sub PositionMaxChar(ActiveBox As Control)
 End Sub
 Public Sub GetTimeLineData()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim dtTicketDate1, dtTicketDate2 As Date
     On Error Resume Next
     ShowData
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     Entry = 0
     With rs
         ReDim strTimelineComments(.RecordCount)
@@ -2554,8 +2544,6 @@ Public Sub GetTimeLineData()
             Entry = Entry + 1
         End With
     Loop
-    rs.Close
-    cn.Close
     HideData
 End Sub
 Public Sub DrawTimeLine()
@@ -2678,15 +2666,11 @@ Public Sub DrawTimeLine()
 End Sub
 Public Sub GetMyPackets()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim LineIN, LineOUT, Row As Integer
     On Error GoTo errs
     strSQL1 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     FlexGridOUT.Clear
     FlexGridOUT.Redraw = False
     FlexGridOUT.Rows = 2
@@ -2698,7 +2682,7 @@ Public Sub GetMyPackets()
     FlexGridIN.FixedCols = 1
     FlexGridIN.FixedRows = 1
     ShowData
-    rs.Open strSQL1, cn, adOpenKeyset
+    Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount <= 0 Then
         intPrevInPackets = 0
         SSTab1.TabCaption(3) = "On-hand Packets (0)"
@@ -2707,8 +2691,6 @@ Public Sub GetMyPackets()
         FlexGridOUT.Redraw = True
         FlexGridIN.Visible = False
         FlexGridIN.Redraw = True
-        rs.Close
-        cn.Close
         HideData
         FlexGridOUT.Clear
         FlexGridIN.Clear
@@ -2787,8 +2769,6 @@ NextLoop:
     Loop
     FlexGridOUT.Rows = LineOUT
     FlexGridIN.Rows = LineIN
-    rs.Close
-    cn.Close
     HideData
     SizeTheSheet FlexGridOUT
     SizeTheSheet FlexGridIN
@@ -2835,23 +2815,14 @@ errs:
     End If
     Resume Next
 End Sub
-'Public Sub DisplayArrows()
-'    If FlexGridHist.Rows - FlexGridHist.TopRow <= 14 Then
-'        picOlder.Visible = False
-'    Else
-'        picOlder.Visible = True
-'    End If
-'    If FlexGridHist.Rows <= 14 Then picOlder.Visible = False
-'End Sub
 Public Sub ShowData()
-
     Set pbData.Picture = picDataPics(2)
     DoEvents
     StartTimer
 End Sub
 Public Sub HideData()
     Dim lngCurQry As Double, lngAddQry As Double, lngAvgQry As Double
-    Dim i As Integer
+    Dim i         As Integer
     lngCurQry = StopTimer
     If intQryIndex >= 20 Then
         intQryIndex = 0
@@ -2867,248 +2838,9 @@ Public Sub HideData()
     lblQryTime.Caption = Round(lngAvgQry, 2) & " ms"
     Set pbData.Picture = picDataPics(0)
 End Sub
-Public Sub RefreshAll() 'Main Idle Loop - Refreshes Fields and History, only when newer entries are detected. Always refreshes MyPackets.
-    Dim b As Integer
-    On Error GoTo errs
-    If bolRunning = True Then Exit Sub
-    Dim rs As New ADODB.Recordset
-    Dim cn As New ADODB.Connection
-    Dim strSQL2, strSQL3 As String
-    'strSQL2 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
-    strSQL2 = "SELECT *" & " FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketJobNum='" & txtJobNo.Text & "') AND (ticketdatabase_0.idTicketDate>{ts '" & dtLatestHistDate & "'})" & " ORDER BY ticketdatabase_0.idTicketDate"
-    strSQL3 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    If txtJobNo.Text = "" Or optCreate.Value = True Or bolHasTicket = False Then GoTo GetMyPackets
-    ShowData
-    rs.Open strSQL2, cn, adOpenForwardOnly, adLockReadOnly
-    If rs.RecordCount <= 0 Then
-        rs.Close
-        GoTo GetMyPackets 'If no new entries, skip history and field updates
-    End If
-    FlexGridHist.Redraw = False
-    FlexGridHist.Visible = False
-    With rs
-        rs.MoveLast
-        dtLatestHistDate = Format$(!idTicketDate, strDBDateTimeFormat)
-        rs.MoveFirst
-    End With
-    FlexUNBoldFirst FlexGridHist
-    Call FlexFlipHist("A")
-  
-    Do Until rs.EOF
-        With rs
-            'Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, !idTicketCreator, !idTicketUserFrom, !idTicketUserTo, !idTicketUser, !idGUID)
-            Call FillFlexHist(!idTicketAction, !idTicketStatus, !idTicketComment, !idTicketDate, GetFullName(!idTicketCreator), GetFullName(!idTicketUserFrom), GetFullName(!idTicketUserTo), GetFullName(!idTicketUser), !idGUID)
-            rs.MoveNext
-        End With
-    Loop
-    For b = 0 To FlexGridHist.Cols - 1
-        FlexGridHist.ColAlignment(b) = flexAlignLeftCenter
-    Next b
-    FlexGridHist.ColWidth(0) = 1000
-    FlexGridHist.ColWidth(1) = 8500
-    FlexGridHist.ColWidth(3) = 500
-    FlexGridHist.RowHeight(0) = 0
-    FlexGridHist.TopRow = FlexHistLastTopRow
-    FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-    Call FlexFlipHist("D")
-    'DisplayArrows
-    FlexBoldFirst FlexGridHist
-    FlexGridRedrawHeight
-    'FlexGridHist.Rows = FlexGridHist.Rows - 1
-    FlexGridHist.Redraw = True
-    FlexGridHist.Visible = True
-GetFields:
-    With rs
-        rs.MoveLast
-        txtPartNoRev.Text = !idTicketPartNum
-        txtDrawNoRev.Text = !idTicketDrawingNum
-        txtCustPoNo.Text = !idTicketCustPoNum
-        txtSalesNo.Text = !idTicketSalesNum
-        txtCreator.Text = GetFullName(!idTicketCreator)
-        txtCreateDate.Text = !idTicketCreateDate
-        txtActionDate.Text = !idTicketDate
-        strTicketAction = !idTicketAction
-        strUserFrom = !idTicketUserFrom
-        strUserTo = !idTicketUserTo
-        strCurUser = !idTicketUser
-        strTicketStatus = !idTicketStatus
-        txtTicketAction.Text = !idTicketAction
-        txtTicketOwner.Text = GetFullName(!idTicketUser)
-        txtTicketDescription.Text = !idTicketDescription
-        txtTicketStatus.Text = !idTicketStatus
-        strPlant = !idTicketPlant
-        cmbPlant.Text = strPlant
-        If txtJobNo.Text = "" Then
-            DisableBoxes
-            tmrRefresher.Enabled = False
-        Else
-            bolHasTicket = True
-            tmrRefresher.Enabled = True
-            FlexGridHist.Visible = True
-        End If
-        If !idTicketComment <> "" Then
-            strCommentText = !idTicketComment
-            tmrScroll.Enabled = True
-        Else
-            pbScrollBox.Cls
-            strCommentText = ""
-            tmrScroll.Enabled = False
-        End If
-    End With
-    SetControls
-    rs.Close
-    '*************************************** GetMyPackets ******************************
-GetMyPackets:
-    Dim LineIN, LineOUT, Row As Integer
-    FlexGridOUT.Clear
-    FlexGridOUT.Redraw = False
-    FlexGridOUT.Rows = 2
-    FlexGridOUT.FixedCols = 1
-    FlexGridOUT.FixedRows = 1
-    FlexGridIN.Clear
-    FlexGridIN.Redraw = False
-    FlexGridIN.Rows = 2
-    FlexGridIN.FixedCols = 1
-    FlexGridIN.FixedRows = 1
-    ShowData
-    rs.Open strSQL3, cn, adOpenForwardOnly, adLockReadOnly
-    If rs.RecordCount <= 0 Then
-        intPrevInPackets = 0
-        SSTab1.TabCaption(3) = "On-hand Packets (0)"
-        SSTab1.TabCaption(2) = "Incoming Packets (0)"
-        FlexGridOUT.Visible = False
-        FlexGridOUT.Redraw = True
-        FlexGridIN.Visible = False
-        FlexGridIN.Redraw = True
-        rs.Close
-        cn.Close
-        HideData
-        FlexGridOUT.Clear
-        FlexGridIN.Clear
-        GoTo SkipGetMyPackets
-    End If
-    LineIN = 1
-    LineOUT = 1
-    Row = 0
-    FlexGridOUT.Rows = rs.RecordCount + 1
-    FlexGridOUT.Cols = 10
-    FlexGridIN.Rows = rs.RecordCount + 1
-    FlexGridIN.Cols = 10
-    ' Create header row
-    FlexGridOUT.TextMatrix(0, 1) = "Job Number"
-    FlexGridOUT.TextMatrix(0, 2) = "Part Number"
-    FlexGridOUT.TextMatrix(0, 3) = "Description"
-    FlexGridOUT.TextMatrix(0, 4) = "Sales Number"
-    FlexGridOUT.TextMatrix(0, 5) = "Customer/PO Number"
-    FlexGridOUT.TextMatrix(0, 6) = "Created By"
-    FlexGridOUT.TextMatrix(0, 7) = "Create Date"
-    FlexGridOUT.TextMatrix(0, 8) = "Last Activity Date"
-    FlexGridOUT.TextMatrix(0, 9) = "Last Activity"
-    FlexGridIN.TextMatrix(0, 1) = "Job Number"
-    FlexGridIN.TextMatrix(0, 2) = "Part Number"
-    FlexGridIN.TextMatrix(0, 3) = "Description"
-    FlexGridIN.TextMatrix(0, 4) = "Sales Number"
-    FlexGridIN.TextMatrix(0, 5) = "Customer/PO Number"
-    FlexGridIN.TextMatrix(0, 6) = "Created By"
-    FlexGridIN.TextMatrix(0, 7) = "Create Date"
-    FlexGridIN.TextMatrix(0, 8) = "Last Activity Date"
-    FlexGridIN.TextMatrix(0, 9) = "Last Activity"
-    Do Until rs.EOF
-        With rs
-            If !idTicketAction = "CREATED" And !idTicketUser = strLocalUser Or !idTicketAction = "RECEIVED" And !idTicketUser = strLocalUser Or !idTicketAction = "REOPENED" And !idTicketUser = strLocalUser Then
-                Row = Row + 1
-                FlexGridOUT.TextMatrix(LineOUT, 0) = LineOUT
-                FlexGridOUT.TextMatrix(LineOUT, 1) = !idTicketJobNum
-                FlexGridOUT.TextMatrix(LineOUT, 2) = !idTicketPartNum
-                FlexGridOUT.TextMatrix(LineOUT, 3) = !idTicketDescription
-                FlexGridOUT.TextMatrix(LineOUT, 4) = !idTicketSalesNum
-                FlexGridOUT.TextMatrix(LineOUT, 5) = !idTicketCustPoNum
-                FlexGridOUT.TextMatrix(LineOUT, 6) = !idTicketCreator
-                FlexGridOUT.TextMatrix(LineOUT, 7) = !idTicketCreateDate
-                FlexGridOUT.TextMatrix(LineOUT, 8) = !idTicketDate
-                If !idTicketAction = "CREATED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80C0FF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = "Job packet was CREATED by " & !idTicketCreator
-                ElseIf !idTicketAction = "RECEIVED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80FFFF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idTicketUser & " RECEIVED the job packet from " & !idTicketUserFrom
-                ElseIf !idTicketAction = "REOPENED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &HFF80FF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idTicketUser & " REOPENED the job packet."
-                End If
-                LineOUT = LineOUT + 1
-            ElseIf !idTicketAction = "INTRANSIT" And !idTicketUserTo = strLocalUser Then '**************************************
-                Row = Row + 1
-                FlexGridIN.TextMatrix(LineIN, 0) = LineIN
-                FlexGridIN.TextMatrix(LineIN, 1) = !idTicketJobNum
-                FlexGridIN.TextMatrix(LineIN, 2) = !idTicketPartNum
-                FlexGridIN.TextMatrix(LineIN, 3) = !idTicketDescription
-                FlexGridIN.TextMatrix(LineIN, 4) = !idTicketSalesNum
-                FlexGridIN.TextMatrix(LineIN, 5) = !idTicketCustPoNum
-                FlexGridIN.TextMatrix(LineIN, 6) = !idTicketCreator
-                FlexGridIN.TextMatrix(LineIN, 7) = !idTicketCreateDate
-                FlexGridIN.TextMatrix(LineIN, 8) = !idTicketDate
-                Call FlexGridRowColor(FlexGridIN, LineIN, &H80FF80)
-                FlexGridIN.TextMatrix(LineIN, 9) = !idTicketUserFrom & " SENT the job packet to " & !idTicketUserTo
-                LineIN = LineIN + 1
-            ElseIf !idTicketStatus = "CLOSED" Then
-NextLoop:
-            End If
-            Row = Row + 1
-            rs.MoveNext
-        End With
-    Loop
-    FlexGridOUT.Rows = LineOUT
-    FlexGridIN.Rows = LineIN
-    rs.Close
-    SizeTheSheet FlexGridOUT
-    SizeTheSheet FlexGridIN
-    FlexGridOUT.Redraw = True
-    FlexGridIN.Redraw = True
-    FlexGridIN.Visible = True
-    FlexGridOUT.Visible = True
-    If LineIN <= 1 Then FlexGridIN.Visible = False
-    If LineOUT <= 1 Then FlexGridOUT.Visible = False
-    If intFlexGridInLastRow >= 2 Then FlexGridIN.TopRow = intFlexGridInLastRow
-    If intFlexGridOutLastRow >= 2 Then FlexGridOUT.TopRow = intFlexGridOutLastRow
-    SSTab1.TabCaption(3) = "On-hand Packets (" & FlexGridOUT.Rows - 1 & ")"
-    SSTab1.TabCaption(2) = "Incoming Packets (" & FlexGridIN.Rows - 1 & ")"
-    If FlexGridIN.Rows - 1 > intPrevInPackets Then
-        ShowBanner &HC0C0C0, "You have new incoming Job Packets. Click to view.", 500, "VIEWPACK"
-        intPrevInPackets = FlexGridIN.Rows - 1
-    Else
-        intPrevInPackets = FlexGridIN.Rows - 1
-    End If
-    If SSTab1.Tab = 2 And ActiveControl.Name = "FlexGridIN" And ProgHasFocus = True Then
-        FlexGridIN.col = FlexINLastSel(1)
-        FlexGridIN.Row = FlexINLastSel(0)
-        FlexGridIN.ColSel = FlexINLastSel(1)
-        FlexGridIN.RowSel = FlexINLastSel(0)
-        FlexGridIN.SetFocus
-    ElseIf SSTab1.Tab = 3 And ActiveControl.Name = "FlexGridOUT" And ProgHasFocus = True Then
-        FlexGridOUT.col = FlexOUTLastSel(1)
-        FlexGridOUT.Row = FlexOUTLastSel(0)
-        FlexGridOUT.ColSel = FlexOUTLastSel(1)
-        FlexGridOUT.RowSel = FlexOUTLastSel(0)
-        FlexGridOUT.SetFocus
-    End If
-SkipGetMyPackets:
-    ' cn.Close
-    HideData
-    CommsUp
-    Exit Sub
-errs:
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        ' CommsUp
-    End If
-    Err.Clear
-    'Resume Next
+Public Sub RefreshAll()
+    RefreshHistory
+    GetMyPackets
 End Sub
 Public Sub CommsDown()
     Set pbData.Picture = picDataPics(1)
@@ -3284,14 +3016,10 @@ Private Sub cmdEdit_Click()
             Exit Sub
         End If
         Dim rs      As New ADODB.Recordset
-        Dim cn      As New ADODB.Connection
         Dim strSQL1 As String
         strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
-        Set rs = New ADODB.Recordset
-        Set cn = New ADODB.Connection
-        cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-        cn.CursorLocation = adUseClient
-        rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+        cn_global.CursorLocation = adUseClient
+        rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
         Do Until rs.EOF
             With rs
                 If ActiveText = "txtPartNoRev" And txtPartNoRev <> PrevPartNum Then !idTicketPartNum = UCase$(txtPartNoRev.Text)
@@ -3303,8 +3031,6 @@ Private Sub cmdEdit_Click()
                 rs.MoveNext
             End With
         Loop
-        rs.Close
-        cn.Close
         Form1.cmdSubmit.Enabled = False
         Form1.optMove.Value = False
         Form1.optReceive.Value = False
@@ -3395,14 +3121,6 @@ Private Sub cmdTimeLine_Click()
     DrawTimeLine
     'frmTimeLine.tmrActionShow.Enabled = True
     frmTimeLine.Show
-End Sub
-Private Sub cmdHeatMap_Click()
-    If bolRunning = True Then 'if already running the qry, dont try to start another one. (Prevents server flooding if return key is held down)
-        Exit Sub
-    Else
-        ClearBanners
-        ShowAllOpenHeatMap
-    End If
 End Sub
 Private Sub GetFadeColor()
     Dim FadeColor As Long
@@ -3641,7 +3359,6 @@ Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
     Printer.EndDoc
 End Sub
 Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
-
     'On Error Resume Next
     FlexGrid.Redraw = False
     'Dim sMsg As String
@@ -3666,13 +3383,10 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
     Printer.Orientation = vbPRORLandscape
     Printer.DrawWidth = 1
     Printer.DrawStyle = vbSolid
-    
     sMsg = strReportType
-    
     Printer.Print sMsg
     Printer.FontSize = 8
     Printer.Print "      " & sAddlMsg
-    
     With Printer
         .ScaleMode = 1
         Printer.Print
@@ -3729,40 +3443,37 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
         Printer.CurrentX = PrevX
         Printer.CurrentY = PrevY
         intPadding = 150
-        
         TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
         XFirstColumn = xmin ' + TwipPix + 2 ' * GAP
         lngYTopOfGrid = Printer.CurrentY
         Printer.CurrentY = Printer.CurrentY + GAP
-        
         'If FlexGrid.Header = True Then
         X = xmin + GAP
-            
-'        For c = 1 To .Cols
-'            Printer.CurrentX = x
-'            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-'            PrevY = Printer.CurrentY
-'            If c = .Cols Then
-'                lngStartY = Printer.CurrentY - GAP + 5
-'                lngStartX = Printer.CurrentX - GAP + 5
-'                lngEndX = xmax
-'
-'                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
-'                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
-'            Else
-'                lngStartY = Printer.CurrentY - GAP + 5
-'                lngStartX = Printer.CurrentX - GAP + 5
-'                lngEndX = Printer.CurrentX + TwipPix + GAP
-'                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
-'                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
-'            End If
-'            Printer.CurrentX = lngStartX + GAP
-'            Printer.CurrentY = PrevY
-'
-'            Printer.Print BoundedText(Printer, .ColHeader(c), TwipPix);
-'            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-'            x = x + TwipPix + 2 * GAP
-'        Next c
+        '        For c = 1 To .Cols
+        '            Printer.CurrentX = x
+        '            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
+        '            PrevY = Printer.CurrentY
+        '            If c = .Cols Then
+        '                lngStartY = Printer.CurrentY - GAP + 5
+        '                lngStartX = Printer.CurrentX - GAP + 5
+        '                lngEndX = xmax
+        '
+        '                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
+        '                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
+        '            Else
+        '                lngStartY = Printer.CurrentY - GAP + 5
+        '                lngStartX = Printer.CurrentX - GAP + 5
+        '                lngEndX = Printer.CurrentX + TwipPix + GAP
+        '                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
+        '                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
+        '            End If
+        '            Printer.CurrentX = lngStartX + GAP
+        '            Printer.CurrentY = PrevY
+        '
+        '            Printer.Print BoundedText(Printer, .ColHeader(c), TwipPix);
+        '            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
+        '            x = x + TwipPix + 2 * GAP
+        '        Next c
         'Printer.CurrentY = Printer.CurrentY + GAP
         'Printer.Print
         ' End If
@@ -3782,13 +3493,11 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
             X = xmin + GAP
             For c = 1 To 1 '.Cols - 1
                 If frmPrinters.optCenterJust And c < .Cols Then
-                
                     intCenterOffset = ((.ColWidth(c)) / 2) - (Printer.TextWidth(.TextMatrix(R, c)) / 2)
                 Else
                     intCenterOffset = 0
                 End If
                 Printer.CurrentX = X
-                
                 If .TextMatrix(R, c) <> "" And Printer.TextWidth(.TextMatrix(R, c)) + intPadding >= xmax - Printer.CurrentX Then           '.ColWidth(c)
                     lngStartY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c))
                     strOrigTxt = .TextMatrix(R, c)
@@ -3801,7 +3510,6 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                         intMidStart = intMidStart + intMidLen ' - 1
                         intMidLen = 1
                         'Printer.Font.Underline = .CellFontUnderline(R, c).Underline
-                        
                         '                        If .CellFontUnderline(R, c).Underline = True Then
                         '                            Printer.ForeColor = vbBlack
                         '                        Else
@@ -3812,17 +3520,16 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                         PrevY = Printer.CurrentY
                         .Row = R
                         .ColSel = .Cols - 1
-                        
                         Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
                         Printer.CurrentY = PrevY + 5
                         If Printer.CurrentY >= ymax Then ' new page
                             Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY + GAP), vbBlack, B
                             X = xmin
-'                            For cc = 1 To 1 '.Cols - 1
-'                                TwipPix = .ColWidth(cc) ' * Screen.TwipsPerPixelX
-'                                X = X + TwipPix + 2 * GAP
-'                                Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack
-'                            Next cc
+                            '                            For cc = 1 To 1 '.Cols - 1
+                            '                                TwipPix = .ColWidth(cc) ' * Screen.TwipsPerPixelX
+                            '                                X = X + TwipPix + 2 * GAP
+                            '                                Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack
+                            '                            Next cc
                             Printer.NewPage
                             Printer.CurrentX = xmax - 600
                             Printer.CurrentY = ymax + 300
@@ -3837,7 +3544,6 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                         End If
                         Printer.CurrentX = X + GAP
                         strSizedTxt = ""
-                    
                     Loop
                     intMidStart = 1
                     intMidLen = 0
@@ -3848,13 +3554,13 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                     'bolLongLine = False
                     PrevY = Printer.CurrentY - GAP ' + 10
                     '                    If c = 3 Then
-                                            lngStartY = Printer.CurrentY - GAP + 5
-                                            lngStartX = Printer.CurrentX - GAP + 5
-                                            lngEndX = Printer.CurrentX + .ColWidth(c) + GAP  ' - 10
-                                            lngEndY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c)) + GAP - 5
-                                            .Row = R
-                                            .ColSel = .Cols - 1
-                                            Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
+                    lngStartY = Printer.CurrentY - GAP + 5
+                    lngStartX = Printer.CurrentX - GAP + 5
+                    lngEndX = Printer.CurrentX + .ColWidth(c) + GAP  ' - 10
+                    lngEndY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c)) + GAP - 5
+                    .Row = R
+                    .ColSel = .Cols - 1
+                    Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
                     '                    End If
                     Printer.CurrentX = X + intCenterOffset
                     TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
@@ -3884,11 +3590,11 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                 Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY), vbBlack, B
                 X = xmin
                 ' Draw lines between the columns.
-'                For c = 1 To 1 '.Cols - 1 '3
-'                    TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX '+ GAP
-'                    X = X + TwipPix + 2 * GAP
-'                    Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'ymax
-'                Next c
+                '                For c = 1 To 1 '.Cols - 1 '3
+                '                    TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX '+ GAP
+                '                    X = X + TwipPix + 2 * GAP
+                '                    Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'ymax
+                '                Next c
                 Printer.NewPage
                 Printer.CurrentX = xmax - 600
                 Printer.CurrentY = ymax + 300
@@ -3900,33 +3606,29 @@ Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
                 lngYTopOfGrid = ymin
                 Printer.CurrentY = ymin
             End If
-        
         Next R
         ymax = Printer.CurrentY
         'Draw a box around everything.
         Printer.Line (XFirstColumn, lngYTopOfGrid)-(lngEndX, ymax), vbBlack, B
         X = xmin
         ' Draw lines between the columns.
-'        For c = 1 To 1 '.Cols - 1 '3
-'            TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
-'            X = X + TwipPix + 2 * GAP
-'
-'            Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'Printer.CurrentY
-'        Next c
+        '        For c = 1 To 1 '.Cols - 1 '3
+        '            TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
+        '            X = X + TwipPix + 2 * GAP
+        '
+        '            Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'Printer.CurrentY
+        '        Next c
     End With
-Printer.EndDoc
-
+    Printer.EndDoc
 End Sub
 Private Function BoundedText(ByVal ptr As Object, _
                              ByVal txt As String, _
                              ByVal max_wid As Single) As String
     On Error GoTo EF
-    
     Do While Printer.TextWidth(txt) > max_wid
         txt = Left$(txt, Len(txt) - 1)
     Loop
     BoundedText = txt
-    
 EF:
 End Function
 Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
@@ -3955,7 +3657,6 @@ Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
 End Sub
 Public Sub RefreshHistory() 'Redraws History Grid
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim b       As Integer
     On Error GoTo errs
@@ -3965,12 +3666,10 @@ Public Sub RefreshHistory() 'Redraws History Grid
     ShowData
     strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
     Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     FlexGridHist.Redraw = False
-    FlexGridHist.Visible = False
+    'FlexGridHist.Visible = False
     FlexGridHist.Clear
     FlexGridHist.Cols = 6
     FlexGridHist.Rows = 0
@@ -4002,8 +3701,6 @@ Public Sub RefreshHistory() 'Redraws History Grid
     FlexGridRedrawHeight
     FlexGridHist.Redraw = True
     FlexGridHist.Visible = True
-    rs.Close
-    cn.Close
     HideData
     Exit Sub
 errs:
@@ -4164,17 +3861,13 @@ Public Sub SetControls()
 End Sub
 Public Sub LiveSearch(ByVal strSearchString As String) '
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     On Error GoTo LeaveSub
     List1.Clear
     ShowData
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT idTicketJobNum From ticketdatabase Where idTicketJobNum Like '" & strSearchString & "%' AND idTicketIsActive = '1' Order By ticketdatabase.idTicketJobNum"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    Set rs = cn_global.Execute(strSQL1)
     Do Until rs.EOF
         With rs
             List1.AddItem !idTicketJobNum, .AbsolutePosition - 1
@@ -4186,15 +3879,12 @@ Public Sub LiveSearch(ByVal strSearchString As String) '
     ElseIf rs.RecordCount <= 0 Then
         List1.Visible = False
     End If
-    rs.Close
-    cn.Close
 LeaveSub:
     HideData
 End Sub
 Public Sub SubmitFile()
-    On Error GoTo errs
+    'On Error GoTo errs
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim intBlah As Integer
     If Trim$(strTicketComment) = "" Then
@@ -4205,11 +3895,8 @@ Public Sub SubmitFile()
     End If
     ShowData
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         !idTicketIsActive = 0
         rs.Update
@@ -4231,8 +3918,6 @@ Public Sub SubmitFile()
         !idTicketPlant = strPlant
         !idTicketIsActive = 1
         rs.Update
-        rs.Close
-        cn.Close
         HideData
     End With
     DisableBoxes
@@ -4260,17 +3945,13 @@ errs:
 End Sub
 Public Sub SubmitReOpen()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim intBlah As Integer
     On Error GoTo errs
     ShowData
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         !idTicketIsActive = 0
         .Update
@@ -4292,8 +3973,6 @@ Public Sub SubmitReOpen()
         !idTicketPlant = strPlant
         !idTicketIsActive = 1
         .Update
-        rs.Close
-        cn.Close
         HideData
     End With
     RefreshAfterEdit
@@ -4319,7 +3998,6 @@ errs:
 End Sub
 Public Sub SubmitClose()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim intBlah As Integer
     On Error GoTo errs
@@ -4331,11 +4009,8 @@ Public Sub SubmitClose()
     End If
     ShowData
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         !idTicketIsActive = 0
         .Update
@@ -4357,8 +4032,6 @@ Public Sub SubmitClose()
         !idTicketPlant = strPlant
         !idTicketIsActive = 1
         rs.Update
-        rs.Close
-        cn.Close
         HideData
         RefreshAfterEdit
         If Err.Number = 0 Then
@@ -4386,17 +4059,13 @@ errs:
 End Sub
 Public Sub SubmitReceive()
     Dim rs          As New ADODB.Recordset
-    Dim cn          As New ADODB.Connection
     Dim strSQL1     As String
     Dim ConfirmText As String
     On Error GoTo errs
     ShowData
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         !idTicketIsActive = 0
         .Update
@@ -4420,8 +4089,6 @@ Public Sub SubmitReceive()
         !idTicketIsActive = 1
         .Update
     End With
-    rs.Close
-    cn.Close
     HideData
     DisableBoxes
     RefreshAfterEdit
@@ -4448,7 +4115,6 @@ errs:
 End Sub
 Public Sub SubmitMove()
     Dim rs          As New ADODB.Recordset
-    Dim cn          As New ADODB.Connection
     Dim strSQL1     As String
     Dim ConfirmText As String
     Dim Hits        As Integer
@@ -4461,11 +4127,8 @@ Public Sub SubmitMove()
     End If
     ShowData
     strSQL1 = "select * from TicketDatabase WHERE idTicketJobNum = '" & txtJobNo.Text & "' Order By idTicketDate desc"
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         !idTicketIsActive = 0
         .Update
@@ -4493,8 +4156,6 @@ Public Sub SubmitMove()
         !idTicketIsActive = 1
         rs.Update
     End With
-    rs.Close
-    cn.Close
     HideData
     RefreshAfterEdit
     cmdSubmit.Enabled = False
@@ -4522,7 +4183,6 @@ errs:
 End Sub
 Public Sub SubmitCreate()
     Dim rs As New ADODB.Recordset
-    Dim cn As New ADODB.Connection
     Dim strSQL1, strSQL2, strJobNum As String
     Dim FormatDate, FormatTime As String
     strJobNum = txtJobNo.Text
@@ -4533,26 +4193,20 @@ Public Sub SubmitCreate()
     strSQL2 = "SELECT idTicketJobNum From ticketdatabase Where idTicketJobNum = '" & strJobNum & "' Order By ticketdatabase.idTicketDate Desc"
     strSQL1 = "INSERT INTO TicketDatabase (idTicketCreateDate,idTicketCreator,idTicketUser,idTicketAction,idTicketStatus,idTicketuserFrom,idTicketUserTo,idTicketComment,idTicketJobNum,idTicketPartNum,idTicketDrawingNum,idTicketCustPoNum,idTicketSalesNum,idTicketDescription,idTicketPlant,idTicketIsActive) VALUES ('" & FormatDate & " " & FormatTime & "','" & strLocalUser & "','" & strLocalUser & "','CREATED','OPEN','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "','" & Replace$(txtJobNo.Text, "'", "''") & "','" & Replace$(txtPartNoRev.Text, "'", "''") & "','" & Replace$(txtDrawNoRev.Text, "'", "''") & "','" & Replace$(txtCustPoNo.Text, "'", "''") & "','" & Replace$(txtSalesNo.Text, "'", "''") & "','" & Replace$(txtTicketDescription.Text, "'", "''") & "','" & cmbPlant.Text & "','1')"
     Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL2, cn, adOpenKeyset, adLockOptimistic
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL2)
     If rs.RecordCount > 0 Then
         ShowBanner &HC0C0FF, "A Job Packet with that Job Number already exists!", 500
         optCreate.Value = 1
         cmdSubmit.Enabled = False
         txtJobNo.SetFocus
-        rs.Close
-        cn.Close
         HideData
         Exit Sub
     Else
         With rs
-            .Close
-            rs.Open strSQL1, cn, adOpenKeyset, adLockOptimistic
+            Set rs = cn_global.Execute(strSQL1)
         End With
     End If
-    cn.Close
     HideData
     bolHasTicket = True
     DisableBoxes
@@ -4568,7 +4222,6 @@ Public Sub SubmitCreate()
     bolOptionClicked = False
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
-    '
 errs:
     If Err.Number = 0 Then
         cmbPlant.BackColor = vbWindowBackground
@@ -4612,19 +4265,15 @@ Public Sub DisableBoxes()
 End Sub
 Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refresh History Grid.
     Dim rs As New ADODB.Recordset
-    Dim cn As New ADODB.Connection
     Dim strSQL1, strSQL2 As String
     On Error GoTo errs
     If txtJobNo.Text = "" Or optCreate.Value = True Or bolHasTicket = False Then Exit Sub
     SetBoxesForEdit "All"
     ShowData
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' AND idTicketJobNum = '" & txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
     strSQL2 = "SELECT * FROM ticketdb.ticketdatabase ticketdatabase_0" & " WHERE (ticketdatabase_0.idTicketAction='CREATED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='RECEIVED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='REOPENED') AND (ticketdatabase_0.idTicketUser='" & strLocalUser & "') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') OR (ticketdatabase_0.idTicketAction='INTRANSIT') AND (ticketdatabase_0.idTicketIsActive='1') AND (ticketdatabase_0.idTicketStatus='OPEN') AND (ticketdatabase_0.idTicketUserTo='" & strLocalUser & "')" & " ORDER BY ticketdatabase_0.idTicketDate"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    Set rs = cn_global.Execute(strSQL1)
     With rs
         txtPartNoRev.Text = !idTicketPartNum
         txtDrawNoRev.Text = !idTicketDrawingNum
@@ -4661,7 +4310,6 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
             tmrScroll.Enabled = False
         End If
     End With
-    rs.Close
     Dim LineIN, LineOUT, Row As Integer
     FlexGridOUT.Clear
     FlexGridOUT.Redraw = False
@@ -4673,7 +4321,7 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
     FlexGridIN.Rows = 2
     FlexGridIN.FixedCols = 1
     FlexGridIN.FixedRows = 1
-    rs.Open strSQL2, cn, adOpenForwardOnly, adLockReadOnly
+    Set rs = cn_global.Execute(strSQL2)
     If rs.RecordCount <= 0 Then
         SSTab1.TabCaption(3) = "On-hand Packets (0)"
         SSTab1.TabCaption(2) = "Incoming Packets (0)"
@@ -4681,8 +4329,6 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
         FlexGridOUT.Redraw = True
         FlexGridIN.Visible = False
         FlexGridIN.Redraw = True
-        rs.Close
-        cn.Close
         HideData
         FlexGridOUT.Clear
         FlexGridIN.Clear
@@ -4761,7 +4407,6 @@ NextLoop:
     Loop
     FlexGridOUT.Rows = LineOUT
     FlexGridIN.Rows = LineIN
-    rs.Close
     SizeTheSheet FlexGridOUT
     SizeTheSheet FlexGridIN
     FlexGridOUT.Redraw = True
@@ -4774,11 +4419,9 @@ NextLoop:
     SSTab1.TabCaption(2) = "Incoming Packets (" & FlexGridIN.Rows - 1 & ")"
     If SSTab1.Tab = 2 And ProgHasFocus = True Then
         If Me.ActiveControl.Name <> "SSTab1" Then
-            cn.Close
             HideData
             Exit Sub
         ElseIf Me.ActiveControl.Name <> "FlexGridIN" Then
-            cn.Close
             HideData
             Exit Sub
         End If
@@ -4789,11 +4432,9 @@ NextLoop:
         FlexGridIN.SetFocus
     ElseIf SSTab1.Tab = 3 And ProgHasFocus = True And Me.ActiveControl.Name = "SSTab2" Or Me.ActiveControl.Name = "FlexGridOUT" Then
         If Me.ActiveControl.Name <> "SSTab2" Then
-            cn.Close
             HideData
             Exit Sub
         ElseIf Me.ActiveControl.Name <> "FlexGridOUT" Then
-            cn.Close
             HideData
             Exit Sub
         End If
@@ -4803,7 +4444,6 @@ NextLoop:
         FlexGridOUT.RowSel = FlexOUTLastSel(0)
         FlexGridOUT.SetFocus
     End If
-    cn.Close
     HideData
     Exit Sub
 errs:
@@ -4985,22 +4625,11 @@ Public Sub GetTopHits()
     End With
 End Sub
 Public Sub UpdateUserList()
-    Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim i       As Integer
     On Error GoTo errs
     strSQL1 = "select * from users"
-    '
     On Error Resume Next
-    '    ShowData
-    '
-    '    Set rs = New ADODB.Recordset
-    '    Set cn = New ADODB.Connection
-    '
-    '    cn.Open "uid=" & strUserName & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    '    cn.CursorLocation = adUseClient
-    'rs.Open strSQL1, cn, adOpenKeyset
     If bolNoHits Then
         cmbUsers.ComboItems.Clear
         cmbUsers.ComboItems.Add 1, , ""
@@ -5015,12 +4644,6 @@ Public Sub UpdateUserList()
     frmRedirect.cmbUserFrom.AddItem "", 0
     frmUserSelect.cmbUsers.Clear
     frmUserSelect.cmbUsers.AddItem "", 0
-    'i = 1
-    'ReDim strUserIndex(1, rs.RecordCount)
-    ' Do Until rs.EOF
-    ' With rs
-    ' strUserIndex(0, i) = UCase$(!idUsers)
-    ' strUserIndex(1, i) = !idFullname
     For i = 1 To UBound(strUserIndex, 2)
         cmbUsers.ComboItems.Add , strUserIndex(0, i), strUserIndex(1, i)
         frmReportFilter.cmbUsers.AddItem strUserIndex(1, i), i
@@ -5030,14 +4653,6 @@ Public Sub UpdateUserList()
         frmUserSelect.cmbUsers.AddItem strUserIndex(1, i), i
         'i = i + 1
     Next i
-    'DoEvents
-    ' rs.MoveNext
-    'End With
-    '
-    ' Loop
-    ' rs.Close
-    ' cn.Close
-    ' HideData
     frmReportFilter.cmbUsers.ListIndex = 0
     Err.Clear
     Exit Sub
@@ -5056,21 +4671,13 @@ errs:
 End Sub
 Private Sub GetUserIndex()
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim i       As Integer
     On Error GoTo errs
     strSQL1 = "select * from users"
-    '
-    '        cmbUsers.ComboItems.Clear
-    '    cmbUsers.ComboItems.Add 1, , ""
-    '
     ShowData
-    Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    rs.Open strSQL1, cn, adOpenKeyset
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset
     i = 1
     ReDim strUserIndex(1, rs.RecordCount)
     Do Until rs.EOF
@@ -5082,8 +4689,6 @@ Private Sub GetUserIndex()
             rs.MoveNext
         End With
     Loop
-    rs.Close
-    cn.Close
     HideData
     ' frmReportFilter.cmbUsers.ListIndex = 0
     Exit Sub
@@ -5141,7 +4746,6 @@ End Sub
 Private Sub ShowAllClosed()
     bolRunning = True
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim Line    As Integer
     Dim TotT    As Single
@@ -5153,19 +4757,15 @@ Private Sub ShowAllClosed()
     Flexgrid1.FixedCols = 1
     Flexgrid1.FixedRows = 1
     Set rs = New ADODB.Recordset
-    Set cn = New ADODB.Connection
     strReportType = "All Closed Job Packets"
     sAddlMsg = ""
     ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'CLOSED' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     pBar.Value = 0
     frmpBar.Visible = True
     If rs.RecordCount <= 0 Then
-        rs.Close
-        cn.Close
         bolRunning = False
         HideData
         Flexgrid1.Clear
@@ -5224,8 +4824,6 @@ Private Sub ShowAllClosed()
         End With
     Loop
     Flexgrid1.Rows = Line
-    rs.Close
-    cn.Close
     bolRunning = False
     HideData
     SizeTheSheet Flexgrid1
@@ -5247,134 +4845,10 @@ errs:
     End If
     bolRunning = False
 End Sub
-Private Sub ShowAllOpenHeatMap()
-    bolRunning = True
-    Dim rs          As New ADODB.Recordset
-    Dim cn          As New ADODB.Connection
-    Dim strSQL1     As String
-    Dim Line        As Integer
-    Dim TotT        As Single
-    Dim Entries     As Integer
-    Dim OrderYesNo  As Integer
-    Const ColorsRGB As Integer = 255
-    Dim CalcColor   As Integer
-    On Error GoTo errs
-    OrderYesNo = MsgBox("Select 'Yes' to order the results by the number of entries." & vbCrLf & vbCrLf & "Select 'No' to order by most recent activity. (Default)", vbQuestion + vbYesNo, "Display results ordered by number of entries?")
-    DoEvents
-    Screen.MousePointer = vbHourglass
-    Flexgrid1.Redraw = False
-    Flexgrid1.Clear
-    Flexgrid1.Rows = 2
-    Flexgrid1.FixedCols = 1
-    Flexgrid1.FixedRows = 1
-    strReportType = "All Open Job Packets"
-    sAddlMsg = ""
-    ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
-    If rs.RecordCount <= 0 Then
-        rs.Close
-        cn.Close
-        bolRunning = False
-        HideData
-        Flexgrid1.Clear
-        Screen.MousePointer = vbDefault
-        Exit Sub
-    End If
-    QryEntryNumbers
-    Line = 1
-    Flexgrid1.Rows = rs.RecordCount + 1
-    Flexgrid1.Cols = 11
-    pBar.Value = 0
-    frmpBar.Visible = True
-    pBar.Max = rs.RecordCount
-    ' Create header row
-    Flexgrid1.TextMatrix(0, 1) = "Job Number"
-    Flexgrid1.TextMatrix(0, 2) = "Part Number"
-    Flexgrid1.TextMatrix(0, 3) = "Description"
-    Flexgrid1.TextMatrix(0, 4) = "Sales Number"
-    Flexgrid1.TextMatrix(0, 5) = "Customer/PO Number"
-    Flexgrid1.TextMatrix(0, 6) = "Created By"
-    Flexgrid1.TextMatrix(0, 7) = "Create Date"
-    Flexgrid1.TextMatrix(0, 8) = "Last Activity Date"
-    Flexgrid1.TextMatrix(0, 9) = "Last Activity"
-    Flexgrid1.TextMatrix(0, 10) = "Entries"
-    ReDim strUsedJobNums(rs.RecordCount + 1)
-    Do Until rs.EOF
-        With rs
-            pBar.Value = .AbsolutePosition
-            DoEvents
-            Entries = GetNumberOfEntries(!idTicketJobNum)
-            CalcColor = ColorsRGB - (Entries * RGBMulti)
-            If CalcColor <= 0 Then CalcColor = 0
-            Flexgrid1.TextMatrix(Line, 0) = Line
-            Flexgrid1.TextMatrix(Line, 1) = !idTicketJobNum
-            Flexgrid1.TextMatrix(Line, 2) = !idTicketPartNum
-            Flexgrid1.TextMatrix(Line, 3) = !idTicketDescription
-            Flexgrid1.TextMatrix(Line, 4) = !idTicketSalesNum
-            Flexgrid1.TextMatrix(Line, 5) = !idTicketCustPoNum
-            Flexgrid1.TextMatrix(Line, 6) = !idTicketCreator
-            Flexgrid1.TextMatrix(Line, 7) = !idTicketCreateDate
-            Flexgrid1.TextMatrix(Line, 8) = !idTicketDate
-            Flexgrid1.TextMatrix(Line, 10) = Entries
-            If !idTicketAction = "CREATED" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idTicketCreator
-            ElseIf !idTicketAction = "INTRANSIT" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUserFrom & " SENT the job packet to " & !idTicketUserTo
-            ElseIf !idTicketAction = "RECEIVED" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " RECEIVED the job packet from " & !idTicketUserFrom
-            ElseIf !idTicketStatus = "CLOSED" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " CLOSED the job packet."
-            ElseIf !idTicketStatus = "OPEN" And !idTicketAction = "FILED" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " FILED the job packet."
-            ElseIf !idTicketAction = "REOPENED" Then
-                Call FlexGridRowColor(Flexgrid1, Line, RGB(255, CalcColor, CalcColor))
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " REOPENED the job packet."
-            End If
-            Line = Line + 1
-            rs.MoveNext
-        End With
-    Loop
-    Flexgrid1.Rows = Line
-    rs.Close
-    cn.Close
-    bolRunning = False
-    HideData
-    SizeTheSheet Flexgrid1
-    If OrderYesNo = vbYes Then
-        Flexgrid1.col = 10
-        Flexgrid1.Sort = flexSortGenericDescending
-    Else
-        'dont order
-    End If
-    Flexgrid1.Redraw = True
-    Flexgrid1.Visible = True
-    pBar.Value = 0
-    frmpBar.Visible = False
-    Screen.MousePointer = vbDefault
-    TotT = lngQryTimes(intQryIndex) * 0.001
-    StatusBar1.Panels.Item(1).Text = Line - 1 & " results returned in " & TotT & " seconds"
-    Exit Sub
-errs:
-    Screen.MousePointer = vbDefault
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        CommsUp
-    End If
-    bolRunning = False
-End Sub
+
 Private Sub ShowAllOpen()
     bolRunning = True
     Dim rs      As New ADODB.Recordset
-    Dim cn      As New ADODB.Connection
     Dim strSQL1 As String
     Dim Line    As Integer
     Dim TotT    As Single
@@ -5388,13 +4862,10 @@ Private Sub ShowAllOpen()
     strReportType = "All Open Job Packets"
     sAddlMsg = ""
     ShowData
-    cn.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    cn.CursorLocation = adUseClient
+    cn_global.CursorLocation = adUseClient
     strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'OPEN' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn, adOpenForwardOnly, adLockReadOnly
+    Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount <= 0 Then
-        rs.Close
-        cn.Close
         bolRunning = False
         HideData
         Flexgrid1.Clear
@@ -5455,8 +4926,6 @@ Private Sub ShowAllOpen()
         End With
     Loop
     Flexgrid1.Rows = Line
-    rs.Close
-    cn.Close
     bolRunning = False
     HideData
     SizeTheSheet Flexgrid1
@@ -5477,6 +4946,7 @@ errs:
     End If
     bolRunning = False
 End Sub
+
 Private Sub cmdAllOpenReport_Click()
     If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
         Exit Sub
@@ -5554,7 +5024,7 @@ Private Sub cmdRefresh_Click()
     DoEvents
     bolRefreshRunning = True
     RefreshAll
-    RefreshHistory
+    'RefreshHistory
     UpdateUserList
     bolRefreshRunning = False
     Screen.MousePointer = vbDefault
@@ -5691,14 +5161,13 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
             FlexGridHist.Row = intRowSel
             FlexGridHist.ColSel = FlexGridHist.Cols - 1
             FlexGridHist.RowSel = intRowSel + 1
-    
         End If
     End If
     If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
 End Sub
 Private Sub FlexGridHist_Scroll()
     FlexHistLastTopRow = FlexGridHist.TopRow
-   ' DisplayArrows
+    ' DisplayArrows
 End Sub
 Private Sub FlexGridIN_Click()
     Set WhichGrid = FlexGridIN
@@ -5783,7 +5252,6 @@ Private Sub Form_Initialize()
     DoEvents
 End Sub
 Private Sub Form_Load()
-    
     Dim i          As Integer
     Dim Commands() As String
     Dim ErrToss    As Boolean
@@ -5797,11 +5265,9 @@ Private Sub Form_Load()
     End With
     bolInitialLoad = True
     FindMySQLDriver
-    Debug.Print strSQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    'picOlder.Top = FlexGridHist.Top + FlexGridHist.Height - picOlder.Height
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
@@ -5830,6 +5296,7 @@ Private Sub Form_Load()
     strServerAddress = "10.35.1.40" '"10.0.1.232"
     strUsername = "TicketApp"
     strPassword = "yb4w4"
+    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     intFormHMax = 10500 '10620 '10500
     intFormHMin = 5535 '5535 '5025
     If CheckForAdmin(strLocalUser) Then
@@ -5887,11 +5354,9 @@ Private Sub Form_Load()
     SSTab1.TabPicture(1) = TabPics(1)
     SSTab1.TabPicture(2) = TabPics(2)
     SSTab1.TabPicture(3) = TabPics(3)
-    
     Set picDataPics(0) = LoadPicture(App.Path & "\Images\DataOff2Light.gif")
     Set picDataPics(1) = LoadPicture(App.Path & "\Images\NoData2.gif")
     Set picDataPics(2) = LoadPicture(App.Path & "\Images\Data2.gif")
-    
     frmSplash.lblStatus.Caption = "Loading user lists..."
     DoEvents
     GetUserIndex
@@ -5918,7 +5383,7 @@ Private Sub Form_Load()
         End If
     Next
     TheX = pbScrollBox.ScaleWidth
-   ' picOlder.Left = FlexGridHist.Left + FlexGridHist.Width / 2 - (picOlder.Width / 2) - 120
+    ' picOlder.Left = FlexGridHist.Left + FlexGridHist.Width / 2 - (picOlder.Width / 2) - 120
     bolInitialLoad = False
     lblQryTime.Caption = "0 ms"
     frmpBar.Top = SSTab1.Top + SSTab1.Height / 2 - frmpBar.Height / 2 + SSTab1.TabHeight - 250
@@ -5943,6 +5408,7 @@ Private Sub SetupAdmin()
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Call WheelUnHook
+    cn_global.Close
     Unload Me
     End
 End Sub
