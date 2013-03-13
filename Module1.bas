@@ -27,6 +27,7 @@ Public dDayLine()   As tLine
 Public dPointLine   As tLine
 Public dAction()    As tTxtBox
 Public dNote()      As tTxtBox
+Public dTimer       As tTxtBox
 Public strSQLDriver As String
 Public bolHook      As Boolean
 Public strINILoc    As String
@@ -84,15 +85,15 @@ Public gHW As Long
 Private Declare Function CallWindowProc _
                 Lib "user32.dll" _
                 Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-                                         ByVal hwnd As Long, _
+                                         ByVal hWnd As Long, _
                                          ByVal Msg As Long, _
                                          ByVal wParam As Long, _
                                          ByVal lParam As Long) As Long
-Private Declare Function SetWindowLong _
-                Lib "user32.dll" _
-                Alias "SetWindowLongA" (ByVal hwnd As Long, _
-                                        ByVal nIndex As Long, _
-                                        ByVal dwNewLong As Long) As Long
+Public Declare Function SetWindowLong _
+               Lib "user32.dll" _
+               Alias "SetWindowLongA" (ByVal hWnd As Long, _
+                                       ByVal nIndex As Long, _
+                                       ByVal dwNewLong As Long) As Long
 Public Const CB_SHOWDROPDOWN As Long = &H14F
 Private Const WM_MOUSEWHEEL = &H20A
 Dim LocalHwnd                        As Long
@@ -133,7 +134,7 @@ Public bolBannerCleared      As Boolean
 Public Const strDBDateFormat As String = "YYYY-MM-DD"
 Private Declare Function SendMessage _
                 Lib "user32.dll" _
-                Alias "SendMessageA" (ByVal hwnd As Long, _
+                Alias "SendMessageA" (ByVal hWnd As Long, _
                                       ByVal Msg As Long, _
                                       wParam As Any, _
                                       lParam As Any) As Long
@@ -159,7 +160,7 @@ Public r1, r2, g1, g2, b1, b2 As Integer
 Public strEntries()      As String
 Public intNumOfEntries() As Integer
 Public Declare Function FlashWindow _
-               Lib "user32" (ByVal hwnd As Long, _
+               Lib "user32" (ByVal hWnd As Long, _
                              ByVal bInvert As Long) As Long
 Public Const Invert = 1
 Public bolNewHistWindow As Boolean
@@ -205,6 +206,14 @@ Declare Function QueryPerformanceFrequency Lib "kernel32" (X As Currency) As Boo
 Public total     As Currency
 Public Ctr1      As Currency, Ctr2 As Currency, Freq As Currency
 Global cn_global As New ADODB.Connection
+Public Declare Function RoundRect _
+               Lib "gdi32" (ByVal hdc As Long, _
+                            ByVal X1 As Long, _
+                            ByVal Y1 As Long, _
+                            ByVal X2 As Long, _
+                            ByVal Y2 As Long, _
+                            ByVal X3 As Long, _
+                            ByVal Y3 As Long) As Long
 
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
@@ -762,16 +771,16 @@ Public Sub OpenCloseBanner(Color As Long, _
         Else
             intTicksToWait = 170
         End If
-        .shpTimer.Width = intShpTimerStartWidth
+        dTimer.Width = intShpTimerStartWidth
         .frmConfirm.BackColor = Color
         If FontColor <> 0 Then
             .lblConfirm.ForeColor = FontColor
             .Border.BorderColor = FontColor
-            .shpTimer.BackColor = FontColor
+            dTimer.Color = FontColor
         Else
             .lblConfirm.ForeColor = vbBlack
             .Border.BorderColor = vbBlack
-            .shpTimer.BackColor = vbBlack
+            dTimer.Color = vbBlack
         End If
         .lblConfirm.Caption = Text
         .lblConfirm.Left = 240
@@ -787,8 +796,8 @@ Public Sub OpenCloseBanner(Color As Long, _
             .Border.Height = 615
         End If
         .frmConfirm.Width = .lblConfirm.Width + 500
-        If .frmConfirm.Width <= .shpTimer.Width Then 'make sure banner is no smaller than count down bar
-            .frmConfirm.Width = .shpTimer.Width + 300
+        If .frmConfirm.Width <= dTimer.Width Then 'make sure banner is no smaller than count down bar
+            .frmConfirm.Width = dTimer.Width + 300
         End If
         .Border.Width = .frmConfirm.Width - 235
         .frmConfirm.Left = .Width / 2 - .frmConfirm.Width / 2 - 50
@@ -797,10 +806,20 @@ Public Sub OpenCloseBanner(Color As Long, _
         intTicksWaited = 0
         bolOpenConfirm = True
         .tmrConfirmSlider.Enabled = True
-        .shpTimer.Top = .Border.Height + 75
-        .shpTimer.Left = .frmConfirm.Width / 2 - .shpTimer.Width / 2
-        sngShapeResize = .shpTimer.Width / intTicksToWait
+        dTimer.Top = .Border.Height + 70
+        dTimer.Left = .frmConfirm.Width / 2 - dTimer.Width / 2
+        sngShapeResize = dTimer.Width / intTicksToWait
         .lblConfirm.Left = .frmConfirm.Width / 2 - .lblConfirm.Width / 2
+        .frmConfirm.Line (dTimer.Left, dTimer.Top)-(dTimer.Left + dTimer.Width, dTimer.Top + 85), dTimer.Color, BF
+        RoundRect .frmConfirm.hdc, (.Border.Left / Screen.TwipsPerPixelY), (.Border.Top / Screen.TwipsPerPixelY), ((.Border.Left / Screen.TwipsPerPixelY) + (.Border.Width / Screen.TwipsPerPixelY)), ((.Border.Top / Screen.TwipsPerPixelY) + (.Border.Height / Screen.TwipsPerPixelY)), 10, 10
+        .frmConfirm.CurrentX = (.lblConfirm.Left) '/ Screen.TwipsPerPixelX)
+        .frmConfirm.CurrentY = (.lblConfirm.Top) '/ Screen.TwipsPerPixelY)
+        .frmConfirm.ForeColor = .lblConfirm.ForeColor
+        .frmConfirm.DrawStyle = 0
+        .frmConfirm.Font.Name = "Tahoma"
+        .frmConfirm.Font.Size = 11
+        .frmConfirm.FontTransparent = True
+        .frmConfirm.Print .lblConfirm.Caption
     End With
 End Sub
 Public Sub Hook(ByVal gHW As Long, HKflg As Boolean)
@@ -886,7 +905,7 @@ End Function
 Public Sub WheelHook(PassedForm As Form)
     On Error Resume Next
     Set MyForm = PassedForm
-    LocalHwnd = PassedForm.hwnd
+    LocalHwnd = PassedForm.hWnd
     LocalPrevWndProc = SetWindowLong(LocalHwnd, GWL_WNDPROC, AddressOf WindowProc2)
 End Sub
 Public Sub WheelUnHook()
