@@ -2058,12 +2058,12 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 Private Declare Function GetActiveWindow Lib "user32" () As Long
-Private Declare Function SetActiveWindow Lib "user32.dll" (ByVal hWnd As Long) As Long
+Private Declare Function SetActiveWindow Lib "user32.dll" (ByVal hwnd As Long) As Long
 Private Declare Function GetKeyState Lib "user32" (ByVal nVirtKey As Long) As Integer
 Private Const VK_TAB = &H9
 Private Declare Function SendMessage _
                 Lib "user32" _
-                Alias "SendMessageA" (ByVal hWnd As Long, _
+                Alias "SendMessageA" (ByVal hwnd As Long, _
                                       ByVal wMsg As Long, _
                                       ByVal wParam As Long, _
                                       lParam As Any) As Long
@@ -2078,14 +2078,14 @@ Private Type RECT
     Bottom As Long
 End Type
 Private Declare Function GetWindowRect _
-                Lib "user32" (ByVal hWnd As Long, _
+                Lib "user32" (ByVal hwnd As Long, _
                               lpRect As RECT) As Long
 Private Declare Function ScreenToClientAny _
                 Lib "user32" _
-                Alias "ScreenToClient" (ByVal hWnd As Long, _
+                Alias "ScreenToClient" (ByVal hwnd As Long, _
                                         lpPoint As Any) As Long
 Private Declare Function MoveWindow _
-                Lib "user32" (ByVal hWnd As Long, _
+                Lib "user32" (ByVal hwnd As Long, _
                               ByVal X As Long, _
                               ByVal Y As Long, _
                               ByVal nWidth As Long, _
@@ -2108,10 +2108,10 @@ End Function
 Public Sub SetComboBoxHeight(ComboBox As ImageCombo, ByVal NewHeight As Long)
     Dim lpRect As RECT
     Dim wi     As Long
-    GetWindowRect ComboBox.hWnd, lpRect
+    GetWindowRect ComboBox.hwnd, lpRect
     wi = lpRect.Right - lpRect.Left
-    ScreenToClientAny ComboBox.Parent.hWnd, lpRect
-    MoveWindow ComboBox.hWnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
+    ScreenToClientAny ComboBox.Parent.hwnd, lpRect
+    MoveWindow ComboBox.hwnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
 End Sub
 Private Function GetTabState() As Boolean
     GetTabState = False
@@ -2911,7 +2911,7 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
     'Get the height of the text in the textbox
     HeightOfLine = Me.TextHeight(Text1.Text) + 50 '285
     'Call API to determine how many lines of text are in text box
-    LinesOfText = SendMessage(Text1.hWnd, EM_GETLINECOUNT, 0&, 0&)
+    LinesOfText = SendMessage(Text1.hwnd, EM_GETLINECOUNT, 0&, 0&)
     'Check to see if row is not tall enough
     If FlexGridHist.RowHeight(MyRow) < (LinesOfText * HeightOfLine) Then
         'Adjust the RowHeight based on the number of lines in textbox
@@ -4830,7 +4830,7 @@ Private Sub ShowAllOpen()
     Dim strSQL1 As String
     Dim Line    As Integer
     Dim TotT    As Single
-    On Error GoTo errs
+    'On Error GoTo errs
     Screen.MousePointer = vbHourglass
     Flexgrid1.Redraw = False
     Flexgrid1.Clear
@@ -4841,7 +4841,15 @@ Private Sub ShowAllOpen()
     sAddlMsg = ""
     ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'OPEN' Order By ticketdatabase.idTicketDate Desc"
+    'strSQL1 = "SELECT * From ticketdatabase Where idTicketIsActive = '1' and idTicketStatus = 'OPEN' Order By ticketdatabase.idTicketDate Desc"
+    
+    'strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" _
+& " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" _
+& " AND ticketdb.packetlist.idStatus='OPEN') ORDER BY idDate DESC"
+    
+    strSQL1 = "SELECT * FROM packetlist d LEFT JOIN packetentrydb c ON c.idJobNum = d.idJobNum WHERE idDate = (SELECT MAX(idDate) FROM packetentrydb c2 Where c2.idJobNum = d.idJobNum) ORDER BY idDate DESC"
+   Debug.Print strSQL1
+   
     Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount <= 0 Then
         bolRunning = False
@@ -4872,32 +4880,32 @@ Private Sub ShowAllOpen()
             pBar.Value = .AbsolutePosition
             DoEvents
             Flexgrid1.TextMatrix(Line, 0) = Line
-            Flexgrid1.TextMatrix(Line, 1) = !idTicketJobNum
-            Flexgrid1.TextMatrix(Line, 2) = !idTicketPartNum
-            Flexgrid1.TextMatrix(Line, 3) = !idTicketDescription
-            Flexgrid1.TextMatrix(Line, 4) = !idTicketSalesNum
-            Flexgrid1.TextMatrix(Line, 5) = !idTicketCustPoNum
-            Flexgrid1.TextMatrix(Line, 6) = !idTicketCreator
-            Flexgrid1.TextMatrix(Line, 7) = !idTicketCreateDate
-            Flexgrid1.TextMatrix(Line, 8) = !idTicketDate
-            If !idTicketAction = "CREATED" Then
+            Flexgrid1.TextMatrix(Line, 1) = !idJobNum
+            Flexgrid1.TextMatrix(Line, 2) = !idPartNum
+            Flexgrid1.TextMatrix(Line, 3) = !idDescription
+            Flexgrid1.TextMatrix(Line, 4) = !idSalesNum
+            Flexgrid1.TextMatrix(Line, 5) = !idCustPoNum
+            Flexgrid1.TextMatrix(Line, 6) = !idCreator
+            Flexgrid1.TextMatrix(Line, 7) = !idCreateDate
+           ' Flexgrid1.TextMatrix(Line, 8) = !idTicketDate
+            If !idAction = "CREATED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H80C0FF)
-                Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idTicketCreator
-            ElseIf !idTicketAction = "INTRANSIT" Then
+                Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idCreator
+            ElseIf !idAction = "INTRANSIT" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H80FF80)
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUserFrom & " SENT the job packet to " & !idTicketUserTo
-            ElseIf !idTicketAction = "RECEIVED" Then
+                Flexgrid1.TextMatrix(Line, 9) = !idUserFrom & " SENT the job packet to " & !idUserTo
+            ElseIf !idAction = "RECEIVED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H80FFFF)
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " RECEIVED the job packet from " & !idTicketUserFrom
-            ElseIf !idTicketStatus = "CLOSED" Then
+                Flexgrid1.TextMatrix(Line, 9) = !idUser & " RECEIVED the job packet from " & !idUserFrom
+            ElseIf !idStatus = "CLOSED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H8080FF)
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " CLOSED the job packet."
-            ElseIf !idTicketStatus = "OPEN" And !idTicketAction = "FILED" Then
+                Flexgrid1.TextMatrix(Line, 9) = !idUser & " CLOSED the job packet."
+            ElseIf !idStatus = "OPEN" And !idAction = "FILED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &HFF8080)
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " FILED the job packet."
-            ElseIf !idTicketAction = "REOPENED" Then
+                Flexgrid1.TextMatrix(Line, 9) = !idUser & " FILED the job packet."
+            ElseIf !idAction = "REOPENED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &HFF80FF)
-                Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " REOPENED the job packet."
+                Flexgrid1.TextMatrix(Line, 9) = !idUser & " REOPENED the job packet."
             End If
             Line = Line + 1
             rs.MoveNext
@@ -5236,10 +5244,10 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
-        Hook Me.hWnd, True
+        Hook Me.hwnd, True
         Call WheelHook(Form1)
     End If
     lblAppVersion.Caption = App.Major & "." & App.Minor & "." & App.Revision
@@ -5378,7 +5386,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     End
 End Sub
 Private Sub Form_Unload(Cancel As Integer)
-    Hook Me.hWnd, False
+    Hook Me.hwnd, False
 End Sub
 Private Sub Frame1_MouseMove(Button As Integer, _
                              Shift As Integer, _
@@ -5658,7 +5666,7 @@ Private Sub optMove_Click()
     cmbUsers.Visible = True
     cmbUsers.SetFocus
     lblUser.Visible = True
-    SendMessage cmbUsers.hWnd, CB_SHOWDROPDOWN, 1, ByVal 0&
+    SendMessage cmbUsers.hwnd, CB_SHOWDROPDOWN, 1, ByVal 0&
 End Sub
 Private Sub optReceive_Click()
     SetBoxesForEdit "All"
@@ -5813,7 +5821,7 @@ Private Sub tmrLiveSearch_Timer()
 End Sub
 Private Sub tmrRefresher_Timer()
     On Error Resume Next
-    If GetActiveWindow() <> Form1.hWnd Then
+    If GetActiveWindow() <> Form1.hwnd Then
         'Do form's lost-focus routines here.
         ProgHasFocus = False
     Else
@@ -5874,7 +5882,7 @@ Private Sub tmrScroll_Timer()
     pbScrollBox.Print strCommentText
 End Sub
 Private Sub tmrWindowFlasher_Timer()
-    FlashWindow Me.hWnd, Invert
+    FlashWindow Me.hwnd, Invert
 End Sub
 Private Sub txtCustPoNo_Change()
     PositionMaxChar txtCustPoNo
