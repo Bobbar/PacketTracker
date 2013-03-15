@@ -85,13 +85,13 @@ Public gHW As Long
 Private Declare Function CallWindowProc _
                 Lib "user32.dll" _
                 Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-                                         ByVal hWnd As Long, _
+                                         ByVal hwnd As Long, _
                                          ByVal Msg As Long, _
                                          ByVal wParam As Long, _
                                          ByVal lParam As Long) As Long
 Public Declare Function SetWindowLong _
                Lib "user32.dll" _
-               Alias "SetWindowLongA" (ByVal hWnd As Long, _
+               Alias "SetWindowLongA" (ByVal hwnd As Long, _
                                        ByVal nIndex As Long, _
                                        ByVal dwNewLong As Long) As Long
 Public Const CB_SHOWDROPDOWN As Long = &H14F
@@ -134,7 +134,7 @@ Public bolBannerCleared      As Boolean
 Public Const strDBDateFormat As String = "YYYY-MM-DD"
 Private Declare Function SendMessage _
                 Lib "user32.dll" _
-                Alias "SendMessageA" (ByVal hWnd As Long, _
+                Alias "SendMessageA" (ByVal hwnd As Long, _
                                       ByVal Msg As Long, _
                                       wParam As Any, _
                                       lParam As Any) As Long
@@ -160,7 +160,7 @@ Public r1, r2, g1, g2, b1, b2 As Integer
 Public strEntries()      As String
 Public intNumOfEntries() As Integer
 Public Declare Function FlashWindow _
-               Lib "user32" (ByVal hWnd As Long, _
+               Lib "user32" (ByVal hwnd As Long, _
                              ByVal bInvert As Long) As Long
 Public Const Invert = 1
 Public bolNewHistWindow As Boolean
@@ -214,6 +214,8 @@ Public Declare Function RoundRect _
                             ByVal Y2 As Long, _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
+Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
+
 
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
@@ -905,7 +907,7 @@ End Function
 Public Sub WheelHook(PassedForm As Form)
     On Error Resume Next
     Set MyForm = PassedForm
-    LocalHwnd = PassedForm.hWnd
+    LocalHwnd = PassedForm.hwnd
     LocalPrevWndProc = SetWindowLong(LocalHwnd, GWL_WNDPROC, AddressOf WindowProc2)
 End Sub
 Public Sub WheelUnHook()

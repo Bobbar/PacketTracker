@@ -2058,12 +2058,12 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Option Explicit
 Private Declare Function GetActiveWindow Lib "user32" () As Long
-Private Declare Function SetActiveWindow Lib "user32.dll" (ByVal hWnd As Long) As Long
+Private Declare Function SetActiveWindow Lib "user32.dll" (ByVal hwnd As Long) As Long
 Private Declare Function GetKeyState Lib "user32" (ByVal nVirtKey As Long) As Integer
 Private Const VK_TAB = &H9
 Private Declare Function SendMessage _
                 Lib "user32" _
-                Alias "SendMessageA" (ByVal hWnd As Long, _
+                Alias "SendMessageA" (ByVal hwnd As Long, _
                                       ByVal wMsg As Long, _
                                       ByVal wParam As Long, _
                                       lParam As Any) As Long
@@ -2078,14 +2078,14 @@ Private Type RECT
     Bottom As Long
 End Type
 Private Declare Function GetWindowRect _
-                Lib "user32" (ByVal hWnd As Long, _
+                Lib "user32" (ByVal hwnd As Long, _
                               lpRect As RECT) As Long
 Private Declare Function ScreenToClientAny _
                 Lib "user32" _
-                Alias "ScreenToClient" (ByVal hWnd As Long, _
+                Alias "ScreenToClient" (ByVal hwnd As Long, _
                                         lpPoint As Any) As Long
 Private Declare Function MoveWindow _
-                Lib "user32" (ByVal hWnd As Long, _
+                Lib "user32" (ByVal hwnd As Long, _
                               ByVal X As Long, _
                               ByVal Y As Long, _
                               ByVal nWidth As Long, _
@@ -2108,10 +2108,10 @@ End Function
 Public Sub SetComboBoxHeight(ComboBox As ImageCombo, ByVal NewHeight As Long)
     Dim lpRect As RECT
     Dim wi     As Long
-    GetWindowRect ComboBox.hWnd, lpRect
+    GetWindowRect ComboBox.hwnd, lpRect
     wi = lpRect.Right - lpRect.Left
-    ScreenToClientAny ComboBox.Parent.hWnd, lpRect
-    MoveWindow ComboBox.hWnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
+    ScreenToClientAny ComboBox.Parent.hwnd, lpRect
+    MoveWindow ComboBox.hwnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
 End Sub
 Private Function GetTabState() As Boolean
     GetTabState = False
@@ -2361,8 +2361,10 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
         txtCustPoNo.Text = !idTicketCustPoNum
         txtSalesNo.Text = !idTicketSalesNum
         txtCreator.Text = GetFullName(!idTicketCreator)
+        strCurrentPacketCreator = !idTicketCreator
         txtCreateDate.Text = !idTicketCreateDate
         txtTicketOwner.Text = GetFullName(!idTicketUser)
+        strCurrentPacketOwner = !idTicketUser
         txtActionDate.Text = !idTicketDate
         strTicketAction = !idTicketAction
         strUserFrom = !idTicketUserFrom
@@ -2911,7 +2913,7 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
     'Get the height of the text in the textbox
     HeightOfLine = Me.TextHeight(Text1.Text) + 50 '285
     'Call API to determine how many lines of text are in text box
-    LinesOfText = SendMessage(Text1.hWnd, EM_GETLINECOUNT, 0&, 0&)
+    LinesOfText = SendMessage(Text1.hwnd, EM_GETLINECOUNT, 0&, 0&)
     'Check to see if row is not tall enough
     If FlexGridHist.RowHeight(MyRow) < (LinesOfText * HeightOfLine) Then
         'Adjust the RowHeight based on the number of lines in textbox
@@ -3888,7 +3890,7 @@ Public Sub SubmitFile()
         !idTicketUser = strLocalUser
         !idTicketCreateDate = txtCreateDate.Text
         !idTicketStatus = "OPEN"
-        !idTicketCreator = txtCreator.Text
+        !idTicketCreator = strCurrentPacketCreator
         !idTicketUserFrom = "NULL"
         !idTicketUserTo = "NULL"
         !idTicketComment = strTicketComment
@@ -3943,7 +3945,7 @@ Public Sub SubmitReOpen()
         !idTicketUser = strLocalUser
         !idTicketCreateDate = txtCreateDate.Text
         !idTicketStatus = "OPEN"
-        !idTicketCreator = txtCreator.Text
+        !idTicketCreator = strCurrentPacketCreator
         !idTicketUserFrom = "NULL"
         !idTicketUserTo = "NULL"
         !idTicketComment = strTicketComment
@@ -4002,7 +4004,7 @@ Public Sub SubmitClose()
         !idTicketUser = strLocalUser
         !idTicketCreateDate = txtCreateDate.Text
         !idTicketStatus = "CLOSED"
-        !idTicketCreator = txtCreator.Text
+        !idTicketCreator = strCurrentPacketCreator
         !idTicketUserFrom = "NULL"
         !idTicketUserTo = "NULL"
         !idTicketComment = strTicketComment
@@ -4057,7 +4059,7 @@ Public Sub SubmitReceive()
         !idTicketUser = strLocalUser
         !idTicketCreateDate = txtCreateDate.Text
         !idTicketStatus = "OPEN"
-        !idTicketCreator = txtCreator.Text
+        !idTicketCreator = strCurrentPacketCreator
         !idTicketUserFrom = strUserFrom
         ConfirmText = "Job Packet received from " & GetFullName(!idTicketUserFrom)
         !idTicketUserTo = "NULL"
@@ -4120,7 +4122,7 @@ Public Sub SubmitMove()
         !idTicketUserFrom = strLocalUser
         !idTicketCreateDate = txtCreateDate.Text
         !idTicketStatus = "OPEN"
-        !idTicketCreator = txtCreator.Text
+        !idTicketCreator = strCurrentPacketCreator
         !idTicketUser = strLocalUser
         !idTicketUserTo = strSelectUserTo
         ConfirmText = "Job Packet sent to " & GetFullName(!idTicketUserTo)
@@ -5239,7 +5241,7 @@ Private Sub Form_Load()
     bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
-        Hook Me.hWnd, True
+        Hook Me.hwnd, True
         Call WheelHook(Form1)
     End If
     lblAppVersion.Caption = App.Major & "." & App.Minor & "." & App.Revision
@@ -5378,7 +5380,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     End
 End Sub
 Private Sub Form_Unload(Cancel As Integer)
-    Hook Me.hWnd, False
+    Hook Me.hwnd, False
 End Sub
 Private Sub Frame1_MouseMove(Button As Integer, _
                              Shift As Integer, _
@@ -5658,7 +5660,7 @@ Private Sub optMove_Click()
     cmbUsers.Visible = True
     cmbUsers.SetFocus
     lblUser.Visible = True
-    SendMessage cmbUsers.hWnd, CB_SHOWDROPDOWN, 1, ByVal 0&
+    SendMessage cmbUsers.hwnd, CB_SHOWDROPDOWN, 1, ByVal 0&
 End Sub
 Private Sub optReceive_Click()
     SetBoxesForEdit "All"
@@ -5813,7 +5815,7 @@ Private Sub tmrLiveSearch_Timer()
 End Sub
 Private Sub tmrRefresher_Timer()
     On Error Resume Next
-    If GetActiveWindow() <> Form1.hWnd Then
+    If GetActiveWindow() <> Form1.hwnd Then
         'Do form's lost-focus routines here.
         ProgHasFocus = False
     Else
@@ -5874,7 +5876,7 @@ Private Sub tmrScroll_Timer()
     pbScrollBox.Print strCommentText
 End Sub
 Private Sub tmrWindowFlasher_Timer()
-    FlashWindow Me.hWnd, Invert
+    FlashWindow Me.hwnd, Invert
 End Sub
 Private Sub txtCustPoNo_Change()
     PositionMaxChar txtCustPoNo
