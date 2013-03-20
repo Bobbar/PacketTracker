@@ -492,9 +492,6 @@ Private Sub Form_Resize()
     'cmdCantSeeMe.SetFocus
 End Sub
 
-Private Sub lblNote_Click(Index As Integer)
-End Sub
-
 Private Sub pbDrawArea_MouseMove(Button As Integer, _
                                  Shift As Integer, _
                                  X As Single, _

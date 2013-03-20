@@ -72,26 +72,27 @@ Public TotalTime            As Single
 Public LStep                As Single
 Public Entry, Clicks As Integer
 Public strTimelineComments() As String
-Public Type Stats
-    Name As String
-    ValName As String
-    Value As String
-End Type
 Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public StartTime As Long
 Private Const WM_ACTIVATEAPP = &H1C
 Private Const GWL_WNDPROC = -4
 Public gHW As Long
+Public Declare Function SendMessage _
+                Lib "user32.dll" _
+                Alias "SendMessageA" (ByVal hwnd As Long, _
+                                      ByVal Msg As Long, _
+                                      wParam As Any, _
+                                      lParam As Any) As Long
 Private Declare Function CallWindowProc _
                 Lib "user32.dll" _
                 Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
-                                         ByVal hWnd As Long, _
+                                         ByVal hwnd As Long, _
                                          ByVal Msg As Long, _
                                          ByVal wParam As Long, _
                                          ByVal lParam As Long) As Long
 Public Declare Function SetWindowLong _
                Lib "user32.dll" _
-               Alias "SetWindowLongA" (ByVal hWnd As Long, _
+               Alias "SetWindowLongA" (ByVal hwnd As Long, _
                                        ByVal nIndex As Long, _
                                        ByVal dwNewLong As Long) As Long
 Public Const CB_SHOWDROPDOWN As Long = &H14F
@@ -132,16 +133,8 @@ Public BannerCase(99)        As String
 Public BannerFontColor(99)   As Long
 Public bolBannerCleared      As Boolean
 Public Const strDBDateFormat As String = "YYYY-MM-DD"
-Private Declare Function SendMessage _
-                Lib "user32.dll" _
-                Alias "SendMessageA" (ByVal hWnd As Long, _
-                                      ByVal Msg As Long, _
-                                      wParam As Any, _
-                                      lParam As Any) As Long
-Public Const CCM_FIRST = &H2000
-Public Const CCM_SETBKCOLOR = (CCM_FIRST + 1)
-Public bolMessageDelivered As Boolean
-Public bolInitialLoad      As Boolean
+Public bolMessageDelivered   As Boolean
+Public bolInitialLoad        As Boolean
 Public intFlexGridInLastRow, intFlexGridOutLastRow As Integer
 Public lngQryStart, lngQryEnd As Long
 Public intQryIndex               As Integer
@@ -152,7 +145,6 @@ Public Const strDBDateTimeFormat As String = "YYYY-MM-DD hh:mm:ss"
 Public intCachedBanners, intCurrentCache As Integer
 Public bolRunning        As Boolean
 Public Const RGBMulti    As Integer = 4
-Public Const RGBColorMax As Integer = 255
 Public intColorFlash     As Integer
 Public bolRefreshRunning As Boolean
 Public iRed              As Integer, iGreen As Integer, iBlue As Integer, iStep As Integer
@@ -160,7 +152,7 @@ Public r1, r2, g1, g2, b1, b2 As Integer
 Public strEntries()      As String
 Public intNumOfEntries() As Integer
 Public Declare Function FlashWindow _
-               Lib "user32" (ByVal hWnd As Long, _
+               Lib "user32" (ByVal hwnd As Long, _
                              ByVal bInvert As Long) As Long
 Public Const Invert = 1
 Public bolNewHistWindow As Boolean
@@ -219,7 +211,7 @@ Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
         If strUserIndex(0, i) = strUsername Then
-            GetFullName = UCase(strUserIndex(1, i))
+            GetFullName = UCase$(strUserIndex(1, i))
             Exit Function
         End If
     Next i
@@ -301,7 +293,7 @@ Public Sub CreateINI()
     Dim iNd As Long
     ' Create an Ini File to play with:
     On Error Resume Next
-    If Dir(strINILoc) = "" Then
+    If Dir$(strINILoc) = "" Then
         MkDir Environ$("APPDATA") & "\JPT\"
         With m_cIni
             .Path = strINILoc
@@ -323,13 +315,12 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     End If
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idGUID = '" & strGUID & "'"
+    strSQL1 = "SELECT * From packetentrydb Where idGUIDEntry = '" & strGUID & "'"
     rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
         .Delete
         .Update
     End With
-    SetLeadTicketActive Form1.txtJobNo.Text
     Form1.HideData
     ShowBanner colInTransit, "Single entry deleted successfully."
     Form1.RefreshAfterEdit
@@ -354,48 +345,17 @@ Public Sub DeletePacket(JobNum As String)
     Dim strSQL1 As String
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
+    strSQL1 = "SELECT * From packetlist Where idJobNum = '" & JobNum & "'"
     rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    Do Until rs.EOF
-        With rs
-            .Delete
-            .MoveNext
-        End With
-    Loop
+    'Do Until rs.EOF
+    With rs
+        .Delete
+        '.MoveNext
+    End With
+    'Loop
     Form1.HideData
     Form1.ClearFields
     ShowBanner colInTransit, "Packet Deleted!"
-End Sub
-Public Sub SetLeadTicketActive(JobNum As String)
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Form1.ShowData
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        If !idTicketIsActive <> "1" Then
-            !idTicketIsActive = "1"
-            .Update
-            .Close
-        Else
-            .Close
-        End If
-    End With
-    Form1.HideData
-End Sub
-Public Sub SetPrevTicketInactive(JobNum As String)
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    On Error Resume Next
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum Like '" & JobNum & "' Order By ticketdatabase.idTicketDate Desc"
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        .MoveNext
-        !idTicketIsActive = "0"
-        .Update
-    End With
 End Sub
 ' KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not
 ' SYNCHRONIZE))
@@ -668,7 +628,7 @@ Public Sub QryEntryNumbers()
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim i
-    strSQL1 = "SELECT idTicketJobNum, COUNT(*) FROM ticketdatabase GROUP BY idTicketJobNum"
+    strSQL1 = "SELECT idJobNum, COUNT(*) FROM packetentrydb GROUP BY idJobNum"
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
     For i = 0 To rs.RecordCount
@@ -690,10 +650,10 @@ Public Function ArrayPosition(ByVal FindValue As Variant, arrSearch As Variant) 
     ArrayPosition = -1  'Set default value of "not found"
     On Error GoTo LocalError
     If Not IsArray(arrSearch) Then Exit Function
-    FindValue = UCase(FindValue)  'no need for the If, you can UCase anything (faster this way)
+    FindValue = UCase$(FindValue)  'no need for the If, you can UCase anything (faster this way)
     Dim lngLoop As Long
     For lngLoop = LBound(arrSearch) To UBound(arrSearch)
-        If UCase(arrSearch(lngLoop)) = FindValue Then
+        If UCase$(arrSearch(lngLoop)) = FindValue Then
             ArrayPosition = lngLoop
             Exit Function
         End If
@@ -753,6 +713,7 @@ Public Sub ShowBanner(Color As Long, _
         Form1.tmrBannerWait.Enabled = True
     End If
 End Sub
+
 Public Sub OpenCloseBanner(Color As Long, _
                            Text As String, _
                            Optional Ticks As Integer, _
@@ -787,13 +748,13 @@ Public Sub OpenCloseBanner(Color As Long, _
         If .lblConfirm.Width >= .Width Then
             .lblConfirm.WordWrap = True
             .lblConfirm.Width = .Width - 550
-            .frmConfirm.Height = .lblConfirm.Height + 585
             .Border.Height = .frmConfirm.Height - 240
+            .frmConfirm.Height = .Border.Height + 240  '585
         Else
             .lblConfirm.WordWrap = False
-            .frmConfirm.Height = 855
             .lblConfirm.Height = 270
-            .Border.Height = 615
+            .Border.Height = 855 '615
+            .frmConfirm.Height = .Border.Height + 240
         End If
         .frmConfirm.Width = .lblConfirm.Width + 500
         If .frmConfirm.Width <= dTimer.Width Then 'make sure banner is no smaller than count down bar
@@ -820,6 +781,7 @@ Public Sub OpenCloseBanner(Color As Long, _
         .frmConfirm.Font.Size = 11
         .frmConfirm.FontTransparent = True
         .frmConfirm.Print .lblConfirm.Caption
+        .lblClose.Left = .Border.Width - 140
     End With
 End Sub
 Public Sub Hook(ByVal gHW As Long, HKflg As Boolean)
@@ -905,7 +867,7 @@ End Function
 Public Sub WheelHook(PassedForm As Form)
     On Error Resume Next
     Set MyForm = PassedForm
-    LocalHwnd = PassedForm.hWnd
+    LocalHwnd = PassedForm.hwnd
     LocalPrevWndProc = SetWindowLong(LocalHwnd, GWL_WNDPROC, AddressOf WindowProc2)
 End Sub
 Public Sub WheelUnHook()
