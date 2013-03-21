@@ -2263,7 +2263,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80FFFF)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
-    ElseIf strStatus = "CLOSED" Then
+    ElseIf strAction = "NULL" Then
         If strComment <> "" And bolPrinting = False Then
             FlexGridHist.Rows = FlexGridHist.Rows + 1
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
@@ -2290,7 +2290,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H8080FF)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
-    ElseIf strStatus = "OPEN" And strAction = "FILED" Then
+    ElseIf strAction = "FILED" Then
         If strComment <> "" And bolPrinting = False Then
             FlexGridHist.Rows = FlexGridHist.Rows + 1
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
