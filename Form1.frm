@@ -2676,7 +2676,7 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim strSQL1 As String
     Dim LineIN, LineOUT, Row As Integer
     On Error GoTo errs
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate"
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
     cn_global.CursorLocation = adUseClient
     FlexGridOUT.Clear
     FlexGridOUT.Redraw = False
@@ -5060,7 +5060,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
