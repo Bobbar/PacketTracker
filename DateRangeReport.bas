@@ -31,14 +31,19 @@ Public Sub DateRangeReport()
         Form1.Flexgrid1.Cols = 10
     End If
     Line = 1
-    strQry = "SELECT * From ticketdatabase WHERE idTicketIsActive = '1' AND" & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " ticketdatabase.idTicketJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " ticketdatabase.idTicketDescription LIKE '%" & _
-       frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " ticketdatabase.idTicketPartNum LIKE '%" & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " ticketdatabase.idTicketSalesNum LIKE '%" & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " ticketdatabase.idTicketDrawingNum LIKE '%" & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " ticketdatabase.idTicketCustPONum LIKE '%" & frmReportFilter.txtSearchCust.Text & "%' AND", "")) & (IIf(frmReportFilter.chkAllTickets.Value = 1, "", " Group By ticketdatabase.idTicketDate")) & " Order By ticketdatabase.idTicketDate Desc"
-    'strQry = "SELECT * From ticketdatabase WHERE idTicketIsActive = '1' AND" & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " ticketdatabase.idTicketJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " ticketdatabase.idTicketDescription LIKE '%" & _
-     frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " ticketdatabase.idTicketPartNum LIKE '" & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " ticketdatabase.idTicketSalesNum LIKE '" & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " ticketdatabase.idTicketDrawingNum LIKE '" & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " ticketdatabase.idTicketCustPONum LIKE '" & frmReportFilter.txtSearchCust.Text & "%' AND", "")) & (IIf(frmReportFilter.chkAllTickets.Value = 1, "", " Group By ticketdatabase.idTicketDate")) & " Order By ticketdatabase.idTicketDate Desc"
+    strQry = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" _
+       & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum) AND" _
+       & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " packetlist.idJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) _
+       & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " packetlist.idDescription LIKE '%" _
+       & frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " packetlist.idPartNum LIKE '" _
+       & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " packetlist.idSalesNum LIKE '" _
+       & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " packetlist.idDrawingNum LIKE '" _
+       & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " packetlist.idCustPONum LIKE '" _
+       & frmReportFilter.txtSearchCust.Text & "%' AND", "")) & " Order By packetentrydb.idDate Desc"
     strQryRebuild = Split(strQry, " AND ")
     strQry = ""
     If UBound(strQryRebuild) = 0 Then
-        strQry = "SELECT * From ticketdatabase Where idTicketIsActive = '1' Order By ticketdatabase.idTicketDate Desc"
+        strQry = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum) Order by packetentrydb.idDate Desc"
         GoTo SkipQryRebuild
     End If
     For s = 0 To UBound(strQryRebuild)
@@ -90,115 +95,114 @@ SkipQryRebuild:
     'DoEvents
     Do Until rs.EOF
         With rs
-            dtTicketDate = Format$(!idTicketDate, "MM/DD/YYYY")
-            If frmReportFilter.cmbPacketType.ListIndex = 0 Or frmReportFilter.cmbPacketType.ListIndex = 1 And !idTicketUser = strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 2 And !idTicketUserTo = strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 3 And !idTicketUserFrom = strSearchUser Then
+            dtTicketDate = Format$(!idDate, "MM/DD/YYYY")
+            If frmReportFilter.cmbPacketType.ListIndex = 0 Or frmReportFilter.cmbPacketType.ListIndex = 1 And !idUser = strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 2 And !idUserTo = strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 3 And !idUserFrom = strSearchUser Then
                 If frmReportFilter.chkClosed.Value = 0 And frmReportFilter.chkFiled.Value = 0 And frmReportFilter.chkOpened.Value = 0 And frmReportFilter.chkInTransit.Value = 0 And frmReportFilter.chkReceived.Value = 0 And frmReportFilter.chkCreated.Value = 0 Then GoTo NoFilters
                 'Start Ticket State filters
-                If frmReportFilter.chkClosed.Value = 0 And !idTicketStatus = "CLOSED" Then
+                If frmReportFilter.chkClosed.Value = 0 And !idStatus = "CLOSED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkFiled.Value = 0 And !idTicketStatus = "OPEN" And !idTicketAction = "FILED" Then
+                ElseIf frmReportFilter.chkFiled.Value = 0 And !idStatus = "OPEN" And !idAction = "FILED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkOpened.Value = 0 And !idTicketStatus = "OPEN" Or frmReportFilter.chkOpened.Value = 0 And !idTicketAction = "REOPENED" Then
+                ElseIf frmReportFilter.chkOpened.Value = 0 And !idStatus = "OPEN" Or frmReportFilter.chkOpened.Value = 0 And !idAction = "REOPENED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkReceived.Value = 0 And !idTicketAction = "RECEIVED" Then
+                ElseIf frmReportFilter.chkReceived.Value = 0 And !idAction = "RECEIVED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkInTransit.Value = 0 And !idTicketAction = "INTRANSIT" Then
+                ElseIf frmReportFilter.chkInTransit.Value = 0 And !idAction = "INTRANSIT" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkCreated.Value = 0 And !idTicketAction = "CREATED" Then
+                ElseIf frmReportFilter.chkCreated.Value = 0 And !idAction = "CREATED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkReOpened.Value = 0 And !idTicketAction = "REOPENED" Then
+                ElseIf frmReportFilter.chkReOpened.Value = 0 And !idAction = "REOPENED" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
                 End If
 NoFilters:
                 If frmReportFilter.chkSF.Value = 0 And frmReportFilter.chkN.Value = 0 And frmReportFilter.chkRMT.Value = 0 And frmReportFilter.chkC.Value = 0 And frmReportFilter.chkW.Value = 0 And frmReportFilter.chkIM.Value = 0 Then GoTo NoPlantFilters             'Start Plant Filters
-                If frmReportFilter.chkSF.Value = 0 And !idTicketPlant = "STEEL FAB" Then
+                If frmReportFilter.chkSF.Value = 0 And !idPlant = "STEEL FAB" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkN.Value = 0 And !idTicketPlant = "NUCLEAR" Then
+                ElseIf frmReportFilter.chkN.Value = 0 And !idPlant = "NUCLEAR" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkRMT.Value = 0 And !idTicketPlant = "ROCKY MT" Then
+                ElseIf frmReportFilter.chkRMT.Value = 0 And !idPlant = "ROCKY MT" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkC.Value = 0 And !idTicketPlant = "CONTROLS" Then
+                ElseIf frmReportFilter.chkC.Value = 0 And !idPlant = "CONTROLS" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkW.Value = 0 And !idTicketPlant = "WOOSTER" Then
+                ElseIf frmReportFilter.chkW.Value = 0 And !idPlant = "WOOSTER" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
-                ElseIf frmReportFilter.chkIM.Value = 0 And !idTicketPlant = "INDUSTRIAL MACH" Then
+                ElseIf frmReportFilter.chkIM.Value = 0 And !idPlant = "INDUSTRIAL MACH" Then
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
                 End If
 NoPlantFilters:
                 If frmReportFilter.chkAllTickets.Value = 0 And dtTicketDate < dtStartDate Or dtTicketDate > dtEndDate Then 'Date range filter
                     ReDim Preserve strUsedJobNums(UBound(strUsedJobNums) + 1)
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
                 Else
                     'let the ticket be displayed
                 End If
-                Found = InStr(1, vbNullChar & Join$(strUsedJobNums(), vbNullChar) & vbNullChar, vbNullChar & !idTicketJobNum & vbNullChar) > 0
+                Found = InStr(1, vbNullChar & Join$(strUsedJobNums(), vbNullChar) & vbNullChar, vbNullChar & !idJobNum & vbNullChar) > 0
                 If Found = False Then
-                    strUsedJobNums(Row) = !idTicketJobNum
+                    strUsedJobNums(Row) = !idJobNum
                     Row = Row + 1
                     If frmReportFilter.chkHeatMap.Value = 1 Then
-                        Entries = GetNumberOfEntries(!idTicketJobNum)
+                        Entries = GetNumberOfEntries(!idJobNum)
                         CalcColor = ColorsRGB - (Entries * RGBMulti)
                         If CalcColor <= 0 Then CalcColor = 0
                     End If
                     Form1.Flexgrid1.TextMatrix(Line, 0) = Line
-                    Form1.Flexgrid1.TextMatrix(Line, 1) = !idTicketJobNum
-                    Form1.Flexgrid1.TextMatrix(Line, 2) = !idTicketPartNum
-                    Form1.Flexgrid1.TextMatrix(Line, 3) = !idTicketDescription
-                    Form1.Flexgrid1.TextMatrix(Line, 4) = !idTicketSalesNum
-                    Form1.Flexgrid1.TextMatrix(Line, 5) = !idTicketCustPoNum
-                    Form1.Flexgrid1.TextMatrix(Line, 6) = !idTicketCreator
-                    Form1.Flexgrid1.TextMatrix(Line, 7) = !idTicketCreateDate
-                    'form1.Flexgrid1.TextMatrix(Line, 8) = !idTicketStatus
-                    Form1.Flexgrid1.TextMatrix(Line, 8) = !idTicketDate
+                    Form1.Flexgrid1.TextMatrix(Line, 1) = !idJobNum
+                    Form1.Flexgrid1.TextMatrix(Line, 2) = !idPartNum
+                    Form1.Flexgrid1.TextMatrix(Line, 3) = !idDescription
+                    Form1.Flexgrid1.TextMatrix(Line, 4) = !idSalesNum
+                    Form1.Flexgrid1.TextMatrix(Line, 5) = !idCustPoNum
+                    Form1.Flexgrid1.TextMatrix(Line, 6) = !idCreator
+                    Form1.Flexgrid1.TextMatrix(Line, 7) = !idCreateDate
+                    Form1.Flexgrid1.TextMatrix(Line, 8) = !idDate
                     If frmReportFilter.chkHeatMap.Value = 1 Then
                         Form1.Flexgrid1.TextMatrix(Line, 10) = Entries
                     Else
                     End If
-                    If !idTicketAction = "CREATED" Then
+                    If !idAction = "CREATED" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &H80C0FF, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idTicketCreator
-                    ElseIf !idTicketAction = "INTRANSIT" Then
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idCreator
+                    ElseIf !idAction = "INTRANSIT" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &H80FF80, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idTicketUserFrom & " SENT the job packet to " & !idTicketUserTo
-                    ElseIf !idTicketAction = "RECEIVED" Then
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idUserFrom & " SENT the job packet to " & !idUserTo
+                    ElseIf !idAction = "RECEIVED" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &H80FFFF, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " RECEIVED the job packet from " & !idTicketUserFrom
-                    ElseIf !idTicketStatus = "CLOSED" Then
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idUser & " RECEIVED the job packet from " & !idUserFrom
+                    ElseIf !idStatus = "CLOSED" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &H8080FF, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " CLOSED the job packet."
-                    ElseIf !idTicketStatus = "OPEN" And !idTicketAction = "FILED" Then
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idUser & " CLOSED the job packet."
+                    ElseIf !idStatus = "OPEN" And !idAction = "FILED" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &HFF8080, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " FILED the job packet."
-                    ElseIf !idTicketAction = "REOPENED" Then
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idUser & " FILED the job packet."
+                    ElseIf !idAction = "REOPENED" Then
                         Call Form1.FlexGridRowColor(Form1.Flexgrid1, Line, IIf(frmReportFilter.chkHeatMap.Value = 0, &HFF80FF, RGB(255, CalcColor, CalcColor)))
-                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idTicketUser & " REOPENED the job packet."
+                        Form1.Flexgrid1.TextMatrix(Line, 9) = !idUser & " REOPENED the job packet."
                     End If
                     Line = Line + 1
                 ElseIf Found = True Then
@@ -207,8 +211,8 @@ ContNext:
                 rs.MoveNext
                 Form1.pBar.Value = .AbsolutePosition
                 DoEvents
-            ElseIf frmReportFilter.cmbPacketType.ListIndex = 1 And !idTicketUser <> strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 2 And !idTicketUserTo <> strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 3 And !idTicketUserFrom <> strSearchUser Then
-                strUsedJobNums(Row) = !idTicketJobNum
+            ElseIf frmReportFilter.cmbPacketType.ListIndex = 1 And !idUser <> strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 2 And !idUserTo <> strSearchUser Or frmReportFilter.cmbPacketType.ListIndex = 3 And !idUserFrom <> strSearchUser Then
+                strUsedJobNums(Row) = !idJobNum
                 Row = Row + 1
                 rs.MoveNext
                 Form1.pBar.Value = .AbsolutePosition

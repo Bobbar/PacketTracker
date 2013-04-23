@@ -184,22 +184,19 @@ Public Sub GetPacket()
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     On Error Resume Next
-    'cmbPlant.Enabled = True
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From ticketdatabase Where idTicketJobNum = '" & Form1.txtJobNo.Text & "' Order By ticketdatabase.idTicketDate Desc"
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & Form1.txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
     Set rs = cn_global.Execute(strSQL1)
-    'MsgBox (rdoRS.RowCount)
     With rs
-        txtAction.Text = !idTicketAction
-        txtUserTo.Text = !idTicketUserTo
-        txtUserFrom.Text = !idTicketUserFrom
-        txtOwner.Text = !idTicketUser
+        txtAction.Text = !idAction
+        txtUserTo.Text = !idUserTo
+        txtUserFrom.Text = !idUserFrom
+        txtOwner.Text = !idUser
     End With
     Form1.HideData
 End Sub
 Private Sub cmbAction_Click()
-    'MsgBox cmbAction.ListIndex
     If cmbAction.ListIndex = 2 Then 'Received
         cmbUserTo.Enabled = False
         strUserTo = "NULL"
@@ -245,10 +242,9 @@ Private Sub cmdGo_Click()
     FormatDateTime = Format$(Form1.txtCreateDate.Text, strDBDateTimeFormat)
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "INSERT INTO TicketDatabase" & " (idTicketCreateDate,idTicketCreator,idTicketUser,idTicketAction,idTicketStatus,idTicketuserFrom,idTicketUserTo,idTicketComment,idTicketJobNum," & "idTicketPartNum,idTicketDrawingNum,idTicketCustPoNum,idTicketSalesNum,idTicketDescription,idTicketPlant,idTicketIsActive) VALUES" & " ('" & FormatDateTime & "','" & Form1.txtCreator.Text & "','" & UCase$(strUserIndex(0, cmbOwner.ListIndex)) & "','" & (IIf(cmbAction.Text = "CLOSED", "NULL", cmbAction.Text)) & "','" & (IIf(cmbAction.Text <> "CLOSED", "OPEN", "CLOSED")) & "','" & strUserFrom & "','" & strUserTo & "','" & "Packet redirected by " & strLocalUser & "','" & Form1.txtJobNo.Text & "','" & Form1.txtPartNoRev.Text & "','" & Form1.txtDrawNoRev.Text & "','" & Form1.txtCustPoNo.Text & "','" & Form1.txtSalesNo.Text & "','" & Form1.txtTicketDescription.Text & "','" & strPlant & "','1')"
+    strSQL1 = "INSERT INTO packetentrydb" & " (idUser,idAction,idUserFrom,idUserTo,idComment,idJobNum) VALUES" & " ('" & UCase$(strUserIndex(0, cmbOwner.ListIndex)) & "','" & (IIf(cmbAction.Text = "CLOSED", "NULL", cmbAction.Text)) & "','" & strUserFrom & "','" & strUserTo & "','" & "Packet redirected by " & strLocalUser & "','" & Form1.txtJobNo.Text & "')"
     Set rs = cn_global.Execute(strSQL1)
     Form1.HideData
-    SetPrevTicketInactive Form1.txtJobNo.Text
     ShowBanner colInTransit, "Packet updated successfully."
     Form1.RefreshAll
     Form1.SetControls
@@ -271,6 +267,5 @@ Private Sub Form_Load()
     cmbAction.AddItem "INTRANSIT", 1
     cmbAction.AddItem "RECEIVED", 2
     cmbAction.AddItem "FILED", 3
-    cmbAction.AddItem "CLOSED", 4
-    cmbAction.AddItem "REOPENED", 5
+    cmbAction.AddItem "REOPENED", 4
 End Sub

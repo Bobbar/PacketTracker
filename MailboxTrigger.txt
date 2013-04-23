@@ -1,0 +1,25 @@
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `ticketdb`.`UpdateMailboxNewEntry`
+AFTER INSERT ON `ticketdb`.`packetentrydb`
+FOR EACH ROW
+BEGIN
+IF new.idAction='CREATED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='INTRANSIT' THEN
+UPDATE `packetlist` SET idMailbox=new.idUserTo WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='RECEIVED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='FILED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUserTo WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='REOPENED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='NULL' THEN
+UPDATE `packetlist` SET idMailbox='NULL' WHERE idJobNum=new.idJobNum;
+END IF;
+END$$
