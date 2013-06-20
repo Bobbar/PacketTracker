@@ -1,5 +1,5 @@
 VERSION 5.00
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTimeLine 
    BackColor       =   &H00808080&
    Caption         =   "History Timeline"
@@ -108,7 +108,6 @@ Begin VB.Form frmTimeLine
                Left            =   240
                TabIndex        =   11
                Top             =   720
-               Value           =   1  'Checked
                Width           =   1575
             End
             Begin VB.CheckBox chkShowAll 
@@ -251,10 +250,10 @@ Begin VB.Form frmTimeLine
             BorderColor     =   &H0000FF00&
             BorderWidth     =   5
             Visible         =   0   'False
-            X1              =   470
-            X2              =   11805
-            Y1              =   5160
-            Y2              =   5160
+            X1              =   780
+            X2              =   12115
+            Y1              =   5220
+            Y2              =   5220
          End
       End
    End
@@ -285,13 +284,140 @@ Dim ret As Long
 Dim a   As POINTAPI
 Dim b   As Long
 Dim c   As Long
+Public Sub DrawTimeLine()
+    Dim i, Days As Integer
+    Dim DStep As Single
+    On Error Resume Next
+    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime) ' + TicketHours(Entry - 1))
+    frmTimeLine.pbDrawArea.FillColor = &H80C0FF
+    ReDim dLine(Entry - 1)
+    dLine(0).Color = &H80C0FF
+    dLine(0).Height = 300
+    dLine(0).Left = 470
+    dLine(0).Top = 120
+    dLine(0).Width = 315
+    ReDim dGrid(Entry - 1)
+    dGrid(0).Color = &HE0E0E0
+    dGrid(0).Height = 300
+    dGrid(0).Left = 0
+    dGrid(0).Top = 120
+    dGrid(0).Width = 11895
+    ReDim dAction(Entry - 1)
+    ReDim dNote(Entry - 1)
+    dAction(0).Text = TicketActionText(0)
+    dAction(0).Color = &H80C0FF
+    dAction(0).Left = dLine(0).Left + dLine(0).Width + 200
+    dAction(0).Top = dLine(0).Top + 20
+    dAction(0).Height = 210
+    dAction(0).Visible = True
+    dNote(0).Height = 210
+    dGrid(0).Width = frmTimeLine.Width
+    Days = TotalTime / 1440 '(TotalTime + TicketHours(Entry - 1)) / 1440
+    Days = Round(Days, 1)
+    For i = 0 To Entry - 1
+        With frmTimeLine
+            If i Mod 2 <> 0 Then 'number is odd
+                dGrid(i).Color = &HC0C0C0
+            Else
+                dGrid(i).Color = &HE0E0E0
+            End If
+            dGrid(i).Width = .Width + 200
+            dGrid(i).Top = dGrid(i - 1).Top + dGrid(0).Height
+            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
+            dLine(i).Top = dLine(i - 1).Top + dLine(0).Height
+            If TicketAction(i) = "CREATED" Then
+                dLine(i).Color = &H80C0FF
+            ElseIf TicketAction(i) = "INTRANSIT" Then
+                dLine(i).Color = &H80FF80
+            ElseIf TicketAction(i) = "RECEIVED" Then
+                dLine(i).Color = &H80FFFF
+            ElseIf TicketAction(i) = "NULL" Then
+                dLine(i).Color = &H8080FF
+            ElseIf TicketAction(i) = "FILED" Then
+                dLine(i).Color = &HFF8080
+            ElseIf TicketAction(i) = "REOPENED" Then
+                dLine(i).Color = &HFF80FF
+            End If
+            
+            
+            
+            If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
+                dLine(i).Width = 38
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+            Else
+                dLine(i).Width = TicketHours(i) * LStep
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
+            End If
+            If i = Entry - 1 Then
+            dLine(i).Width = 38
+            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+            End If
+            
+            
+            dNote(i).Text = strTimelineComments(i)
+            dNote(i).Width = Printer.TextWidth(dNote(i).Text)
+            dAction(i).Text = TicketActionText(i)
+            If dLine(i).Left - dAction(i).Width - 240 < 0 And (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width Then
+                dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
+            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
+                dAction(i).Left = dLine(i).Left - dAction(i).Width - 200
+            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 < 0 Then
+                dAction(i).Left = ((dLine(i).Left + dLine(i).Width) / 2) - (dAction(i).Width / 2)  '+  dLine(i).X1
+            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
+                dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
+            End If
+            dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
+            dAction(i).Color = dLine(i).Color
+            Printer.FontSize = 9
+            dAction(i).Width = frmTimeLine.pbDrawArea.TextWidth(dAction(i).Text)
+            If frmTimeLine.chkShowAll.Value = 1 Then
+                dAction(i).Visible = True
+            Else
+                dAction(i).Visible = False
+            End If
+        End With
+    Next i
+    If Days > 0 Then
+        DStep = ((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width) - frmTimeLine.lnScale.X1) / Days
+    Else
+    End If
+    ReDim dDayLine(Days)
+    dDayLine(0).Y1 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200
+    dDayLine(0).Y2 = dGrid(0).Top
+    dDayLine(0).X1 = 470
+    dDayLine(0).X2 = 470
+    For i = 1 To Days
+        dDayLine(i).Y1 = frmTimeLine.lnScale.Y1
+        dDayLine(i).Y2 = dGrid(0).Top
+        dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
+        dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
+    Next i
+    With frmTimeLine
+        frmTimeLine.DrawLines
+        .Image1.ZOrder 0
+    End With
+    frmTimeLine.lblPacketAge.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200 + 40
+    If frmTimeLine.Width <= 10755 Then frmTimeLine.lblPacketAge.Left = frmTimeLine.Frame1.Left + frmTimeLine.Frame1.Width + 10
+    frmTimeLine.lblPacketAge.Caption = "Packet Age: " & (IIf((TotalTime + TicketHours(Entry - 1)) > 1440, Round((TotalTime + TicketHours(Entry - 1)) / 1440, 1) & "days", Round((TotalTime + TicketHours(Entry - 1)) / 60, 1) & "hrs"))
+    If frmTimeLine.lblPacketAge.Top + 30 >= frmTimeLine.Height Then
+        frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 40
+    Else
+        frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+    End If
+    If frmTimeLine.Visible = True Then
+        frmTimeLine.VScroll1.Max = frmTimeLine.VScroll1.Max
+    Else
+        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
+    End If
+    frmTimeLine.Frame1.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 500
+End Sub
 Public Sub ReDrawTimeLine()
     Dim i, Days As Integer
     Dim DStep As Single
     On Error Resume Next
-    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime + TicketHours(Entry - 1))
+    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime) ' + TicketHours(Entry - 1))
     dGrid(0).Width = frmTimeLine.Width + 20
-    Days = (TotalTime + TicketHours(Entry - 1)) / 1440
+    Days = TotalTime / 1440 '(TotalTime + TicketHours(Entry - 1)) / 1440
     Days = Round(Days, 1)
     For i = 0 To Entry ' - 1
         With frmTimeLine
@@ -302,6 +428,11 @@ Public Sub ReDrawTimeLine()
             Else
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
+            End If
+            If i = Entry - 1 Then
+            dLine(i).Width = 200
+            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width ' - 100
+            dLine(i).FillStyle = 7
             End If
             If chkShowAll.Value = 1 Then
                 dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
@@ -365,10 +496,26 @@ Public Sub DrawLines()
         .pbDrawArea.DrawStyle = 0
         If dPointLine.Visible Then .pbDrawArea.Line (dPointLine.X1, dPointLine.Y1)-(dPointLine.X2, dPointLine.Y2)
         For i = 0 To UBound(dLine) 'draw bars
-            .pbDrawArea.DrawStyle = 0
-            .pbDrawArea.FillColor = dLine(i).Color
-            .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+            If i = UBound(dLine) Then
+                .pbDrawArea.Font.Size = 25
+                .pbDrawArea.Font.Name = "Wingdings 3"
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FillStyle = dLine(i).FillStyle
+                .pbDrawArea.FillColor = dLine(i).Color
+                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+                .pbDrawArea.CurrentX = dLine(i).Left + dLine(i).Width + 40
+                .pbDrawArea.CurrentY = dLine(i).Top - 100
+                .pbDrawArea.Print Chr$(52)
+            Else
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FillStyle = dLine(i).FillStyle
+                .pbDrawArea.FillColor = dLine(i).Color
+                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+            End If
         Next
+        .pbDrawArea.FillStyle = 0
+        .pbDrawArea.Font.Size = 9
+        .pbDrawArea.Font.Name = "Tahoma"
         For i = 0 To UBound(dAction)
             If dAction(i).Visible Then
                 .pbDrawArea.DrawStyle = 0
@@ -381,10 +528,14 @@ Public Sub DrawLines()
                         .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dNote(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
                         .pbDrawArea.CurrentX = dNote(i).Left ' + (dAction(i).Width / 2) - (dNote(i).Width / 2)
                         .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
-                        .pbDrawArea.ForeColor = &H404040
+                        If chkShowAll.Value = False Then
+                            .pbDrawArea.ForeColor = &H80000012
+                        Else
+                            .pbDrawArea.ForeColor = &HA4A4A4
+                        End If
                         .pbDrawArea.DrawStyle = 0
-                        '
                         .pbDrawArea.FontTransparent = True
+                        .pbDrawArea.Font.Italic = True
                         .pbDrawArea.Print dNote(i).Text
                     Else
                         .pbDrawArea.DrawStyle = 0
@@ -392,17 +543,27 @@ Public Sub DrawLines()
                         .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dAction(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
                         .pbDrawArea.CurrentX = dNote(i).Left + (dAction(i).Width / 2) - (dNote(i).Width / 2)
                         .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
-                        .pbDrawArea.ForeColor = &H404040
+                        If chkShowAll.Value = False Then
+                            .pbDrawArea.ForeColor = &H80000012
+                        Else
+                            .pbDrawArea.ForeColor = &HA4A4A4
+                        End If
                         .pbDrawArea.DrawStyle = 0
                         .pbDrawArea.FontTransparent = True
+                        .pbDrawArea.Font.Italic = True
                         .pbDrawArea.Print dNote(i).Text
                     End If
                 End If
                 .pbDrawArea.CurrentX = dAction(i).Left + (dAction(i).Width / 2) - (dAction(i).Width / 2)
                 .pbDrawArea.CurrentY = dAction(i).Top ' + (dAction(0).Height / 2)
-                .pbDrawArea.ForeColor = &H404040
+                If chkShowAll.Value = False Then
+                    .pbDrawArea.ForeColor = &H80000012
+                Else
+                    .pbDrawArea.ForeColor = &HA4A4A4
+                End If
                 .pbDrawArea.DrawStyle = 0
                 .pbDrawArea.FontTransparent = True
+                .pbDrawArea.Font.Italic = False
                 .pbDrawArea.Print dAction(i).Text
             End If
         Next i
@@ -418,12 +579,12 @@ Private Sub chkDayLines_Click()
     If chkDayLines.Value = 1 Then
         DrawDayLines = True
         ' DayLine(0).Visible = True
-        Form1.DrawTimeLine
+        DrawTimeLine
         ReDrawTimeLine
     Else
         DrawDayLines = False
         'DayLine(0).Visible = False
-        Form1.DrawTimeLine
+        DrawTimeLine
         ReDrawTimeLine
     End If
 End Sub
@@ -432,7 +593,7 @@ Private Sub chkShowAll_Click()
         'tmrActionShow.Enabled = True
     Else
         tmrActionShow.Enabled = False
-        Form1.DrawTimeLine
+        DrawTimeLine
         ReDrawTimeLine
     End If
 End Sub
@@ -545,6 +706,7 @@ Private Sub pbDrawArea_MouseMove(Button As Integer, _
         End If
     End If
 End Sub
+
 Private Sub VScroll1_Change()
     pbDrawArea.Top = -(VScroll1.Value)
     pbDrawArea.Refresh

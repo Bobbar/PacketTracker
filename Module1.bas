@@ -11,6 +11,7 @@ Public Type tLine
     Height As Integer
     Color As Long
     Visible As Boolean
+    FillStyle As Long
 End Type
 Public Type tTxtBox
     Left As Long
@@ -347,7 +348,7 @@ Public Sub DeletePacket(JobNum As String)
     Dim strSQL1 As String
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From packetlist Where idJobNum = '" & JobNum & "'"
+    strSQL1 = "SELECT idJobnum From packetlist Where idJobNum = '" & JobNum & "'"
     rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     'Do Until rs.EOF
     With rs

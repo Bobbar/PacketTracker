@@ -1,7 +1,7 @@
 VERSION 5.00
 Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
-Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "mscomctl.ocx"
+Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
 Begin VB.Form Form1 
    AutoRedraw      =   -1  'True
@@ -36,7 +36,7 @@ Begin VB.Form Form1
       Left            =   3300
       ScaleHeight     =   1155
       ScaleWidth      =   5595
-      TabIndex        =   122
+      TabIndex        =   50
       TabStop         =   0   'False
       Top             =   0
       Width           =   5595
@@ -56,6 +56,7 @@ Begin VB.Form Form1
          ForeColor       =   &H00000000&
          Height          =   255
          Left            =   4800
+         MouseIcon       =   "Form1.frx":0CCA
          TabIndex        =   126
          Top             =   120
          Width           =   255
@@ -99,7 +100,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   270
          Left            =   240
-         TabIndex        =   123
+         TabIndex        =   125
          Top             =   420
          Visible         =   0   'False
          Width           =   1260
@@ -109,7 +110,7 @@ Begin VB.Form Form1
       Caption         =   "Timers"
       Height          =   5055
       Left            =   10755
-      TabIndex        =   85
+      TabIndex        =   91
       Top             =   4425
       Visible         =   0   'False
       Width           =   795
@@ -173,14 +174,14 @@ Begin VB.Form Form1
       BorderStyle     =   0  'None
       Height          =   1575
       Left            =   3960
-      TabIndex        =   77
+      TabIndex        =   84
       Top             =   6000
       Visible         =   0   'False
       Width           =   5355
       Begin ComctlLib.ProgressBar pBar 
          Height          =   405
          Left            =   120
-         TabIndex        =   78
+         TabIndex        =   85
          Top             =   840
          Width           =   5115
          _ExtentX        =   9022
@@ -204,7 +205,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   330
          Left            =   120
-         TabIndex        =   79
+         TabIndex        =   86
          Top             =   360
          Width           =   5190
       End
@@ -213,9 +214,9 @@ Begin VB.Form Form1
       Height          =   370
       Left            =   7080
       MaskColor       =   &H00FFFFFF&
-      Picture         =   "Form1.frx":0CCA
+      Picture         =   "Form1.frx":115C
       Style           =   1  'Graphical
-      TabIndex        =   73
+      TabIndex        =   43
       TabStop         =   0   'False
       ToolTipText     =   "Edit Field"
       Top             =   720
@@ -227,7 +228,7 @@ Begin VB.Form Form1
       Align           =   2  'Align Bottom
       Height          =   375
       Left            =   0
-      TabIndex        =   8
+      TabIndex        =   53
       Top             =   9765
       Width           =   12210
       _ExtentX        =   21537
@@ -240,7 +241,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -258,7 +258,7 @@ Begin VB.Form Form1
       CausesValidation=   0   'False
       Height          =   5175
       Left            =   120
-      TabIndex        =   37
+      TabIndex        =   23
       ToolTipText     =   "Click to expand"
       Top             =   4320
       Width           =   11955
@@ -280,30 +280,30 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "History"
-      TabPicture(0)   =   "Form1.frx":124E
+      TabPicture(0)   =   "Form1.frx":16E0
       Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Frame1"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
-      TabPicture(1)   =   "Form1.frx":177E
+      TabPicture(1)   =   "Form1.frx":1C10
       Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Frame4"
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
-      TabPicture(2)   =   "Form1.frx":1BF0
+      TabPicture(2)   =   "Form1.frx":2082
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Frame5"
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
-      TabPicture(3)   =   "Form1.frx":1D8A
+      TabPicture(3)   =   "Form1.frx":221C
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame6"
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
          Left            =   -74880
-         TabIndex        =   52
+         TabIndex        =   74
          Top             =   480
          Width           =   11775
          Begin VB.Frame frmKey 
@@ -311,7 +311,7 @@ Begin VB.Form Form1
             Height          =   1455
             Index           =   3
             Left            =   10920
-            TabIndex        =   112
+            TabIndex        =   117
             Top             =   3000
             Visible         =   0   'False
             Width           =   768
@@ -323,7 +323,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   118
+               TabIndex        =   123
                Top             =   0
                Width           =   765
             End
@@ -335,7 +335,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   117
+               TabIndex        =   122
                Top             =   240
                Width           =   765
             End
@@ -347,7 +347,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   116
+               TabIndex        =   121
                Top             =   480
                Width           =   765
             End
@@ -359,7 +359,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   115
+               TabIndex        =   120
                Top             =   720
                Width           =   765
             End
@@ -371,7 +371,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   114
+               TabIndex        =   119
                Top             =   960
                Width           =   765
             End
@@ -383,7 +383,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   3
                Left            =   0
-               TabIndex        =   113
+               TabIndex        =   118
                Top             =   1200
                Width           =   765
             End
@@ -393,9 +393,9 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":247C
+            Picture         =   "Form1.frx":290E
             Style           =   1  'Graphical
-            TabIndex        =   61
+            TabIndex        =   37
             TabStop         =   0   'False
             ToolTipText     =   "Print Report"
             Top             =   3600
@@ -406,7 +406,7 @@ Begin VB.Form Form1
             Caption         =   "Refresh Packets"
             Height          =   360
             Left            =   120
-            TabIndex        =   54
+            TabIndex        =   32
             TabStop         =   0   'False
             ToolTipText     =   "Maually refresh my packets"
             Top             =   480
@@ -415,7 +415,7 @@ Begin VB.Form Form1
          Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridOUT 
             Height          =   4215
             Left            =   1560
-            TabIndex        =   56
+            TabIndex        =   34
             TabStop         =   0   'False
             Top             =   240
             Width           =   10095
@@ -446,7 +446,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":4010
+            Picture         =   "Form1.frx":44A2
             ToolTipText     =   "Open grid in a new window"
             Top             =   1080
             Width           =   450
@@ -463,7 +463,7 @@ Begin VB.Form Form1
             Height          =   255
             Index           =   3
             Left            =   120
-            TabIndex        =   119
+            TabIndex        =   124
             Top             =   2880
             Width           =   1335
          End
@@ -473,7 +473,7 @@ Begin VB.Form Form1
             Caption         =   "On-hand Packets"
             Height          =   195
             Left            =   6120
-            TabIndex        =   72
+            TabIndex        =   82
             Top             =   2160
             Width           =   1230
          End
@@ -487,7 +487,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame5 
          Height          =   4575
          Left            =   -74880
-         TabIndex        =   51
+         TabIndex        =   73
          Top             =   480
          Width           =   11775
          Begin VB.Frame frmKey 
@@ -495,7 +495,7 @@ Begin VB.Form Form1
             Height          =   1455
             Index           =   2
             Left            =   10920
-            TabIndex        =   104
+            TabIndex        =   109
             Top             =   3000
             Visible         =   0   'False
             Width           =   768
@@ -507,7 +507,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   110
+               TabIndex        =   115
                Top             =   1200
                Width           =   765
             End
@@ -519,7 +519,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   109
+               TabIndex        =   114
                Top             =   960
                Width           =   765
             End
@@ -531,7 +531,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   108
+               TabIndex        =   113
                Top             =   720
                Width           =   765
             End
@@ -543,7 +543,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   107
+               TabIndex        =   112
                Top             =   480
                Width           =   765
             End
@@ -555,7 +555,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   106
+               TabIndex        =   111
                Top             =   240
                Width           =   765
             End
@@ -567,7 +567,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   2
                Left            =   0
-               TabIndex        =   105
+               TabIndex        =   110
                Top             =   0
                Width           =   765
             End
@@ -577,9 +577,9 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":4105
+            Picture         =   "Form1.frx":4597
             Style           =   1  'Graphical
-            TabIndex        =   60
+            TabIndex        =   36
             TabStop         =   0   'False
             ToolTipText     =   "Print Report"
             Top             =   3600
@@ -590,7 +590,7 @@ Begin VB.Form Form1
             Caption         =   "Refresh Packets"
             Height          =   360
             Left            =   120
-            TabIndex        =   53
+            TabIndex        =   31
             TabStop         =   0   'False
             ToolTipText     =   "Maually refresh my packets"
             Top             =   480
@@ -599,7 +599,7 @@ Begin VB.Form Form1
          Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridIN 
             Height          =   4215
             Left            =   1560
-            TabIndex        =   55
+            TabIndex        =   33
             TabStop         =   0   'False
             Top             =   240
             Width           =   10095
@@ -631,7 +631,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":5C99
+            Picture         =   "Form1.frx":612B
             ToolTipText     =   "Open grid in a new window"
             Top             =   1080
             Width           =   450
@@ -648,7 +648,7 @@ Begin VB.Form Form1
             Height          =   255
             Index           =   2
             Left            =   120
-            TabIndex        =   111
+            TabIndex        =   116
             Top             =   2880
             Width           =   1335
          End
@@ -664,7 +664,7 @@ Begin VB.Form Form1
             Caption         =   "Incoming Packets"
             Height          =   195
             Left            =   6120
-            TabIndex        =   71
+            TabIndex        =   81
             Top             =   2160
             Width           =   1245
          End
@@ -672,7 +672,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame4 
          Height          =   4575
          Left            =   -74880
-         TabIndex        =   43
+         TabIndex        =   70
          Top             =   480
          Width           =   11775
          Begin VB.Frame frmKey 
@@ -680,7 +680,7 @@ Begin VB.Form Form1
             Height          =   1455
             Index           =   1
             Left            =   10920
-            TabIndex        =   96
+            TabIndex        =   101
             Top             =   3000
             Visible         =   0   'False
             Width           =   768
@@ -692,7 +692,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   102
+               TabIndex        =   107
                Top             =   0
                Width           =   765
             End
@@ -704,7 +704,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   101
+               TabIndex        =   106
                Top             =   240
                Width           =   765
             End
@@ -716,7 +716,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   100
+               TabIndex        =   105
                Top             =   480
                Width           =   765
             End
@@ -728,7 +728,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   99
+               TabIndex        =   104
                Top             =   720
                Width           =   765
             End
@@ -740,7 +740,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   98
+               TabIndex        =   103
                Top             =   960
                Width           =   765
             End
@@ -752,7 +752,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   1
                Left            =   0
-               TabIndex        =   97
+               TabIndex        =   102
                Top             =   1200
                Width           =   765
             End
@@ -761,7 +761,7 @@ Begin VB.Form Form1
             Caption         =   "All Opened"
             Height          =   360
             Left            =   120
-            TabIndex        =   48
+            TabIndex        =   30
             TabStop         =   0   'False
             ToolTipText     =   "Display all currently open packets"
             Top             =   795
@@ -771,7 +771,7 @@ Begin VB.Form Form1
             Caption         =   "All Closed"
             Height          =   360
             Left            =   120
-            TabIndex        =   47
+            TabIndex        =   29
             TabStop         =   0   'False
             ToolTipText     =   "Display all currently closed packets"
             Top             =   1200
@@ -790,7 +790,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   480
             Left            =   120
-            TabIndex        =   46
+            TabIndex        =   28
             TabStop         =   0   'False
             ToolTipText     =   "Run a custom filtered search"
             Top             =   240
@@ -801,9 +801,9 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":5D8E
+            Picture         =   "Form1.frx":6220
             Style           =   1  'Graphical
-            TabIndex        =   45
+            TabIndex        =   27
             TabStop         =   0   'False
             ToolTipText     =   "Print Report"
             Top             =   3600
@@ -814,7 +814,7 @@ Begin VB.Form Form1
             Caption         =   "Entry Heat Map"
             Height          =   360
             Left            =   0
-            TabIndex        =   87
+            TabIndex        =   47
             ToolTipText     =   "Shows heat map of packet entries. (More entries = hotter)"
             Top             =   4200
             Visible         =   0   'False
@@ -823,7 +823,7 @@ Begin VB.Form Form1
          Begin MSHierarchicalFlexGridLib.MSHFlexGrid Flexgrid1 
             Height          =   4215
             Left            =   1560
-            TabIndex        =   44
+            TabIndex        =   26
             TabStop         =   0   'False
             Top             =   240
             Visible         =   0   'False
@@ -864,7 +864,7 @@ Begin VB.Form Form1
             Height          =   255
             Index           =   1
             Left            =   120
-            TabIndex        =   103
+            TabIndex        =   108
             Top             =   2880
             Width           =   1335
          End
@@ -872,7 +872,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":7922
+            Picture         =   "Form1.frx":7DB4
             ToolTipText     =   "Open grid in a new window"
             Top             =   1680
             Width           =   450
@@ -883,7 +883,7 @@ Begin VB.Form Form1
             Caption         =   "Packet Search"
             Height          =   195
             Left            =   6120
-            TabIndex        =   83
+            TabIndex        =   89
             Top             =   2160
             Width           =   555
          End
@@ -898,7 +898,7 @@ Begin VB.Form Form1
          ClipControls    =   0   'False
          Height          =   4575
          Left            =   120
-         TabIndex        =   38
+         TabIndex        =   69
          Top             =   480
          Width           =   11775
          Begin VB.Frame frmKey 
@@ -906,7 +906,7 @@ Begin VB.Form Form1
             Height          =   1455
             Index           =   0
             Left            =   10920
-            TabIndex        =   88
+            TabIndex        =   93
             Top             =   3000
             Visible         =   0   'False
             Width           =   768
@@ -918,7 +918,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   94
+               TabIndex        =   99
                Top             =   1200
                Width           =   765
             End
@@ -930,7 +930,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   93
+               TabIndex        =   98
                Top             =   960
                Width           =   765
             End
@@ -942,7 +942,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   92
+               TabIndex        =   97
                Top             =   720
                Width           =   765
             End
@@ -954,7 +954,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   91
+               TabIndex        =   96
                Top             =   480
                Width           =   765
             End
@@ -966,7 +966,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   90
+               TabIndex        =   95
                Top             =   240
                Width           =   765
             End
@@ -978,7 +978,7 @@ Begin VB.Form Form1
                Height          =   195
                Index           =   0
                Left            =   0
-               TabIndex        =   89
+               TabIndex        =   94
                Top             =   0
                Width           =   765
             End
@@ -992,10 +992,10 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   300
             Left            =   1560
-            Picture         =   "Form1.frx":7A17
+            Picture         =   "Form1.frx":7EA9
             ScaleHeight     =   300
             ScaleWidth      =   9810
-            TabIndex        =   67
+            TabIndex        =   41
             TabStop         =   0   'False
             Top             =   4140
             Visible         =   0   'False
@@ -1005,7 +1005,7 @@ Begin VB.Form Form1
             Caption         =   "View Timeline"
             Height          =   480
             Left            =   120
-            TabIndex        =   65
+            TabIndex        =   40
             TabStop         =   0   'False
             ToolTipText     =   "Displays a visual representation of packet activity"
             Top             =   960
@@ -1016,9 +1016,9 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":93CA
+            Picture         =   "Form1.frx":985C
             Style           =   1  'Graphical
-            TabIndex        =   42
+            TabIndex        =   25
             TabStop         =   0   'False
             ToolTipText     =   "Print History"
             Top             =   3600
@@ -1029,7 +1029,7 @@ Begin VB.Form Form1
             Caption         =   "Refresh History"
             Height          =   360
             Left            =   120
-            TabIndex        =   39
+            TabIndex        =   24
             TabStop         =   0   'False
             ToolTipText     =   "Manually refresh history data"
             Top             =   360
@@ -1038,7 +1038,7 @@ Begin VB.Form Form1
          Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridHist 
             Height          =   4215
             Left            =   1560
-            TabIndex        =   63
+            TabIndex        =   38
             TabStop         =   0   'False
             Top             =   240
             Visible         =   0   'False
@@ -1088,8 +1088,9 @@ Begin VB.Form Form1
             Height          =   360
             Left            =   1320
             MultiLine       =   -1  'True
-            TabIndex        =   64
-            Text            =   "Form1.frx":AF5E
+            TabIndex        =   39
+            TabStop         =   0   'False
+            Text            =   "Form1.frx":B3F0
             Top             =   240
             Visible         =   0   'False
             Width           =   8025
@@ -1106,7 +1107,7 @@ Begin VB.Form Form1
             Height          =   255
             Index           =   0
             Left            =   120
-            TabIndex        =   95
+            TabIndex        =   100
             Top             =   2880
             Width           =   1335
          End
@@ -1114,7 +1115,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":AF66
+            Picture         =   "Form1.frx":B3F8
             ToolTipText     =   "Open grid in a new window"
             Top             =   1560
             Width           =   450
@@ -1132,7 +1133,7 @@ Begin VB.Form Form1
             Caption         =   "History Viewer"
             Height          =   195
             Left            =   6120
-            TabIndex        =   50
+            TabIndex        =   72
             Top             =   2160
             Width           =   1035
          End
@@ -1142,13 +1143,13 @@ Begin VB.Form Form1
       Caption         =   "Tracking Info."
       Height          =   3975
       Left            =   7380
-      TabIndex        =   22
+      TabIndex        =   60
       Top             =   120
       Width           =   4695
       Begin VB.Frame Frame7 
          Height          =   1215
          Left            =   2490
-         TabIndex        =   74
+         TabIndex        =   83
          Top             =   2730
          Width           =   2175
          Begin VB.PictureBox pbData 
@@ -1161,7 +1162,7 @@ Begin VB.Form Form1
             Left            =   1320
             ScaleHeight     =   750
             ScaleWidth      =   765
-            TabIndex        =   121
+            TabIndex        =   49
             TabStop         =   0   'False
             Top             =   360
             Width           =   765
@@ -1170,7 +1171,7 @@ Begin VB.Form Form1
             Caption         =   "Refresh"
             Height          =   360
             Left            =   120
-            TabIndex        =   76
+            TabIndex        =   45
             TabStop         =   0   'False
             ToolTipText     =   "Manually refresh all data"
             Top             =   510
@@ -1181,7 +1182,7 @@ Begin VB.Form Form1
             Caption         =   "Auto Refresh"
             Height          =   255
             Left            =   120
-            TabIndex        =   75
+            TabIndex        =   44
             TabStop         =   0   'False
             Top             =   195
             Value           =   1  'Checked
@@ -1203,7 +1204,7 @@ Begin VB.Form Form1
             ForeColor       =   &H00808080&
             Height          =   195
             Left            =   135
-            TabIndex        =   86
+            TabIndex        =   92
             ToolTipText     =   "Avg. Query Time"
             Top             =   960
             Width           =   1080
@@ -1227,7 +1228,7 @@ Begin VB.Form Form1
          Left            =   240
          ScaleHeight     =   255
          ScaleWidth      =   4185
-         TabIndex        =   69
+         TabIndex        =   42
          TabStop         =   0   'False
          Top             =   1200
          Width           =   4215
@@ -1239,7 +1240,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   240
          Locked          =   -1  'True
-         TabIndex        =   28
+         TabIndex        =   22
          TabStop         =   0   'False
          Text            =   "%USERNAME%"
          Top             =   3000
@@ -1251,7 +1252,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   2520
          Locked          =   -1  'True
-         TabIndex        =   57
+         TabIndex        =   35
          TabStop         =   0   'False
          Top             =   600
          Width           =   1935
@@ -1264,7 +1265,7 @@ Begin VB.Form Form1
          Enabled         =   0   'False
          Height          =   285
          Left            =   120
-         TabIndex        =   23
+         TabIndex        =   17
          Text            =   "%DATETIME%"
          Top             =   3480
          Width           =   2055
@@ -1275,7 +1276,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   240
          Locked          =   -1  'True
-         TabIndex        =   27
+         TabIndex        =   21
          TabStop         =   0   'False
          Top             =   1800
          Width           =   1815
@@ -1298,7 +1299,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   2520
          Locked          =   -1  'True
-         TabIndex        =   26
+         TabIndex        =   20
          TabStop         =   0   'False
          Top             =   2400
          Width           =   1935
@@ -1309,7 +1310,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   240
          Locked          =   -1  'True
-         TabIndex        =   25
+         TabIndex        =   19
          TabStop         =   0   'False
          Top             =   2400
          Width           =   1815
@@ -1320,7 +1321,7 @@ Begin VB.Form Form1
          Height          =   285
          Left            =   2520
          Locked          =   -1  'True
-         TabIndex        =   24
+         TabIndex        =   18
          TabStop         =   0   'False
          Top             =   1800
          Width           =   1935
@@ -1339,7 +1340,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   1320
-         TabIndex        =   70
+         TabIndex        =   80
          Top             =   2760
          Visible         =   0   'False
          Width           =   45
@@ -1350,7 +1351,7 @@ Begin VB.Form Form1
          Caption         =   "Latest Note"
          Height          =   195
          Left            =   240
-         TabIndex        =   68
+         TabIndex        =   79
          Top             =   960
          Width           =   840
       End
@@ -1361,7 +1362,7 @@ Begin VB.Form Form1
          Caption         =   "@"
          Height          =   195
          Left            =   2280
-         TabIndex        =   59
+         TabIndex        =   76
          Top             =   630
          Width           =   255
       End
@@ -1372,7 +1373,7 @@ Begin VB.Form Form1
          Caption         =   "Local User"
          Height          =   195
          Left            =   240
-         TabIndex        =   34
+         TabIndex        =   66
          Top             =   2760
          Width           =   1695
       End
@@ -1382,7 +1383,7 @@ Begin VB.Form Form1
          Caption         =   "Action Date"
          Height          =   195
          Left            =   2520
-         TabIndex        =   58
+         TabIndex        =   75
          Top             =   360
          Width           =   840
       End
@@ -1392,7 +1393,7 @@ Begin VB.Form Form1
          Caption         =   "Current Status"
          Height          =   195
          Left            =   240
-         TabIndex        =   33
+         TabIndex        =   65
          Top             =   1560
          Width           =   1065
       End
@@ -1402,7 +1403,7 @@ Begin VB.Form Form1
          Caption         =   "Latest Action"
          Height          =   195
          Left            =   240
-         TabIndex        =   32
+         TabIndex        =   64
          Top             =   360
          Width           =   945
       End
@@ -1412,7 +1413,7 @@ Begin VB.Form Form1
          Caption         =   "Create Date"
          Height          =   195
          Left            =   2520
-         TabIndex        =   31
+         TabIndex        =   63
          Top             =   2160
          Width           =   1605
       End
@@ -1422,7 +1423,7 @@ Begin VB.Form Form1
          Caption         =   "Packet Creator"
          Height          =   195
          Left            =   240
-         TabIndex        =   30
+         TabIndex        =   62
          Top             =   2160
          Width           =   1080
       End
@@ -1432,7 +1433,7 @@ Begin VB.Form Form1
          Caption         =   "Current Packet Owner"
          Height          =   195
          Left            =   2520
-         TabIndex        =   29
+         TabIndex        =   61
          Top             =   1560
          Width           =   1605
       End
@@ -1441,7 +1442,7 @@ Begin VB.Form Form1
       Caption         =   "Packet Info."
       Height          =   3975
       Left            =   120
-      TabIndex        =   9
+      TabIndex        =   54
       Top             =   120
       Width           =   7215
       Begin VB.PictureBox pbSubmitBox 
@@ -1452,7 +1453,7 @@ Begin VB.Form Form1
          Left            =   2040
          ScaleHeight     =   855
          ScaleWidth      =   2295
-         TabIndex        =   124
+         TabIndex        =   51
          TabStop         =   0   'False
          Top             =   3060
          Width           =   2295
@@ -1472,7 +1473,7 @@ Begin VB.Form Form1
             Height          =   465
             Left            =   240
             MaskColor       =   &H000000FF&
-            TabIndex        =   125
+            TabIndex        =   52
             ToolTipText     =   "Submit update"
             Top             =   180
             Width           =   1815
@@ -1481,7 +1482,7 @@ Begin VB.Form Form1
       Begin MSComctlLib.ImageCombo cmbUsers 
          Height          =   330
          Left            =   1680
-         TabIndex        =   120
+         TabIndex        =   48
          Top             =   2580
          Visible         =   0   'False
          Width           =   2235
@@ -1514,7 +1515,7 @@ Begin VB.Form Form1
          Height          =   1455
          Left            =   240
          Sorted          =   -1  'True
-         TabIndex        =   10
+         TabIndex        =   8
          TabStop         =   0   'False
          Top             =   960
          Visible         =   0   'False
@@ -1555,7 +1556,7 @@ Begin VB.Form Form1
          ForeColor       =   &H80000008&
          Height          =   195
          Left            =   180
-         TabIndex        =   41
+         TabIndex        =   14
          Top             =   3510
          Width           =   1455
       End
@@ -1575,7 +1576,7 @@ Begin VB.Form Form1
          ForeColor       =   &H80000008&
          Height          =   255
          Left            =   180
-         TabIndex        =   40
+         TabIndex        =   10
          Top             =   2040
          Width           =   2175
       End
@@ -1660,7 +1661,7 @@ Begin VB.Form Form1
          ForeColor       =   &H80000008&
          Height          =   255
          Left            =   180
-         TabIndex        =   12
+         TabIndex        =   11
          Top             =   2400
          Width           =   1935
       End
@@ -1677,7 +1678,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   360
          Left            =   240
-         TabIndex        =   11
+         TabIndex        =   9
          Top             =   1080
          Width           =   990
       End
@@ -1754,7 +1755,7 @@ Begin VB.Form Form1
          ForeColor       =   &H80000008&
          Height          =   330
          Left            =   180
-         TabIndex        =   14
+         TabIndex        =   12
          Top             =   2730
          Width           =   1695
       End
@@ -1800,14 +1801,14 @@ Begin VB.Form Form1
       Begin VB.Frame Frame8 
          Height          =   735
          Left            =   5010
-         TabIndex        =   80
+         TabIndex        =   87
          Top             =   3205
          Width           =   2175
          Begin VB.CommandButton cmdShowMore 
             Caption         =   "Show Tabs"
             Height          =   360
             Left            =   480
-            TabIndex        =   81
+            TabIndex        =   46
             TabStop         =   0   'False
             ToolTipText     =   "Show additional features"
             Top             =   230
@@ -1829,7 +1830,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   345
             Left            =   80
-            TabIndex        =   82
+            TabIndex        =   88
             Top             =   240
             Width           =   405
          End
@@ -1838,7 +1839,7 @@ Begin VB.Form Form1
          Appearance      =   0  'Flat
          Height          =   555
          Left            =   4080
-         Picture         =   "Form1.frx":B05B
+         Picture         =   "Form1.frx":B4ED
          ToolTipText     =   "Add Note"
          Top             =   2520
          Width           =   540
@@ -1859,7 +1860,7 @@ Begin VB.Form Form1
          ForeColor       =   &H00008000&
          Height          =   165
          Left            =   4080
-         TabIndex        =   66
+         TabIndex        =   78
          ToolTipText     =   "Current Chars / Max Chars"
          Top             =   1800
          Visible         =   0   'False
@@ -1870,7 +1871,7 @@ Begin VB.Form Form1
          BackStyle       =   0  'Transparent
          Height          =   195
          Left            =   2160
-         TabIndex        =   62
+         TabIndex        =   77
          Top             =   2940
          Visible         =   0   'False
          Width           =   45
@@ -1890,7 +1891,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   4800
-         TabIndex        =   49
+         TabIndex        =   71
          Top             =   2520
          Width           =   435
       End
@@ -1909,7 +1910,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   2520
-         TabIndex        =   36
+         TabIndex        =   68
          Top             =   360
          Width           =   960
       End
@@ -1928,7 +1929,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   4800
-         TabIndex        =   21
+         TabIndex        =   59
          Top             =   1080
          Width           =   750
       End
@@ -1947,7 +1948,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   240
-         TabIndex        =   20
+         TabIndex        =   58
          Top             =   360
          Width           =   1005
       End
@@ -1966,7 +1967,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   4800
-         TabIndex        =   19
+         TabIndex        =   57
          Top             =   1800
          Width           =   1575
       End
@@ -1985,7 +1986,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   2520
-         TabIndex        =   18
+         TabIndex        =   56
          Top             =   1800
          Width           =   1590
       End
@@ -2004,7 +2005,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   195
          Left            =   2520
-         TabIndex        =   17
+         TabIndex        =   55
          Top             =   1080
          Width           =   1260
       End
@@ -2025,7 +2026,7 @@ Begin VB.Form Form1
       ForeColor       =   &H80000011&
       Height          =   165
       Left            =   120
-      TabIndex        =   84
+      TabIndex        =   90
       Top             =   9540
       Width           =   1290
    End
@@ -2045,7 +2046,7 @@ Begin VB.Form Form1
       ForeColor       =   &H80000011&
       Height          =   165
       Left            =   10560
-      TabIndex        =   35
+      TabIndex        =   67
       Top             =   9540
       Width           =   1470
    End
@@ -2553,124 +2554,7 @@ Public Sub GetTimeLineData()
     Loop
     HideData
 End Sub
-Public Sub DrawTimeLine()
-    Dim i, Days As Integer
-    Dim DStep As Single
-    On Error Resume Next
-    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime + TicketHours(Entry - 1))
-    frmTimeLine.pbDrawArea.FillColor = &H80C0FF
-    ReDim dLine(Entry - 1)
-    dLine(0).Color = &H80C0FF
-    dLine(0).Height = 300
-    dLine(0).Left = 470
-    dLine(0).Top = 120
-    dLine(0).Width = 315
-    ReDim dGrid(Entry - 1)
-    dGrid(0).Color = &HE0E0E0
-    dGrid(0).Height = 300
-    dGrid(0).Left = 0
-    dGrid(0).Top = 120
-    dGrid(0).Width = 11895
-    ReDim dAction(Entry - 1)
-    ReDim dNote(Entry - 1)
-    dAction(0).Text = TicketActionText(0)
-    dAction(0).Color = &H80C0FF
-    dAction(0).Left = dLine(0).Left + dLine(0).Width + 200
-    dAction(0).Top = dLine(0).Top + 20
-    dAction(0).Height = 210
-    dAction(0).Visible = True
-    dNote(0).Height = 210
-    dGrid(0).Width = frmTimeLine.Width
-    Days = (TotalTime + TicketHours(Entry - 1)) / 1440
-    Days = Round(Days, 1)
-    For i = 0 To Entry - 1
-        With frmTimeLine
-            If i Mod 2 <> 0 Then 'number is odd
-                dGrid(i).Color = &HC0C0C0
-            Else
-                dGrid(i).Color = &HE0E0E0
-            End If
-            dGrid(i).Width = .Width + 200
-            dGrid(i).Top = dGrid(i - 1).Top + dGrid(0).Height
-            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
-            dLine(i).Top = dLine(i - 1).Top + dLine(0).Height
-            If TicketAction(i) = "CREATED" Then
-                dLine(i).Color = &H80C0FF
-            ElseIf TicketAction(i) = "INTRANSIT" Then
-                dLine(i).Color = &H80FF80
-            ElseIf TicketAction(i) = "RECEIVED" Then
-                dLine(i).Color = &H80FFFF
-            ElseIf TicketAction(i) = "NULL" Then
-                dLine(i).Color = &H8080FF
-            ElseIf TicketAction(i) = "FILED" Then
-                dLine(i).Color = &HFF8080
-            ElseIf TicketAction(i) = "REOPENED" Then
-                dLine(i).Color = &HFF80FF
-            End If
-            If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
-                dLine(i).Width = 38
-                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
-            Else
-                dLine(i).Width = TicketHours(i) * LStep
-                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
-            End If
-            dNote(i).Text = strTimelineComments(i)
-            dNote(i).Width = Printer.TextWidth(dNote(i).Text)
-            dAction(i).Text = TicketActionText(i)
-            If dLine(i).Left - dAction(i).Width - 240 < 0 And (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width Then
-                dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
-            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
-                dAction(i).Left = dLine(i).Left - dAction(i).Width - 200
-            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 > .Width And dLine(i).Left - dAction(i).Width - 240 < 0 Then
-                dAction(i).Left = ((dLine(i).Left + dLine(i).Width) / 2) - (dAction(i).Width / 2)  '+  dLine(i).X1
-            ElseIf (dLine(i).Left + dLine(i).Width) + dAction(i).Width + 400 < .Width And dLine(i).Left - dAction(i).Width - 240 > 0 Then
-                dAction(i).Left = (dLine(i).Left + dLine(i).Width) + 200
-            End If
-            dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
-            dAction(i).Color = dLine(i).Color
-            Printer.FontSize = 9
-            dAction(i).Width = frmTimeLine.pbDrawArea.TextWidth(dAction(i).Text)
-            If frmTimeLine.chkShowAll.Value = 1 Then
-                dAction(i).Visible = True
-            Else
-                dAction(i).Visible = False
-            End If
-        End With
-    Next i
-    If Days > 0 Then
-        DStep = ((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width) - frmTimeLine.lnScale.X1) / Days
-    Else
-    End If
-    ReDim dDayLine(Days)
-    dDayLine(0).Y1 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200
-    dDayLine(0).Y2 = dGrid(0).Top
-    dDayLine(0).X1 = 470
-    dDayLine(0).X2 = 470
-    For i = 1 To Days
-        dDayLine(i).Y1 = frmTimeLine.lnScale.Y1
-        dDayLine(i).Y2 = dGrid(0).Top
-        dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
-        dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
-    Next i
-    With frmTimeLine
-        frmTimeLine.DrawLines
-        .Image1.ZOrder 0
-    End With
-    frmTimeLine.lblPacketAge.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200 + 40
-    If frmTimeLine.Width <= 10755 Then frmTimeLine.lblPacketAge.Left = frmTimeLine.Frame1.Left + frmTimeLine.Frame1.Width + 10
-    frmTimeLine.lblPacketAge.Caption = "Packet Age: " & (IIf((TotalTime + TicketHours(Entry - 1)) > 1440, Round((TotalTime + TicketHours(Entry - 1)) / 1440, 1) & "days", Round((TotalTime + TicketHours(Entry - 1)) / 60, 1) & "hrs"))
-    If frmTimeLine.lblPacketAge.Top + 30 >= frmTimeLine.Height Then
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 40
-    Else
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
-    End If
-    If frmTimeLine.Visible = True Then
-        frmTimeLine.VScroll1.Max = frmTimeLine.VScroll1.Max
-    Else
-        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
-    End If
-    frmTimeLine.Frame1.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 500
-End Sub
+
 Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -3132,7 +3016,7 @@ Private Sub cmdTimeLine_Click()
     GetTimeLineData
     DrawDayLines = True
     frmTimeLine.chkDayLines.Value = 1
-    DrawTimeLine
+    frmTimeLine.DrawTimeLine
     frmTimeLine.Show
 End Sub
 Private Sub GetFadeColor()
@@ -5060,7 +4944,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
