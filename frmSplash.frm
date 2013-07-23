@@ -79,7 +79,7 @@ Begin VB.Form frmSplash
       Begin VB.Image Image1 
          Height          =   1335
          Left            =   2820
-         Picture         =   "frmSplash.frx":000C
+         Picture         =   "frmSplash.frx":08CA
          Top             =   1920
          Width           =   1350
       End

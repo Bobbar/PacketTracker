@@ -1,0 +1,83 @@
+Public JobList() As String
+
+Public Sub FixCreateDates()
+    Dim i As Integer
+    Dim blah
+    Dim CreateDT As Date
+    GetJobList
+    For i = 1 To UBound(JobList)
+        CreateDT = GetCreateDate(JobList(i))
+        Debug.Print i & " - " & UBound(JobList) & "     Changing " & JobList(i) & " createdate to: " & CreateDT
+        DoEvents
+        blah = ChangeCreateDate(JobList(i), CreateDT)
+    Next i
+
+Public Function GetCreateDate(JobNum As String) As Date
+
+ 
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+  
+    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & JobNum & "' order by idDate DESC"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+       
+       .MoveLast
+       
+       GetCreateDate = !idDate
+       
+        .Close
+       
+    End With
+   
+
+End Function
+Public Function GetJobList()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    strSQL1 = "select idJobNum from packetlist"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        ReDim JobList(.RecordCount)
+        Do Until .EOF
+            JobList(.AbsolutePosition) = !idJobNum
+            .MoveNext
+        Loop
+        .Close
+    End With
+End Function
+Public Function ChangeCreateDate(JobNum As String, CreateDate As Date)
+On Error GoTo errs
+
+ 
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+  
+    strSQL1 = "select * from packetlist Where idJobNum = '" & JobNum & "'"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    
+    
+    With rs
+     ' ReDim JobList(.RecordCount)
+      
+      
+       !idCreateDate = Format(CreateDate, strDBDateTimeFormat)
+       
+       
+       
+       
+     
+      .Update
+      .Close
+    End With
+   Exit Function
+errs:
+ 
+ Debug.Print "ERR: " & Err.Description
+ Resume Next
+ 
+
+End Function

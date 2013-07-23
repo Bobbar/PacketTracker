@@ -11,6 +11,7 @@ Public Type tLine
     Height As Integer
     Color As Long
     Visible As Boolean
+    FillStyle As Long
 End Type
 Public Type tTxtBox
     Left As Long
@@ -78,11 +79,11 @@ Private Const WM_ACTIVATEAPP = &H1C
 Private Const GWL_WNDPROC = -4
 Public gHW As Long
 Public Declare Function SendMessage _
-                Lib "user32.dll" _
-                Alias "SendMessageA" (ByVal hwnd As Long, _
-                                      ByVal Msg As Long, _
-                                      wParam As Any, _
-                                      lParam As Any) As Long
+               Lib "user32.dll" _
+               Alias "SendMessageA" (ByVal hwnd As Long, _
+                                     ByVal Msg As Long, _
+                                     wParam As Any, _
+                                     lParam As Any) As Long
 Private Declare Function CallWindowProc _
                 Lib "user32.dll" _
                 Alias "CallWindowProcA" (ByVal lpPrevWndFunc As Long, _
@@ -207,8 +208,6 @@ Public Declare Function RoundRect _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
-
-
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
@@ -347,7 +346,7 @@ Public Sub DeletePacket(JobNum As String)
     Dim strSQL1 As String
     Form1.ShowData
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * From packetlist Where idJobNum = '" & JobNum & "'"
+    strSQL1 = "SELECT idJobnum From packetlist Where idJobNum = '" & JobNum & "'"
     rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     'Do Until rs.EOF
     With rs
