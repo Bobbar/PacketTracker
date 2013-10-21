@@ -208,6 +208,33 @@ Public Declare Function RoundRect _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
+Public Function DBConcurrent() As Integer 'Does the state of the packet stored locally match what's in the DB? NO = 0, YES = 1, NOTFOUND = 2
+    Dim strSQL1 As String
+    Dim rs      As New ADODB.Recordset
+    On Error GoTo errs
+    DBConcurrent = 0
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & Form1.txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
+    Set rs = cn_global.Execute(strSQL1)
+    With rs
+        If rs.RecordCount < 1 Then
+            DBConcurrent = 2
+        Else
+            If strTicketAction <> !idAction Or strTicketStatus <> !idStatus Then
+                DBConcurrent = 0
+            ElseIf strTicketAction = !idAction And strTicketStatus = !idStatus Then
+                DBConcurrent = 1
+            End If
+        End If
+    End With
+    Exit Function
+errs:
+    If Err.Number = -2147467259 Then
+        Form1.CommsDown
+    Else
+        Form1.CommsUp
+    End If
+End Function
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)

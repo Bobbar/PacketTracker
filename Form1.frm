@@ -241,7 +241,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            TextSave        =   ""
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -268,6 +267,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -283,14 +283,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":12E0
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Frame1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1C82
@@ -673,7 +673,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -899,7 +899,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   69
          Top             =   480
          Width           =   11775
@@ -2541,9 +2541,9 @@ Public Sub GetTimeLineData()
                 TicketActionText(Entry) = " " & !idUserFrom & " SENT the job packet to " & !idUserTo & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
             ElseIf !idAction = "RECEIVED" Then
                 TicketActionText(Entry) = " " & !idUser & " RECEIVED the job packet from " & !idUserFrom & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idStatus = "CLOSED" Then
+            ElseIf !idAction = "NULL" Then
                 TicketActionText(Entry) = " " & !idUser & " CLOSED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idStatus = "OPEN" And !idAction = "FILED" Then
+            ElseIf !idAction = "FILED" Then
                 TicketActionText(Entry) = " " & !idUser & " FILED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
             ElseIf !idAction = "REOPENED" Then
                 TicketActionText(Entry) = " " & !idUser & " REOPENED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
@@ -2555,11 +2555,9 @@ Public Sub GetTimeLineData()
         End With
     Loop
     If TotalTime / 1440 > 60 Then
-    DrawDayLines = False
-    frmTimeLine.chkDayLines.Value = 0
+        DrawDayLines = False
+        frmTimeLine.chkDayLines.Value = 0
     End If
-    
-    
     TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
     HideData
 End Sub
@@ -2745,6 +2743,22 @@ Public Sub HideData()
     Set pbData.Picture = picDataPics(0)
 End Sub
 Public Sub RefreshAll()
+    If DBConcurrent = 2 And bolHasTicket Then
+        ClearFields
+        GetMyPackets
+        SetControls
+        optCreate.Value = False
+        optCreate.Enabled = True
+        StatusBar1.Panels.Item(1).Text = ""
+        txtJobNo.SetFocus
+        ShowBanner vbYellow, "The packet has been deleted.  Current status updated.", 350
+        Exit Sub
+    End If
+    If DBConcurrent = 0 And bolHasTicket Then
+        ClearOptBoxes
+        RefreshFields
+        SetControls
+    End If
     RefreshHistory
     GetMyPackets
 End Sub
@@ -2773,8 +2787,8 @@ Public Sub CommsDown()
         ShowBanner vbRed, "! The program has lost the connection to the server. Packet Tracker has gone into suspend mode. !", 500, , vbWhite
         bolMessageDelivered = True
     Else
-    cn_global.Close
-    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+        cn_global.Close
+        cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
     End If
 End Sub
 Public Sub CommsUp()
@@ -2870,6 +2884,7 @@ Private Sub SetBoxesForEdit(EnabledControl As String)
         EditMode = False
     End If
 End Sub
+
 Private Sub cmdEdit_Click()
     On Error GoTo errs
     Dim blah
@@ -3572,14 +3587,14 @@ Public Sub RefreshHistory() 'Redraws History Grid
     FlexGridHist.ColWidth(3) = 0
     FlexGridHist.ColWidth(4) = 0
     FlexGridHist.RowHeight(0) = 0
-    FlexGridHist.TopRow = FlexHistLastTopRow
-    FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     Call FlexFlipHist("D")
     FlexBoldFirst FlexGridHist
     FlexGridRedrawHeight
     FlexGridHist.ScrollBars = flexScrollBarVertical
     FlexGridHist.Visible = True
     FlexGridHist.Redraw = True
+    FlexGridHist.TopRow = FlexHistLastTopRow
+    FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     HideData
     Exit Sub
 errs:
@@ -3763,6 +3778,13 @@ LeaveSub:
 End Sub
 Public Sub SubmitFile()
     On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim intBlah As Integer
@@ -3816,6 +3838,13 @@ Public Sub SubmitReOpen()
     Dim strSQL1 As String, strSQL2 As String
     Dim intBlah As Integer
     On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
     ShowData
     strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
     strSQL2 = "select * from packetlist WHERE idJobNum = '" & txtJobNo.Text & "'"
@@ -3868,6 +3897,13 @@ Public Sub SubmitClose()
     Dim strSQL1 As String, strSQL2 As String
     Dim intBlah As Integer
     On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
     If Trim$(strTicketComment) = "" Then
         MsgBox ("Please enter a comment describing the closed file location.")
         optClose.Value = True
@@ -3924,6 +3960,13 @@ Public Sub SubmitReceive()
     Dim strSQL1     As String
     Dim ConfirmText As String
     On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
     ShowData
     strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
     cn_global.CursorLocation = adUseClient
@@ -3970,6 +4013,13 @@ Public Sub SubmitMove()
     Dim ConfirmText As String
     Dim Hits        As Integer
     On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
     Hits = GetINIValue(strSelectUserTo)
     If Hits = 0 Then
         Call SetINIValue(strSelectUserTo, 1)
@@ -4105,7 +4155,8 @@ Public Sub DisableBoxes()
     cmbPlant.Enabled = False
     lblChars.Visible = False
 End Sub
-Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refresh History Grid.
+
+Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh History Grid.
     Dim rs As New ADODB.Recordset
     Dim strSQL1, strSQL2 As String
     On Error GoTo errs
@@ -4151,7 +4202,7 @@ Public Sub RefreshAfterEdit() 'Fills fields, refreshes MyPackets, does not refre
             tmrScroll.Enabled = False
         End If
     End With
-    GetMyPackets
+    'GetMyPackets
     HideData
     Exit Sub
 errs:
@@ -4160,6 +4211,10 @@ errs:
     Else
         CommsUp
     End If
+End Sub
+Public Sub RefreshAfterEdit()
+    RefreshFields
+    GetMyPackets
 End Sub
 Public Sub ClearAllButJobN()
     strLastJobNum = ""
@@ -4730,7 +4785,26 @@ End Sub
 Private Sub cmdRefreshHist_Click()
     RefreshHistory
 End Sub
+Public Sub ClearOptBoxes()
+    optMove.Value = False
+    optReceive.Value = False
+    optClose.Value = False
+    optFile.Value = False
+    optReOpen.Value = False
+    optCreate.Value = False
+    cmdSubmit.Enabled = False
+    bolOptionClicked = False
+End Sub
 Private Sub cmdSubmit_Click()
+    'If Not DBConcurrent Then
+    '
+    '
+    'ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+    'ClearOptBoxes
+    'RefreshAll
+    'SetControls
+    'Exit Sub
+    'End If
     cmdSubmit.BackColor = vbButtonFace
     lblChars.Visible = False
     If optFile.Value = True Then
@@ -4806,8 +4880,8 @@ Private Sub cmdSubmit_Click()
     imgComment.Enabled = False
 End Sub
 Private Sub cmdShowMore_Click()
-    intMovement = 200
-    intMovementAccel = 50
+    intMovement = 0
+    intMovementAccel = 2
     tmrReSizer.Enabled = True
 End Sub
 Private Sub FlexGrid1_DblClick()
@@ -5090,6 +5164,7 @@ Private Sub SetupAdmin()
     intFormHMin = intFormHMin + 300
     intFormHMax = intFormHMax + 300
 End Sub
+
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Call WheelUnHook
     cn_global.Close
@@ -5249,6 +5324,7 @@ Private Sub List1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y 
     List1.Visible = False
     List1.Clear
 End Sub
+
 Private Sub mnuDelete_Click()
     Dim blah
     If bolHasTicket Then
@@ -5371,6 +5447,7 @@ Private Sub optReOpen_Click()
     imgComment.Enabled = True
     frmComments.txtComment.Locked = False
 End Sub
+
 Private Sub SSTab1_Click(PreviousTab As Integer)
     If SSTab1.Tab = 0 Then Set WhichGrid = FlexGridHist
     If SSTab1.Tab = 1 Then Set WhichGrid = Flexgrid1
@@ -5382,7 +5459,7 @@ Private Sub SSTab1_MouseDown(Button As Integer, _
                              X As Single, _
                              Y As Single)
     If bolOpenForm = True Then
-        Call cmdShowMore_Click
+        If cmdShowMore.Enabled = True Then Call cmdShowMore_Click
     End If
 End Sub
 Private Sub tmrBannerWait_Timer()

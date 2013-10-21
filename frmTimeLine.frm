@@ -338,9 +338,6 @@ Public Sub DrawTimeLine()
             ElseIf TicketAction(i) = "REOPENED" Then
                 dLine(i).Color = &HFF80FF
             End If
-            
-            
-            
             If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
                 dLine(i).Width = 38
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
@@ -349,11 +346,9 @@ Public Sub DrawTimeLine()
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
             If i = Entry - 1 Then
-            dLine(i).Width = 38
-            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+                dLine(i).Width = 38
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
             End If
-            
-            
             dNote(i).Text = strTimelineComments(i)
             dNote(i).Width = Printer.TextWidth(dNote(i).Text)
             dAction(i).Text = TicketActionText(i)
@@ -430,9 +425,9 @@ Public Sub ReDrawTimeLine()
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
             If i = Entry - 1 Then
-            dLine(i).Width = 200
-            dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width ' - 100
-            dLine(i).FillStyle = 7
+                dLine(i).Width = 200
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width ' - 100
+                dLine(i).FillStyle = 7
             End If
             If chkShowAll.Value = 1 Then
                 dAction(i).Top = dGrid(i).Top + dGrid(0).Height / 2 - dAction(0).Height / 2
@@ -531,7 +526,7 @@ Public Sub DrawLines()
                         If chkShowAll.Value = False Then
                             .pbDrawArea.ForeColor = &H80000012
                         Else
-                            .pbDrawArea.ForeColor = &HA4A4A4
+                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
                         End If
                         .pbDrawArea.DrawStyle = 0
                         .pbDrawArea.FontTransparent = True
@@ -546,7 +541,7 @@ Public Sub DrawLines()
                         If chkShowAll.Value = False Then
                             .pbDrawArea.ForeColor = &H80000012
                         Else
-                            .pbDrawArea.ForeColor = &HA4A4A4
+                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
                         End If
                         .pbDrawArea.DrawStyle = 0
                         .pbDrawArea.FontTransparent = True
@@ -559,7 +554,7 @@ Public Sub DrawLines()
                 If chkShowAll.Value = False Then
                     .pbDrawArea.ForeColor = &H80000012
                 Else
-                    .pbDrawArea.ForeColor = &HA4A4A4
+                    .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
                 End If
                 .pbDrawArea.DrawStyle = 0
                 .pbDrawArea.FontTransparent = True
