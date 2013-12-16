@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   254279683
+            Format          =   260243459
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   254279683
+            Format          =   260243459
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -231,7 +231,7 @@ Begin VB.Form frmReportFilter
          End
       End
       Begin VB.Frame Frame3 
-         Caption         =   "Search Text (Beginning with...)"
+         Caption         =   "Search Text (Containing...)"
          Height          =   2775
          Left            =   5280
          TabIndex        =   9
@@ -412,12 +412,12 @@ Begin VB.Form frmReportFilter
          Begin VB.Label Label5 
             AutoSize        =   -1  'True
             BackStyle       =   0  'Transparent
-            Caption         =   "Description: (Containing...)"
+            Caption         =   "Description:"
             Height          =   195
             Left            =   2400
             TabIndex        =   17
             Top             =   360
-            Width           =   1965
+            Width           =   855
          End
          Begin VB.Label Label4 
             AutoSize        =   -1  'True

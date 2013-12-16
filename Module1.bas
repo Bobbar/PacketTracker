@@ -235,6 +235,17 @@ errs:
         Form1.CommsUp
     End If
 End Function
+
+Public Function GetEmail(strUsername As String) As String
+    Dim i As Integer
+    For i = 0 To UBound(strUserIndex, 2)
+        If strUserIndex(0, i) = strUsername Then
+            GetEmail = UCase$(strUserIndex(2, i))
+            Exit Function
+        End If
+    Next i
+End Function
+
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
@@ -244,7 +255,79 @@ Public Function GetFullName(strUsername As String) As String
         End If
     Next i
 End Function
-
+Public Sub SendNotification(SendRec As String, _
+                            MailFrom As String, _
+                            MailTo As String, _
+                            JobNum As String, _
+                            strDescrip As String, _
+                            strPartNum As String, _
+                            strCustomer As String, _
+                            strCreator As String, _
+                            strCreateDate As String)
+    'On Error GoTo errs
+    Dim iConf As New CDO.Configuration
+    Dim Flds  As ADODB.Fields
+    Dim iMsg  As New CDO.Message
+    Set Flds = iConf.Fields
+    ' Set the configuration
+    Flds(cdoSendUsingMethod) = cdoSendUsingPort
+    Flds(cdoSMTPServer) = "mx.wthg.com"
+    ' ... other settings
+    Flds.Update
+    With iMsg
+        Set .Configuration = iConf
+        .Sender = GetEmail(MailFrom)
+        .To = GetEmail(MailTo)
+        .From = GetEmail(MailFrom)
+        .Subject = "JTP: Bobby Lovell sent you a packet"
+        .HTMLBody = GenerateHTML(SendRec, GetFullName(MailFrom), MailTo, JobNum, strDescrip, strPartNum, strCustomer, strCreator, strCreateDate)
+        '.TextBody = Message
+        .Send
+    End With
+    Set iMsg = Nothing
+    Set iConf = Nothing
+    Set Flds = Nothing
+    'Exit Sub
+    'errs:
+    ' Debug.Print Err.Number
+    ' If Err.Number = -2147220973 Then
+    '    MsgBox "Failed to send EMail notification!"
+    '  End If
+End Sub
+Public Function GenerateHTML(strSendOrRec As String, _
+                             strFrom As String, _
+                             strTo As String, _
+                             strPacketNum As String, _
+                             strDescrip As String, _
+                             strPartNum As String, _
+                             strCustomer As String, _
+                             strCreator As String, _
+                             strCreateDate As String) As String
+    ' On Error GoTo errs
+    Dim tmpHTML As String
+    If UCase$(strSendOrRec) = "SEND" Then
+        Dim BackColor As String
+        BackColor = Hex$(colInTransit) 'Replace$(colInTransit, "&H8", "#")
+        tmpHTML = tmpHTML + "<HTML>" & vbCrLf
+        tmpHTML = tmpHTML + "<BODY BGCOLOR=" & BackColor & ">" & vbCrLf
+        tmpHTML = tmpHTML + "<FONT STYLE=font-family:Tahoma;>" & vbCrLf
+        tmpHTML = tmpHTML + "<FONT SIZE=6><U>Message from Job Packet Tracker:</U></FONT><BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + strFrom & " is sending Job Packet <b>" & strPacketNum & "</b> to you. <BR><BR><BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + " <FONT STYLE=font-family:Terminal;>" & vbCrLf
+        tmpHTML = tmpHTML + " Detailed Info:<BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + "<PRE><B>Job Number: <B/>" & strPacketNum & "<BR><B>Description:</B> " & strDescrip & "<BR>"
+        tmpHTML = tmpHTML + "<B>Part Number:<B/>" & strPartNum & "<BR><B>Customer:</B> " & strCustomer & "<BR>"
+        tmpHTML = tmpHTML + "<B>Creator:<B/>" & strCreator & "<BR><B>Create Date:</B> " & strCreateDate & "<BR>"
+        tmpHTML = tmpHTML + " <FONT>" & vbCrLf
+        tmpHTML = tmpHTML + " </BODY>" & vbCrLf
+        tmpHTML = tmpHTML + " </HTML>" & vbCrLf
+        GenerateHTML = tmpHTML
+    ElseIf UCase$(strSendOrRec) = "REC" Then
+    End If
+    '  Exit Function
+    'errs:
+    '    Debug.Print Err.Number
+End Function
 Public Sub StartTimer()
     total = 0
     QueryPerformanceFrequency Freq
@@ -350,7 +433,7 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
         .Update
     End With
     Form1.HideData
-    ShowBanner colInTransit, "Single entry deleted successfully."
+   
     Form1.RefreshAfterEdit
     Form1.GetMyPackets
     Form1.SetControls
@@ -367,6 +450,17 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     Form1.RefreshAll
     Form1.RefreshHistory
     Form1.GetMyPackets
+    
+    If Err.Number = 0 And DBConcurrent = 0 Then
+     ShowBanner colInTransit, "Single entry deleted successfully."
+    Else
+    
+    
+    blah = MsgBox("An update was attempted but the result was unexpected!" & vbCrLf & "(The state of the packet did not change as expected)", vbExclamation + vbOKOnly, "Something's wrong...")
+    
+    End If
+    
+    
 End Sub
 Public Sub DeletePacket(JobNum As String)
     Dim rs      As New ADODB.Recordset

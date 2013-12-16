@@ -57,6 +57,7 @@ Begin VB.Form Form1
          Height          =   255
          Left            =   4800
          MouseIcon       =   "Form1.frx":08CA
+         MousePointer    =   2  'Cross
          TabIndex        =   126
          Top             =   120
          Width           =   255
@@ -241,7 +242,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -267,7 +267,6 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -283,14 +282,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":12E0
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Frame1"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Frame4"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1C82
@@ -673,7 +672,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -899,7 +898,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   69
          Top             =   480
          Width           =   11775
@@ -1813,7 +1812,7 @@ Begin VB.Form Form1
             TabIndex        =   46
             TabStop         =   0   'False
             ToolTipText     =   "Show additional features"
-            Top             =   230
+            Top             =   240
             Width           =   1575
          End
          Begin VB.Label Label17 
@@ -2112,6 +2111,42 @@ Private Declare Function TranslateColor _
 Private bolNoHits      As Boolean
 Private intRowSel      As Integer
 Private strCommentText As String
+Private intMovement As Integer, intMovementAccel As Integer, intMovementAccelRate As Integer
+Public Sub GetUserIndex()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim i       As Integer
+    On Error GoTo errs
+    strSQL1 = "select * from users"
+ ShowData
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset
+    i = 1
+    ReDim strUserIndex(2, rs.RecordCount)
+    Do Until rs.EOF
+        With rs
+            strUserIndex(0, i) = UCase$(!idUsers)
+            strUserIndex(1, i) = !idFullname
+            strUserIndex(2, i) = !idEmail
+            i = i + 1
+            rs.MoveNext
+        End With
+    Loop
+   HideData
+    Exit Sub
+errs:
+    If Err.Number = -2147467259 Then
+        If bolInitialLoad = True Then
+            Dim blah
+            blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
+            Unload Me
+        Else
+            CommsDown
+        End If
+    Else
+        CommsUp
+    End If
+End Sub
 Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
     Dim R As Long
     R = TranslateColor(Color, 0, GetRealColor)
@@ -2743,23 +2778,27 @@ Public Sub HideData()
     Set pbData.Picture = picDataPics(0)
 End Sub
 Public Sub RefreshAll()
-    If DBConcurrent = 2 And bolHasTicket Then
-        ClearFields
-        GetMyPackets
-        SetControls
-        optCreate.Value = False
-        optCreate.Enabled = True
-        StatusBar1.Panels.Item(1).Text = ""
-        txtJobNo.SetFocus
-        ShowBanner vbYellow, "The packet has been deleted.  Current status updated.", 350
-        Exit Sub
+    Dim ConcurrentStatus As Integer
+    ConcurrentStatus = DBConcurrent
+    If bolHasTicket Then
+        If ConcurrentStatus = 2 Then
+            ClearFields
+            GetMyPackets
+            SetControls
+            optCreate.Value = False
+            optCreate.Enabled = True
+            StatusBar1.Panels.Item(1).Text = ""
+            txtJobNo.SetFocus
+            ShowBanner vbYellow, "The packet has been deleted.  Current status updated.", 350
+            Exit Sub
+        End If
+        If ConcurrentStatus = 0 Then
+            ClearOptBoxes
+            RefreshFields
+            SetControls
+        End If
+        RefreshHistory
     End If
-    If DBConcurrent = 0 And bolHasTicket Then
-        ClearOptBoxes
-        RefreshFields
-        SetControls
-    End If
-    RefreshHistory
     GetMyPackets
 End Sub
 Public Sub CommsDown()
@@ -3789,7 +3828,8 @@ Public Sub SubmitFile()
     Dim strSQL1 As String
     Dim intBlah As Integer
     If Trim$(strTicketComment) = "" Then
-        MsgBox ("Please enter a comment describing the filing location.")
+        Dim Msg
+        Msg = MsgBox("Please enter a comment describing the filing location.", vbOKOnly + vbExclamation, "Note Required")
         optFile.Value = True
         frmComments.Show (vbModal)
         Exit Sub
@@ -3822,9 +3862,13 @@ Public Sub SubmitFile()
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
     RefreshAfterEdit
-    If Err.Number = 0 Then
+
+    
+    If DBConcurrent = 1 And Err.Number = 0 Then
         ShowBanner colFiled, "Job Packet Filed Successfully."
     Else
+     
+    
     End If
     Exit Sub
 errs:
@@ -3905,7 +3949,8 @@ Public Sub SubmitClose()
         Exit Sub
     End If
     If Trim$(strTicketComment) = "" Then
-        MsgBox ("Please enter a comment describing the closed file location.")
+        Dim Msg
+        Msg = MsgBox("Please enter a comment describing the filing location.", vbOKOnly + vbExclamation, "Note Required")
         optClose.Value = True
         frmComments.Show (vbModal)
         Exit Sub
@@ -4027,7 +4072,7 @@ Public Sub SubmitMove()
         Call SetINIValue(strSelectUserTo, (Hits + 1))
     End If
     ShowData
-    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
+    strSQL1 = "Select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
     cn_global.CursorLocation = adUseClient
     rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
     With rs
@@ -4047,6 +4092,10 @@ Public Sub SubmitMove()
         .Close
     End With
     HideData
+
+SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text
+    
+    
     RefreshAfterEdit
     cmdSubmit.Enabled = False
     optMove.Value = False
@@ -4061,6 +4110,7 @@ Public Sub SubmitMove()
     imgComment.Enabled = False
     GetTopHits
     UpdateUserList
+
 errs:
     If Err.Number = 0 Then
         ShowBanner colInTransit, ConfirmText
@@ -4372,6 +4422,11 @@ Public Sub GetTopHits()
                 Next iKey
             Next iSection
             Call MySort(SortHits)
+            For i = 0 To UBound(SortHits, 2)
+            Debug.Print SortHits(1, i)
+            Next
+            
+            
             If UBound(SortHits, 2) - 1 < 4 Then
                 MaxKeys = UBound(SortHits, 2) - 1
             ElseIf UBound(SortHits, 2) - 1 >= 4 Then
@@ -4415,40 +4470,6 @@ Public Sub UpdateUserList()
     Next i
     frmReportFilter.cmbUsers.ListIndex = 0
     Err.Clear
-    Exit Sub
-errs:
-    If Err.Number = -2147467259 Then
-        If bolInitialLoad = True Then
-            Dim blah
-            blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
-            Unload Me
-        Else
-            CommsDown
-        End If
-    Else
-        CommsUp
-    End If
-End Sub
-Private Sub GetUserIndex()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim i       As Integer
-    On Error GoTo errs
-    strSQL1 = "select * from users"
-    ShowData
-    cn_global.CursorLocation = adUseClient
-    rs.Open strSQL1, cn_global, adOpenKeyset
-    i = 1
-    ReDim strUserIndex(1, rs.RecordCount)
-    Do Until rs.EOF
-        With rs
-            strUserIndex(0, i) = UCase$(!idUsers)
-            strUserIndex(1, i) = !idFullname
-            i = i + 1
-            rs.MoveNext
-        End With
-    Loop
-    HideData
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4881,7 +4902,8 @@ Private Sub cmdSubmit_Click()
 End Sub
 Private Sub cmdShowMore_Click()
     intMovement = 0
-    intMovementAccel = 2
+    intMovementAccel = 1
+    intMovementAccelRate = 5
     tmrReSizer.Enabled = True
 End Sub
 Private Sub FlexGrid1_DblClick()
@@ -4899,6 +4921,7 @@ Private Sub FlexGrid1_KeyPress(KeyAscii As Integer)
         Call cmdSearch_Click
     End If
 End Sub
+
 Private Sub FlexGridHist_Click()
     Set WhichGrid = FlexGridHist
 End Sub
@@ -5029,7 +5052,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
@@ -5631,7 +5654,7 @@ Private Sub tmrReSizer_Timer()
         End If
     End If
     intMovement = intMovement + intMovementAccel
-    intMovementAccel = intMovementAccel + 2
+    intMovementAccel = intMovementAccel + intMovementAccelRate
 End Sub
 Private Sub tmrScroll_Timer()
     On Error Resume Next
