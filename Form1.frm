@@ -29,7 +29,7 @@ Begin VB.Form Form1
    Begin VB.PictureBox frmConfirm 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
-      BackColor       =   &H0080C0FF&
+      BackColor       =   &H0080FFFF&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1155
@@ -242,6 +242,7 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -2234,7 +2235,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80C0FF)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colCreate)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2245,7 +2246,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(1)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80C0FF)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colCreate)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     ElseIf strAction = "INTRANSIT" Then
         If strComment <> "" And bolPrinting = False Then
@@ -2261,7 +2262,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80FF80)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colInTransit)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2272,7 +2273,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(2)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80FF80)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colInTransit)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     ElseIf strAction = "RECEIVED" Then
         If strComment <> "" And bolPrinting = False Then
@@ -2288,7 +2289,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80FFFF)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReceived)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2299,7 +2300,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(3)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H80FFFF)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReceived)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     ElseIf strAction = "NULL" Then
         If strComment <> "" And bolPrinting = False Then
@@ -2315,7 +2316,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H8080FF)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colClosed)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2326,7 +2327,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(5)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &H8080FF)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colClosed)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     ElseIf strAction = "FILED" Then
         If strComment <> "" And bolPrinting = False Then
@@ -2342,7 +2343,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &HFF8080)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colFiled)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2353,7 +2354,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(4)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &HFF8080)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colFiled)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     ElseIf strAction = "REOPENED" Then
         If strComment <> "" And bolPrinting = False Then
@@ -2369,7 +2370,7 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &HFF80FF)
+            Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReopened)
             FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
         End If
         FlexGridHist.Rows = FlexGridHist.Rows + 1 'Add new row per entry
@@ -2380,7 +2381,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(7)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, &HFF80FF)
+        Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReopened)
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     End If
 End Sub
@@ -4029,6 +4030,9 @@ Public Sub SubmitReceive()
         .Close
     End With
     HideData
+    
+    'cmdSubmit.Enabled = False
+    
     DisableBoxes
     RefreshAfterEdit
     cmdSubmit.Enabled = False
@@ -4041,6 +4045,9 @@ Public Sub SubmitReceive()
     bolOptionClicked = False
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
+    
+    SendNotification "REC", strLocalUser, strUserFrom, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
+    
     If Err.Number = 0 Then
         ShowBanner colReceived, ConfirmText
     Else
@@ -4092,10 +4099,8 @@ Public Sub SubmitMove()
         .Close
     End With
     HideData
-
-SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text
-    
-    
+    cmdSubmit.Enabled = False
+    SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
     RefreshAfterEdit
     cmdSubmit.Enabled = False
     optMove.Value = False
@@ -4110,7 +4115,6 @@ SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicket
     imgComment.Enabled = False
     GetTopHits
     UpdateUserList
-
 errs:
     If Err.Number = 0 Then
         ShowBanner colInTransit, ConfirmText
@@ -4418,15 +4422,10 @@ Public Sub GetTopHits()
                     ReDim Preserve SortHits(1, UBound(SortHits, 2) + 1)
                     .Key = sKeys(iKey)
                     SortHits(1, UBound(SortHits, 2)) = .Key
-                    SortHits(0, UBound(SortHits, 2)) = .Value
+                    SortHits(0, UBound(SortHits, 2)) = Int(.Value)
                 Next iKey
             Next iSection
             Call MySort(SortHits)
-            For i = 0 To UBound(SortHits, 2)
-            Debug.Print SortHits(1, i)
-            Next
-            
-            
             If UBound(SortHits, 2) - 1 < 4 Then
                 MaxKeys = UBound(SortHits, 2) - 1
             ElseIf UBound(SortHits, 2) - 1 >= 4 Then

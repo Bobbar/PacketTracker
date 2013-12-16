@@ -89,7 +89,7 @@ Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Me.Hide
 End Sub
 Private Sub txtComment_Change()
-    strTicketComment = Replace(txtComment.Text, vbCrLf, " ")
+    strTicketComment = Replace(txtComment.Text, vbCrLf, "")
     lblChars.Caption = Len(txtComment.Text) & " / 200"
 End Sub
 Private Sub txtComment_KeyPress(KeyAscii As Integer)

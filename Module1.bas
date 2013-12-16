@@ -263,7 +263,7 @@ Public Sub SendNotification(SendRec As String, _
                             strPartNum As String, _
                             strCustomer As String, _
                             strCreator As String, _
-                            strCreateDate As String)
+                            strCreateDate As String, strComment As String)
     'On Error GoTo errs
     Dim iConf As New CDO.Configuration
     Dim Flds  As ADODB.Fields
@@ -279,8 +279,12 @@ Public Sub SendNotification(SendRec As String, _
         .Sender = GetEmail(MailFrom)
         .To = GetEmail(MailTo)
         .From = GetEmail(MailFrom)
-        .Subject = "JTP: Bobby Lovell sent you a packet"
-        .HTMLBody = GenerateHTML(SendRec, GetFullName(MailFrom), MailTo, JobNum, strDescrip, strPartNum, strCustomer, strCreator, strCreateDate)
+        If UCase$(SendRec) = "SEND" Then
+            .Subject = "JPT: " & GetFullName(strLocalUser) & " sent you a packet"
+        ElseIf UCase$(SendRec) = "REC" Then
+            .Subject = "JPT: " & GetFullName(strLocalUser) & " received a packet"
+        End If
+        .HTMLBody = GenerateHTML(SendRec, GetFullName(MailFrom), MailTo, JobNum, strDescrip, strPartNum, strCustomer, strCreator, strCreateDate, strComment)
         '.TextBody = Message
         .Send
     End With
@@ -302,27 +306,99 @@ Public Function GenerateHTML(strSendOrRec As String, _
                              strPartNum As String, _
                              strCustomer As String, _
                              strCreator As String, _
-                             strCreateDate As String) As String
+                             strCreateDate As String, _
+                             strComment As String) As String
     ' On Error GoTo errs
     Dim tmpHTML As String
     If UCase$(strSendOrRec) = "SEND" Then
         Dim BackColor As String
-        BackColor = Hex$(colInTransit) 'Replace$(colInTransit, "&H8", "#")
+        BackColor = Hex$(colInTransit)
         tmpHTML = tmpHTML + "<HTML>" & vbCrLf
         tmpHTML = tmpHTML + "<BODY BGCOLOR=" & BackColor & ">" & vbCrLf
         tmpHTML = tmpHTML + "<FONT STYLE=font-family:Tahoma;>" & vbCrLf
         tmpHTML = tmpHTML + "<FONT SIZE=6><U>Message from Job Packet Tracker:</U></FONT><BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + strFrom & " is sending Job Packet <b>" & strPacketNum & "</b> to you. <BR><BR><BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + strFrom & " is sending Job Packet <b>" & strPacketNum & "</b> to you. <BR><BR>" & vbCrLf
+        If strComment <> "" Then
+            tmpHTML = tmpHTML + "<I>" & Chr$(34) & strComment & Chr$(34) & "</I><BR><BR><BR><BR>" & vbCrLf
+        Else
+            tmpHTML = tmpHTML + "<BR><BR>"
+        End If
         tmpHTML = tmpHTML + " <FONT STYLE=font-family:Terminal;>" & vbCrLf
         tmpHTML = tmpHTML + " Detailed Info:<BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + "<PRE><B>Job Number: <B/>" & strPacketNum & "<BR><B>Description:</B> " & strDescrip & "<BR>"
-        tmpHTML = tmpHTML + "<B>Part Number:<B/>" & strPartNum & "<BR><B>Customer:</B> " & strCustomer & "<BR>"
-        tmpHTML = tmpHTML + "<B>Creator:<B/>" & strCreator & "<BR><B>Create Date:</B> " & strCreateDate & "<BR>"
+        tmpHTML = tmpHTML + "<table border=0 cellpadding=3>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Job Number:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Description:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strPacketNum & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strDescrip & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Part Number:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Customer:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strPartNum & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCustomer & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Creator:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Create Date:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCreator & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCreateDate & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "</table>" & vbCrLf
         tmpHTML = tmpHTML + " <FONT>" & vbCrLf
         tmpHTML = tmpHTML + " </BODY>" & vbCrLf
         tmpHTML = tmpHTML + " </HTML>" & vbCrLf
         GenerateHTML = tmpHTML
     ElseIf UCase$(strSendOrRec) = "REC" Then
+        BackColor = Hex$(&HF4FF80)
+        tmpHTML = tmpHTML + "<HTML>" & vbCrLf
+        tmpHTML = tmpHTML + "<BODY BGCOLOR=" & BackColor & ">" & vbCrLf
+        tmpHTML = tmpHTML + "<FONT STYLE=font-family:Tahoma;>" & vbCrLf
+        tmpHTML = tmpHTML + "<FONT SIZE=6><U>Message from Job Packet Tracker:</U></FONT><BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + strFrom & " has received Job Packet <b>" & strPacketNum & "</b><BR><BR>" & vbCrLf
+        If strComment <> "" Then
+            tmpHTML = tmpHTML + "<I>" & Chr$(34) & strComment & Chr$(34) & "</I><BR><BR><BR><BR>" & vbCrLf
+        Else
+            tmpHTML = tmpHTML + "<BR><BR>"
+        End If
+        tmpHTML = tmpHTML + " <FONT STYLE=font-family:Terminal;>" & vbCrLf
+        tmpHTML = tmpHTML + " Detailed Info:<BR><BR>" & vbCrLf
+        tmpHTML = tmpHTML + "<table border=0 cellpadding=3>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Job Number:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Description:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strPacketNum & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strDescrip & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Part Number:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Customer:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strPartNum & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCustomer & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Creator:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td><b>Create Date:</b></td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<tr>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCreator & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "<td>" & strCreateDate & "</td>" & vbCrLf
+        tmpHTML = tmpHTML + "</tr>" & vbCrLf
+        tmpHTML = tmpHTML + "</table>" & vbCrLf
+        tmpHTML = tmpHTML + " <FONT>" & vbCrLf
+        tmpHTML = tmpHTML + " </BODY>" & vbCrLf
+        tmpHTML = tmpHTML + " </HTML>" & vbCrLf
+        GenerateHTML = tmpHTML
     End If
     '  Exit Function
     'errs:

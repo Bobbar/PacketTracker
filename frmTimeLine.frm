@@ -326,17 +326,17 @@ Public Sub DrawTimeLine()
             dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             dLine(i).Top = dLine(i - 1).Top + dLine(0).Height
             If TicketAction(i) = "CREATED" Then
-                dLine(i).Color = &H80C0FF
+                dLine(i).Color = colCreate
             ElseIf TicketAction(i) = "INTRANSIT" Then
-                dLine(i).Color = &H80FF80
+                dLine(i).Color = colInTransit
             ElseIf TicketAction(i) = "RECEIVED" Then
-                dLine(i).Color = &H80FFFF
+                dLine(i).Color = colReceived
             ElseIf TicketAction(i) = "NULL" Then
-                dLine(i).Color = &H8080FF
+                dLine(i).Color = colClosed
             ElseIf TicketAction(i) = "FILED" Then
-                dLine(i).Color = &HFF8080
+                dLine(i).Color = colFiled
             ElseIf TicketAction(i) = "REOPENED" Then
-                dLine(i).Color = &HFF80FF
+                dLine(i).Color = colReopened
             End If
             If TicketHours(i) * LStep < 38 Then 'Less than 1 pixel wide
                 dLine(i).Width = 38
