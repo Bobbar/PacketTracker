@@ -255,6 +255,26 @@ Public Function GetFullName(strUsername As String) As String
         End If
     Next i
 End Function
+Public Sub SendEmailToQueue(SendRec As String, _
+                            MailFrom As String, _
+                            MailTo As String, _
+                            JobNum As String, _
+                            strComment As String)
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+strSQL1 = "INSERT INTO emailqueue (idSendOrRec,idFrom,idTo,idJobNum,idComment)" & " VALUES ('" & SendRec & "','" & MailFrom & "','" & MailTo & "','" & JobNum & "','" & strComment & "')"
+    Set rs = New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+    
+    
+    
+    
+    
+    
+    
+    
+End Sub
 Public Sub SendNotification(SendRec As String, _
                             MailFrom As String, _
                             MailTo As String, _

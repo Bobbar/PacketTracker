@@ -242,7 +242,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -4045,8 +4044,8 @@ Public Sub SubmitReceive()
     bolOptionClicked = False
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
-    
-    SendNotification "REC", strLocalUser, strUserFrom, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
+    SendEmailToQueue "REC", strLocalUser, strUserFrom, txtJobNo.Text, strTicketComment
+    'SendNotification "REC", strLocalUser, strUserFrom, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
     
     If Err.Number = 0 Then
         ShowBanner colReceived, ConfirmText
@@ -4100,7 +4099,8 @@ Public Sub SubmitMove()
     End With
     HideData
     cmdSubmit.Enabled = False
-    SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
+    SendEmailToQueue "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, strTicketComment
+    'SendNotification "SEND", strLocalUser, strSelectUserTo, txtJobNo.Text, txtTicketDescription.Text, txtPartNoRev.Text, txtCustPoNo.Text, txtCreator.Text, txtCreateDate.Text, strTicketComment
     RefreshAfterEdit
     cmdSubmit.Enabled = False
     optMove.Value = False
