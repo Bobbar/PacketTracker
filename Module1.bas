@@ -262,168 +262,11 @@ Public Sub SendEmailToQueue(SendRec As String, _
                             strComment As String)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
-strSQL1 = "INSERT INTO emailqueue (idSendOrRec,idFrom,idTo,idJobNum,idComment)" & " VALUES ('" & SendRec & "','" & MailFrom & "','" & MailTo & "','" & JobNum & "','" & strComment & "')"
+    strSQL1 = "INSERT INTO emailqueue (idSendOrRec,idFrom,idTo,idJobNum,idComment)" & " VALUES ('" & SendRec & "','" & MailFrom & "','" & MailTo & "','" & JobNum & "','" & strComment & "')"
     Set rs = New ADODB.Recordset
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
-    
-    
-    
-    
-    
-    
-    
-    
 End Sub
-Public Sub SendNotification(SendRec As String, _
-                            MailFrom As String, _
-                            MailTo As String, _
-                            JobNum As String, _
-                            strDescrip As String, _
-                            strPartNum As String, _
-                            strCustomer As String, _
-                            strCreator As String, _
-                            strCreateDate As String, strComment As String)
-    'On Error GoTo errs
-    Dim iConf As New CDO.Configuration
-    Dim Flds  As ADODB.Fields
-    Dim iMsg  As New CDO.Message
-    Set Flds = iConf.Fields
-    ' Set the configuration
-    Flds(cdoSendUsingMethod) = cdoSendUsingPort
-    Flds(cdoSMTPServer) = "mx.wthg.com"
-    ' ... other settings
-    Flds.Update
-    With iMsg
-        Set .Configuration = iConf
-        .Sender = GetEmail(MailFrom)
-        .To = GetEmail(MailTo)
-        .From = GetEmail(MailFrom)
-        If UCase$(SendRec) = "SEND" Then
-            .Subject = "JPT: " & GetFullName(strLocalUser) & " sent you a packet"
-        ElseIf UCase$(SendRec) = "REC" Then
-            .Subject = "JPT: " & GetFullName(strLocalUser) & " received a packet"
-        End If
-        .HTMLBody = GenerateHTML(SendRec, GetFullName(MailFrom), MailTo, JobNum, strDescrip, strPartNum, strCustomer, strCreator, strCreateDate, strComment)
-        '.TextBody = Message
-        .Send
-    End With
-    Set iMsg = Nothing
-    Set iConf = Nothing
-    Set Flds = Nothing
-    'Exit Sub
-    'errs:
-    ' Debug.Print Err.Number
-    ' If Err.Number = -2147220973 Then
-    '    MsgBox "Failed to send EMail notification!"
-    '  End If
-End Sub
-Public Function GenerateHTML(strSendOrRec As String, _
-                             strFrom As String, _
-                             strTo As String, _
-                             strPacketNum As String, _
-                             strDescrip As String, _
-                             strPartNum As String, _
-                             strCustomer As String, _
-                             strCreator As String, _
-                             strCreateDate As String, _
-                             strComment As String) As String
-    ' On Error GoTo errs
-    Dim tmpHTML As String
-    If UCase$(strSendOrRec) = "SEND" Then
-        Dim BackColor As String
-        BackColor = Hex$(colInTransit)
-        tmpHTML = tmpHTML + "<HTML>" & vbCrLf
-        tmpHTML = tmpHTML + "<BODY BGCOLOR=" & BackColor & ">" & vbCrLf
-        tmpHTML = tmpHTML + "<FONT STYLE=font-family:Tahoma;>" & vbCrLf
-        tmpHTML = tmpHTML + "<FONT SIZE=6><U>Message from Job Packet Tracker:</U></FONT><BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + strFrom & " is sending Job Packet <b>" & strPacketNum & "</b> to you. <BR><BR>" & vbCrLf
-        If strComment <> "" Then
-            tmpHTML = tmpHTML + "<I>" & Chr$(34) & strComment & Chr$(34) & "</I><BR><BR><BR><BR>" & vbCrLf
-        Else
-            tmpHTML = tmpHTML + "<BR><BR>"
-        End If
-        tmpHTML = tmpHTML + " <FONT STYLE=font-family:Terminal;>" & vbCrLf
-        tmpHTML = tmpHTML + " Detailed Info:<BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + "<table border=0 cellpadding=3>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Job Number:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Description:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strPacketNum & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strDescrip & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Part Number:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Customer:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strPartNum & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCustomer & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Creator:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Create Date:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCreator & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCreateDate & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "</table>" & vbCrLf
-        tmpHTML = tmpHTML + " <FONT>" & vbCrLf
-        tmpHTML = tmpHTML + " </BODY>" & vbCrLf
-        tmpHTML = tmpHTML + " </HTML>" & vbCrLf
-        GenerateHTML = tmpHTML
-    ElseIf UCase$(strSendOrRec) = "REC" Then
-        BackColor = Hex$(&HF4FF80)
-        tmpHTML = tmpHTML + "<HTML>" & vbCrLf
-        tmpHTML = tmpHTML + "<BODY BGCOLOR=" & BackColor & ">" & vbCrLf
-        tmpHTML = tmpHTML + "<FONT STYLE=font-family:Tahoma;>" & vbCrLf
-        tmpHTML = tmpHTML + "<FONT SIZE=6><U>Message from Job Packet Tracker:</U></FONT><BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + strFrom & " has received Job Packet <b>" & strPacketNum & "</b><BR><BR>" & vbCrLf
-        If strComment <> "" Then
-            tmpHTML = tmpHTML + "<I>" & Chr$(34) & strComment & Chr$(34) & "</I><BR><BR><BR><BR>" & vbCrLf
-        Else
-            tmpHTML = tmpHTML + "<BR><BR>"
-        End If
-        tmpHTML = tmpHTML + " <FONT STYLE=font-family:Terminal;>" & vbCrLf
-        tmpHTML = tmpHTML + " Detailed Info:<BR><BR>" & vbCrLf
-        tmpHTML = tmpHTML + "<table border=0 cellpadding=3>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Job Number:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Description:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strPacketNum & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strDescrip & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Part Number:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Customer:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strPartNum & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCustomer & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Creator:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td><b>Create Date:</b></td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<tr>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCreator & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "<td>" & strCreateDate & "</td>" & vbCrLf
-        tmpHTML = tmpHTML + "</tr>" & vbCrLf
-        tmpHTML = tmpHTML + "</table>" & vbCrLf
-        tmpHTML = tmpHTML + " <FONT>" & vbCrLf
-        tmpHTML = tmpHTML + " </BODY>" & vbCrLf
-        tmpHTML = tmpHTML + " </HTML>" & vbCrLf
-        GenerateHTML = tmpHTML
-    End If
-    '  Exit Function
-    'errs:
-    '    Debug.Print Err.Number
-End Function
 Public Sub StartTimer()
     total = 0
     QueryPerformanceFrequency Freq
@@ -529,7 +372,11 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
         .Update
     End With
     Form1.HideData
-   
+    If Err.Number = 0 And DBConcurrent = 0 Then
+        ShowBanner colInTransit, "Single entry deleted successfully."
+    Else
+        blah = MsgBox("An update was attempted but the result was unexpected!" & vbCrLf & "(The state of the packet did not change as expected)", vbExclamation + vbOKOnly, "Something's wrong...")
+    End If
     Form1.RefreshAfterEdit
     Form1.GetMyPackets
     Form1.SetControls
@@ -546,17 +393,6 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     Form1.RefreshAll
     Form1.RefreshHistory
     Form1.GetMyPackets
-    
-    If Err.Number = 0 And DBConcurrent = 0 Then
-     ShowBanner colInTransit, "Single entry deleted successfully."
-    Else
-    
-    
-    blah = MsgBox("An update was attempted but the result was unexpected!" & vbCrLf & "(The state of the packet did not change as expected)", vbExclamation + vbOKOnly, "Something's wrong...")
-    
-    End If
-    
-    
 End Sub
 Public Sub DeletePacket(JobNum As String)
     Dim rs      As New ADODB.Recordset

@@ -1,15 +1,15 @@
 [History]
 1=#P0#=mb	#P1#=ShowAllOpen	#P2#=TicketTracker/Form1/ShowAllOpen	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217113312	#P7#=0	#P8#=54	.
-2=#P0#=mb	#P1#=SendEmailToQueue	#P2#=TicketTracker/MyMod/SendEmailToQueue	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217112045	#P7#=0	#P8#=12	.
+2=#P0#=mb	#P1#=SendEmailToQueue	#P2#=TicketTracker/MyMod/SendEmailToQueue	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217151439	#P7#=0	#P8#=5	.
 3=#P0#=mb	#P1#=EnumRegistryValues	#P2#=TicketTracker/MyMod/EnumRegistryValues	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217093406	#P7#=0	#P8#=0	.
 4=#P0#=mb	#P1#=FindMySQLDriver	#P2#=TicketTracker/MyMod/FindMySQLDriver	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217093349	#P7#=0	#P8#=16	.
-5=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131217093304	#P7#=0	#P8#=2	.
+5=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131217093304	#P7#=0	#P8#=22	.
 6=#P0#=mb	#P1#=GenerateHTML	#P2#=TicketTracker/MyMod/GenerateHTML	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217084817	#P7#=0	#P8#=0	.
 7=#P0#=mb	#P1#=txtComment_Change	#P2#=TicketTracker/frmComments/txtComment_Change	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131216154809	#P7#=0	#P8#=1	.
 8=#P0#=mb	#P1#=cmdOK_Click	#P2#=TicketTracker/frmComments/cmdOK_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131216154756	#P7#=0	#P8#=1	.
-9=#P0#=mb	#P1#=SendNotification	#P2#=TicketTracker/MyMod/SendNotification	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217104140	#P7#=0	#P8#=9	.
-10=#P0#=mb	#P1#=SubmitReceive	#P2#=TicketTracker/Form1/SubmitReceive	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217130410	#P7#=0	#P8#=49	.
-11=#P0#=mb	#P1#=SubmitMove	#P2#=TicketTracker/Form1/SubmitMove	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217111216	#P7#=0	#P8#=41	.
+9=#P0#=mb	#P1#=SendNotification	#P2#=TicketTracker/MyMod/SendNotification	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217104140	#P7#=0	#P8#=0	.
+10=#P0#=mb	#P1#=SubmitReceive	#P2#=TicketTracker/Form1/SubmitReceive	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217151358	#P7#=0	#P8#=29	.
+11=#P0#=mb	#P1#=SubmitMove	#P2#=TicketTracker/Form1/SubmitMove	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217151348	#P7#=0	#P8#=41	.
 12=#P0#=mb	#P1#=DrawTimeLine	#P2#=TicketTracker/frmTimeLine/DrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131216105820	#P7#=0	#P8#=54	.
 13=#P0#=mb	#P1#=FillFlexHist	#P2#=TicketTracker/Form1/FillFlexHist	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131216105718	#P7#=0	#P8#=172	.
 14=#P0#=mb	#P1#=GetTopHits	#P2#=TicketTracker/Form1/GetTopHits	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131216104946	#P7#=0	#P8#=33	.
@@ -21,9 +21,9 @@
 20=#P0#=mb	#P1#=LiveSearch	#P2#=TicketTracker/Form1/LiveSearch	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131212141240	#P7#=0	#P8#=14	.
 21=#P0#=mb	#P1#=GetMyPackets	#P2#=TicketTracker/Form1/GetMyPackets	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131212135712	#P7#=0	#P8#=126	.
 22=#P0#=mb	#P1#=FlexGridHist_MouseDown	#P2#=TicketTracker/Form1/FlexGridHist_MouseDown	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131211100712	#P7#=0	#P8#=1	.
-23=#P0#=mb	#P1#=DeleteEntry	#P2#=TicketTracker/MyMod/DeleteEntry	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217115246	#P7#=0	#P8#=17	.
-24=#P0#=mb	#P1#=SubmitFile	#P2#=TicketTracker/Form1/SubmitFile	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131211095810	#P7#=0	#P8#=6	.
-25=#P0#=mb	#P1#=DBConcurrent	#P2#=TicketTracker/MyMod/DBConcurrent	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131211095446	#P7#=0	#P8#=0	.
+23=#P0#=mb	#P1#=DeleteEntry	#P2#=TicketTracker/MyMod/DeleteEntry	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217160618	#P7#=0	#P8#=14	.
+24=#P0#=mb	#P1#=SubmitFile	#P2#=TicketTracker/Form1/SubmitFile	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131211095810	#P7#=0	#P8#=1	.
+25=#P0#=mb	#P1#=DBConcurrent	#P2#=TicketTracker/MyMod/DBConcurrent	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217160519	#P7#=0	#P8#=10	.
 26=#P0#=mb	#P1#=BannerClick	#P2#=TicketTracker/Form1/BannerClick	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131211095245	#P7#=0	#P8#=15	.
 27=#P0#=mb	#P1#=Form_QueryUnload	#P2#=TicketTracker/frmUserSelect/Form_QueryUnload	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131203102751	#P7#=0	#P8#=1	.
 28=#P0#=mb	#P1#=UpdateUserList	#P2#=TicketTracker/Form1/UpdateUserList	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131203102542	#P7#=0	#P8#=18	.
@@ -91,7 +91,7 @@
 90=#P0#=mb	#P1#=GetODBCDrivers	#P2#=TicketTracker/MyMod/GetODBCDrivers	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130522160510	#P7#=0	#P8#=-1	.
 91=#P0#=mb	#P1#=ReDrawTimeLine	#P2#=TicketTracker/frmTimeLine/ReDrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130520162307	#P7#=0	#P8#=15	.
 92=#P0#=mb	#P1#=UnloadControls	#P2#=TicketTracker/frmTimeLine/UnloadControls	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130516160158	#P7#=0	#P8#=1	.
-93=#P0#=mb	#P1#=GetINIValue	#P2#=TicketTracker/MyMod/GetINIValue	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130514130905	#P7#=0	#P8#=8	.
+93=#P0#=mb	#P1#=GetINIValue	#P2#=TicketTracker/MyMod/GetINIValue	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217150146	#P7#=0	#P8#=8	.
 94=#P0#=mb	#P1#=ReturnEmpInfo	#P2#=TicketTracker/MyMod/ReturnEmpInfo	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130514105834	#P7#=0	#P8#=11	.
 95=#P0#=mb	#P1#=StopTimer	#P2#=TicketTracker/MyMod/StopTimer	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20130514094746	#P7#=0	#P8#=2	.
 96=#P0#=mb	#P1#=cmdTimeLine_Click	#P2#=TicketTracker/Form1/cmdTimeLine_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20130503104819	#P7#=0	#P8#=9	.
