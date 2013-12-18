@@ -5048,7 +5048,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True

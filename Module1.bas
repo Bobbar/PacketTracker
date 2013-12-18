@@ -535,14 +535,12 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim i
-    strSQL1 = "SELECT idAdmins FROM users"
+    strSQL1 = "SELECT * FROM users WHERE idUsers = '" & strLocalUser & "'"
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
     With rs
-        Do Until .EOF
-            If UCase$(!idAdmins) = UCase$(strLocalUser) Then CheckForAdmin = True
-            .MoveNext
-        Loop
+      If CBool(!idAdmins) Then CheckForAdmin = True
+       
     End With
 End Function
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
