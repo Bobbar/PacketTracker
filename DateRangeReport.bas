@@ -35,10 +35,10 @@ Public Sub DateRangeReport()
        & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum) AND" _
        & (IIf(frmReportFilter.txtSearchJobNum.Text <> "", " packetlist.idJobNum LIKE '" & frmReportFilter.txtSearchJobNum.Text & "%' AND", "")) _
        & (IIf(frmReportFilter.txtSearchDesc.Text <> "", " packetlist.idDescription LIKE '%" _
-       & frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " packetlist.idPartNum LIKE '" _
-       & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " packetlist.idSalesNum LIKE '" _
-       & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " packetlist.idDrawingNum LIKE '" _
-       & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " packetlist.idCustPONum LIKE '" _
+       & frmReportFilter.txtSearchDesc.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchPart.Text <> "", " packetlist.idPartNum LIKE '%" _
+       & frmReportFilter.txtSearchPart.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchSales.Text <> "", " packetlist.idSalesNum LIKE '%" _
+       & frmReportFilter.txtSearchSales.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchDraw.Text <> "", " packetlist.idDrawingNum LIKE '%" _
+       & frmReportFilter.txtSearchDraw.Text & "%' AND", "")) & (IIf(frmReportFilter.txtSearchCust.Text <> "", " packetlist.idCustPONum LIKE '%" _
        & frmReportFilter.txtSearchCust.Text & "%' AND", "")) & " Order By packetentrydb.idDate Desc"
     strQryRebuild = Split(strQry, " AND ")
     strQry = ""

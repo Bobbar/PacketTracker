@@ -38,7 +38,7 @@ Begin VB.Form Form1
       ScaleWidth      =   5595
       TabIndex        =   50
       TabStop         =   0   'False
-      Top             =   0
+      Top             =   1260
       Width           =   5595
       Begin VB.Label lblClose 
          Alignment       =   2  'Center
@@ -269,6 +269,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -284,14 +285,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":12E0
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Frame1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1C82
@@ -302,6 +303,7 @@ Begin VB.Form Form1
       TabPicture(3)   =   "Form1.frx":1E1C
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame6"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
@@ -674,7 +676,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -900,7 +902,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   69
          Top             =   480
          Width           =   11775
@@ -2135,6 +2137,7 @@ Public Sub GetUserIndex()
         End With
     Loop
    HideData
+   CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -2488,6 +2491,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     FlexHistLastTopRow = 0
     Screen.MousePointer = vbDefault
     lblChars.Visible = False
+    CommsUp
     Exit Sub
 errhandle:
     If Hex$(Err.Number) = 80040201 Then
@@ -2598,48 +2602,17 @@ Public Sub GetTimeLineData()
     TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
     HideData
 End Sub
-
-Public Sub GetMyPackets(Optional Verbose As Boolean = True)
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim LineIN, LineOUT, Row As Integer
-    On Error GoTo errs
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
-    cn_global.CursorLocation = adUseClient
-    FlexGridOUT.Clear
-    FlexGridOUT.Redraw = False
-    FlexGridOUT.Rows = 2
-    FlexGridOUT.FixedCols = 1
+Public Sub SetupGrids()
+   FlexGridOUT.Rows = 2
+   FlexGridIN.Rows = 2
+   FlexGridOUT.Cols = 10
+ FlexGridIN.Cols = 10
+  FlexGridOUT.FixedCols = 1
     FlexGridOUT.FixedRows = 1
-    FlexGridIN.Clear
-    FlexGridIN.Redraw = False
-    FlexGridIN.Rows = 2
     FlexGridIN.FixedCols = 1
     FlexGridIN.FixedRows = 1
-    ShowData
-    Set rs = cn_global.Execute(strSQL1)
-    If rs.RecordCount <= 0 Then
-        intPrevInPackets = 0
-        SSTab1.TabCaption(3) = "On-hand Packets (0)"
-        SSTab1.TabCaption(2) = "Incoming Packets (0)"
-        FlexGridOUT.Visible = False
-        FlexGridOUT.Redraw = True
-        FlexGridIN.Visible = False
-        FlexGridIN.Redraw = True
-        HideData
-        FlexGridOUT.Clear
-        FlexGridIN.Clear
-        Exit Sub
-    End If
-    LineIN = 1
-    LineOUT = 1
-    Row = 0
-    FlexGridOUT.Rows = rs.RecordCount + 1
-    FlexGridOUT.Cols = 10
-    FlexGridIN.Rows = rs.RecordCount + 1
-    FlexGridIN.Cols = 10
-    ' Create header row
-    FlexGridOUT.TextMatrix(0, 1) = "Job Number"
+
+  FlexGridOUT.TextMatrix(0, 1) = "Job Number"
     FlexGridOUT.TextMatrix(0, 2) = "Part Number"
     FlexGridOUT.TextMatrix(0, 3) = "Description"
     FlexGridOUT.TextMatrix(0, 4) = "Sales Number"
@@ -2657,6 +2630,43 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     FlexGridIN.TextMatrix(0, 7) = "Create Date"
     FlexGridIN.TextMatrix(0, 8) = "Last Activity Date"
     FlexGridIN.TextMatrix(0, 9) = "Last Activity"
+End Sub
+Public Sub GetMyPackets(Optional Verbose As Boolean = True)
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim LineIN, LineOUT, Row As Integer
+    On Error GoTo errs
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
+    Debug.Print strSQL1
+    
+    cn_global.CursorLocation = adUseClient
+    'FlexGridOUT.Clear
+    FlexGridOUT.Redraw = False
+    FlexGridOUT.Rows = 2
+    'FlexGridIN.Clear
+    FlexGridIN.Redraw = False
+    FlexGridIN.Rows = 2
+    ShowData
+    Set rs = cn_global.Execute(strSQL1)
+    If rs.RecordCount <= 0 Then
+        intPrevInPackets = 0
+        SSTab1.TabCaption(3) = "On-hand Packets (0)"
+        SSTab1.TabCaption(2) = "Incoming Packets (0)"
+        FlexGridOUT.Visible = False
+        FlexGridOUT.Redraw = True
+        FlexGridIN.Visible = False
+        FlexGridIN.Redraw = True
+        HideData
+        'FlexGridOUT.Clear
+        'FlexGridIN.Clear
+        Exit Sub
+    End If
+    LineIN = 1
+    LineOUT = 1
+    Row = 0
+    FlexGridOUT.Rows = rs.RecordCount + 1
+    FlexGridIN.Rows = rs.RecordCount + 1
+    ' Create header row
     Do Until rs.EOF
         With rs
             If !idAction = "CREATED" And !idUser = strLocalUser Or !idAction = "RECEIVED" And !idUser = strLocalUser Or !idAction = "REOPENED" And !idUser = strLocalUser Then
@@ -2747,6 +2757,7 @@ NextLoop:
         FlexGridOUT.RowSel = FlexOUTLastSel(0)
         FlexGridOUT.SetFocus
     End If
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -3637,6 +3648,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     FlexGridHist.TopRow = FlexHistLastTopRow
     FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     HideData
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4255,6 +4267,7 @@ Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh 
     End With
     'GetMyPackets
     HideData
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4466,6 +4479,7 @@ Public Sub UpdateUserList()
     Next i
     frmReportFilter.cmbUsers.ListIndex = 0
     Err.Clear
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4608,6 +4622,7 @@ Private Sub ShowAllClosed()
     Screen.MousePointer = vbDefault
     TotT = lngQryTimes(intQryIndex) * 0.001
     StatusBar1.Panels.Item(1).Text = Line - 1 & " results returned in " & TotT & " seconds"
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4709,6 +4724,7 @@ Private Sub ShowAllOpen()
     Screen.MousePointer = vbDefault
     TotT = lngQryTimes(intQryIndex) * 0.001
     StatusBar1.Panels.Item(1).Text = Line - 1 & " results returned in " & TotT & " seconds"
+    CommsUp
     Exit Sub
 errs:
     Screen.MousePointer = vbDefault
@@ -5048,7 +5064,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
@@ -5102,6 +5118,7 @@ Private Sub Form_Load()
     SetComboBoxHeight cmbUsers, 260
     frmSplash.lblStatus.Caption = "Getting incoming and on-hand packets..."
     DoEvents
+    SetupGrids
     GetMyPackets False
     ' Cache icons into memory for quick access
     frmSplash.lblStatus.Caption = "Caching images..."

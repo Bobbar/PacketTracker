@@ -227,6 +227,7 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
             End If
         End If
     End With
+    Form1.CommsUp
     Exit Function
 errs:
     If Err.Number = -2147467259 Then
