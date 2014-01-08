@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   260243459
+            Format          =   266207235
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   260243459
+            Format          =   266207235
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -716,7 +716,8 @@ Private Sub cmdRunReport_Click()
     dtStartDate = (MonthStart.Year & "-" & (IIf(Len(MonthStart.Month) < 2, "0" & MonthStart.Month, MonthStart.Month)) & "-" & (IIf(Len(MonthStart.Day) < 2, "0" & MonthStart.Day, MonthStart.Day)))
     dtEndDate = (MonthEnd.Year & "-" & (IIf(Len(MonthEnd.Month) < 2, "0" & MonthEnd.Month, MonthEnd.Month)) & "-" & (IIf(Len(MonthEnd.Day) < 2, "0" & MonthEnd.Day, MonthEnd.Day)))
     DateRangeReport
-    sAddlMsg = "Filtered by : " & (IIf(chkCreated.Value = 1, "Created, ", "")) & (IIf(chkReceived.Value = 1, "Received, ", "")) & (IIf(chkInTransit.Value = 1, "In transit, ", "")) & (IIf(chkOpened.Value = 1, "Opened, ", "")) & (IIf(chkFiled.Value = 1, "Filed, ", "")) & (IIf(chkClosed.Value = 1, "Closed ", "")) & vbCrLf & "      Plants: " & (IIf(chkSF.Value = 1, "Steel Fab, ", "")) & (IIf(chkN.Value = 1, "Nuclear, ", "")) & (IIf(chkRMT.Value = 1, "Rocky Mt, ", "")) & (IIf(chkC.Value = 1, "Controls, ", "")) & (IIf(chkW.Value = 1, "Wooster, ", "")) & (IIf(chkIM.Value = 1, "Industrial Mach, ", "")) & vbCrLf & "      User: " & (IIf(cmbUsers.Text <> "", cmbUsers.Text, "All"))
+    'sAddlMsg = "Filtered by : " & (IIf(chkCreated.Value = 1, "Created, ", "")) & (IIf(chkReceived.Value = 1, "Received, ", "")) & (IIf(chkInTransit.Value = 1, "In transit, ", "")) & (IIf(chkOpened.Value = 1, "Opened, ", "")) & (IIf(chkFiled.Value = 1, "Filed, ", "")) & (IIf(chkClosed.Value = 1, "Closed ", "")) & vbCrLf & "      Plants: " & (IIf(chkSF.Value = 1, "Steel Fab, ", "")) & (IIf(chkN.Value = 1, "Nuclear, ", "")) & (IIf(chkRMT.Value = 1, "Rocky Mt, ", "")) & (IIf(chkC.Value = 1, "Controls, ", "")) & (IIf(chkW.Value = 1, "Wooster, ", "")) & (IIf(chkIM.Value = 1, "Industrial Mach, ", "")) & vbCrLf & "      User: " & (IIf(cmbUsers.Text <> "", cmbUsers.Text, "All"))
+    sAddlMsg = "Filtered by : " & (IIf(chkCreated.Value = 1, "Created, ", "")) & (IIf(chkReceived.Value = 1, "Received, ", "")) & (IIf(chkInTransit.Value = 1, "In transit, ", "")) & (IIf(chkOpened.Value = 1, "Opened, ", "")) & (IIf(chkFiled.Value = 1, "Filed, ", "")) & (IIf(chkClosed.Value = 1, "Closed ", "")) & "      Plants: " & (IIf(chkSF.Value = 1, "Steel Fab, ", "")) & (IIf(chkN.Value = 1, "Nuclear, ", "")) & (IIf(chkRMT.Value = 1, "Rocky Mt, ", "")) & (IIf(chkC.Value = 1, "Controls, ", "")) & (IIf(chkW.Value = 1, "Wooster, ", "")) & (IIf(chkIM.Value = 1, "Industrial Mach, ", "")) & "      User: " & (IIf(cmbUsers.Text <> "", cmbUsers.Text, "All"))
     ClearFields
 End Sub
 Private Sub Form_Load()

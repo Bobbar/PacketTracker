@@ -22,6 +22,7 @@ Begin VB.Form Form1
    EndProperty
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
+   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   10140
    ScaleWidth      =   12210
@@ -159,7 +160,7 @@ Begin VB.Form Form1
          Top             =   2400
       End
       Begin VB.Timer tmrScroll 
-         Interval        =   1
+         Interval        =   5
          Left            =   120
          Top             =   960
       End
@@ -242,7 +243,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            TextSave        =   ""
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -269,7 +269,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   1
+      Tab             =   3
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -290,9 +290,8 @@ Begin VB.Form Form1
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Frame4"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1C82
@@ -301,13 +300,13 @@ Begin VB.Form Form1
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
       TabPicture(3)   =   "Form1.frx":1E1C
-      Tab(3).ControlEnabled=   0   'False
+      Tab(3).ControlEnabled=   -1  'True
       Tab(3).Control(0)=   "Frame6"
       Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   74
          Top             =   480
          Width           =   11775
@@ -676,7 +675,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -2111,18 +2110,18 @@ Private Declare Function TranslateColor _
                 Lib "olepro32.dll" _
                 Alias "OleTranslateColor" (ByVal clr As OLE_COLOR, _
                                            ByVal palet As Long, _
-                                           col As Long) As Long
+                                           Col As Long) As Long
 Private bolNoHits      As Boolean
 Private intRowSel      As Integer
 Private strCommentText As String
-Private intMovement As Integer, intMovementAccel As Integer, intMovementAccelRate As Integer
+Private intMovement    As Integer, intMovementAccel As Integer, intMovementAccelRate As Integer
 Public Sub GetUserIndex()
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim i       As Integer
     On Error GoTo errs
     strSQL1 = "select * from users"
- ShowData
+    ShowData
     cn_global.CursorLocation = adUseClient
     rs.Open strSQL1, cn_global, adOpenKeyset
     i = 1
@@ -2136,8 +2135,8 @@ Public Sub GetUserIndex()
             rs.MoveNext
         End With
     Loop
-   HideData
-   CommsUp
+    HideData
+    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -2232,11 +2231,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colCreate)
@@ -2247,7 +2246,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | Job packet was created by " & strCreator
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(1)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colCreate)
@@ -2259,11 +2258,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colInTransit)
@@ -2274,7 +2273,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUserFrom & " sent the job packet to " & strUserTo
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(2)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colInTransit)
@@ -2286,11 +2285,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReceived)
@@ -2301,7 +2300,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " received the job packet from " & strUserFrom
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(3)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReceived)
@@ -2313,11 +2312,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colClosed)
@@ -2328,7 +2327,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " closed the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(5)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colClosed)
@@ -2340,11 +2339,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colFiled)
@@ -2355,7 +2354,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " filed the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(4)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colFiled)
@@ -2367,11 +2366,11 @@ Public Sub FillFlexHist(strAction As String, _
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 4) = "com"
             FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = "    " & Chr$(34) & strComment & Chr$(34)
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 1
+            FlexGridHist.Col = 1
             FlexGridHist.CellFontSize = lngFontSize
             FlexGridHist.CellFontItalic = True
             FlexGridHist.Row = FlexGridHist.Rows - 1
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             Set FlexGridHist.CellPicture = HistoryIcons(6)
             FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
             Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReopened)
@@ -2382,7 +2381,7 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 3) = FlexGridHist.Rows - 1
         FlexGridHist.TextMatrix(FlexGridHist.Rows - 1, 1) = strDate & " | " & strUser & " reopened the job packet."
         FlexGridHist.Row = FlexGridHist.Rows - 1
-        FlexGridHist.col = 0
+        FlexGridHist.Col = 0
         Set FlexGridHist.CellPicture = HistoryIcons(7)
         FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
         Call FlexGridRowColor(FlexGridHist, FlexGridHist.Rows - 1, colReopened)
@@ -2603,16 +2602,15 @@ Public Sub GetTimeLineData()
     HideData
 End Sub
 Public Sub SetupGrids()
-   FlexGridOUT.Rows = 2
-   FlexGridIN.Rows = 2
-   FlexGridOUT.Cols = 10
- FlexGridIN.Cols = 10
-  FlexGridOUT.FixedCols = 1
+    FlexGridOUT.Rows = 2
+    FlexGridIN.Rows = 2
+    FlexGridOUT.Cols = 10
+    FlexGridIN.Cols = 10
+    FlexGridOUT.FixedCols = 1
     FlexGridOUT.FixedRows = 1
     FlexGridIN.FixedCols = 1
     FlexGridIN.FixedRows = 1
-
-  FlexGridOUT.TextMatrix(0, 1) = "Job Number"
+    FlexGridOUT.TextMatrix(0, 1) = "Job Number"
     FlexGridOUT.TextMatrix(0, 2) = "Part Number"
     FlexGridOUT.TextMatrix(0, 3) = "Description"
     FlexGridOUT.TextMatrix(0, 4) = "Sales Number"
@@ -2637,8 +2635,6 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim LineIN, LineOUT, Row As Integer
     On Error GoTo errs
     strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
-    Debug.Print strSQL1
-    
     cn_global.CursorLocation = adUseClient
     'FlexGridOUT.Clear
     FlexGridOUT.Redraw = False
@@ -2740,7 +2736,7 @@ NextLoop:
         ElseIf Me.ActiveControl.Name <> "FlexGridIN" Then
             Exit Sub
         End If
-        FlexGridIN.col = FlexINLastSel(1)
+        FlexGridIN.Col = FlexINLastSel(1)
         FlexGridIN.Row = FlexINLastSel(0)
         FlexGridIN.ColSel = FlexINLastSel(1)
         FlexGridIN.RowSel = FlexINLastSel(0)
@@ -2751,7 +2747,7 @@ NextLoop:
         ElseIf Me.ActiveControl.Name <> "FlexGridOUT" Then
             Exit Sub
         End If
-        FlexGridOUT.col = FlexOUTLastSel(1)
+        FlexGridOUT.Col = FlexOUTLastSel(1)
         FlexGridOUT.Row = FlexOUTLastSel(0)
         FlexGridOUT.ColSel = FlexOUTLastSel(1)
         FlexGridOUT.RowSel = FlexOUTLastSel(0)
@@ -2879,7 +2875,7 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
     On Error Resume Next
     'Set MSFlexGrid to appropriate Cell
     FlexGridHist.Row = MyRow
-    FlexGridHist.col = MyCol
+    FlexGridHist.Col = MyCol
     'Set textbox width to match current width of selected cell
     Text1.Width = FlexGridHist.ColWidth(MyCol) - 100
     Text1.FontSize = FlexGridHist.CellFontSize
@@ -3054,7 +3050,10 @@ Private Sub cmdPrintInPack_Click()
     FlexGridIN.ColWidth(8) = 1290
     FlexGridIN.ColWidth(9) = 3525
     strReportType = "Incoming Packets"
-    PrintFlexGrid FlexGridIN
+    'PrintFlexGrid FlexGridIN
+    BuildGridPrint FlexGridIN
+    PrintHeaders strReportType, sAddlMsg
+    PrintGridArray GridPrint()
     SizeTheSheet FlexGridIN
 End Sub
 Private Sub cmdPrintOnPack_Click()
@@ -3077,7 +3076,10 @@ Private Sub cmdPrintOnPack_Click()
     FlexGridOUT.ColWidth(8) = 1290
     FlexGridOUT.ColWidth(9) = 3525
     strReportType = "On-hand Packets"
-    PrintFlexGrid FlexGridOUT
+    'PrintFlexGrid FlexGridOUT
+    BuildGridPrint FlexGridOUT
+    PrintHeaders strReportType, sAddlMsg
+    PrintGridArray GridPrint()
     SizeTheSheet FlexGridOUT
 End Sub
 Private Sub cmdTimeLine_Click()
@@ -3127,12 +3129,12 @@ Sub FlexBoldFirst(FlexGrid As MSHFlexGrid)
     On Error Resume Next
     intCellHeight = 600
     FlexGrid.Row = 0
-    FlexGrid.col = 1
+    FlexGrid.Col = 1
     FlexGrid.CellFontSize = 10
     FlexGrid.CellFontBold = True
     If FlexGrid.TextMatrix(1, 4) = "com" Then
         FlexGrid.Row = 1
-        FlexGrid.col = 1
+        FlexGrid.Col = 1
         FlexGrid.CellFontBold = True
         FlexGrid.CellFontSize = 10.75
         FlexGrid.RowHeight(1) = intCellHeight - 200
@@ -3143,13 +3145,13 @@ errs:
 End Sub
 Sub FlexFlipHist(Mode As String)
     If Mode = "A" Then
-        FlexGridHist.col = 3
+        FlexGridHist.Col = 3
         FlexGridHist.Sort = flexSortGenericAscending
     Else
         'do nothing
     End If
     If Mode = "D" Then
-        FlexGridHist.col = 3
+        FlexGridHist.Col = 3
         FlexGridHist.Sort = flexSortGenericDescending
     Else
         'do nothing
@@ -3157,8 +3159,8 @@ Sub FlexFlipHist(Mode As String)
 End Sub
 Sub FlexSort(Mode As String)
     If Flexgrid1.MouseRow = 0 And Mode = "A" Then
-        Flexgrid1.col = Flexgrid1.MouseCol
-        If Flexgrid1.col = 10 Then
+        Flexgrid1.Col = Flexgrid1.MouseCol
+        If Flexgrid1.Col = 10 Then
             Flexgrid1.Sort = flexSortGenericAscending
         Else
             Flexgrid1.Sort = flexSortStringAscending
@@ -3167,8 +3169,8 @@ Sub FlexSort(Mode As String)
         'do nothing
     End If
     If Flexgrid1.MouseRow = 0 And Mode = "D" Then
-        Flexgrid1.col = Flexgrid1.MouseCol
-        If Flexgrid1.col = 10 Then
+        Flexgrid1.Col = Flexgrid1.MouseCol
+        If Flexgrid1.Col = 10 Then
             Flexgrid1.Sort = flexSortGenericDescending
         Else
             Flexgrid1.Sort = flexSortStringDescending
@@ -3188,414 +3190,103 @@ Public Sub FlexGridRowColor(FlexGrid As MSHFlexGrid, _
     If lngRow > FlexGrid.Rows - 1 Then
         Exit Sub
     End If
-    lngPrevCol = FlexGrid.col
+    lngPrevCol = FlexGrid.Col
     lngPrevRow = FlexGrid.Row
     lngPrevColSel = FlexGrid.ColSel
     lngPrevRowSel = FlexGrid.RowSel
     lngPrevFillStyle = FlexGrid.FillStyle
-    FlexGrid.col = FlexGrid.FixedCols
+    FlexGrid.Col = FlexGrid.FixedCols
     FlexGrid.Row = lngRow
     FlexGrid.ColSel = FlexGrid.Cols - 1
     FlexGrid.RowSel = lngRow
     FlexGrid.FillStyle = flexFillRepeat
     FlexGrid.CellBackColor = lngColor
-    FlexGrid.col = lngPrevCol
+    FlexGrid.Col = lngPrevCol
     FlexGrid.Row = lngPrevRow
     FlexGrid.ColSel = lngPrevColSel
     FlexGrid.RowSel = lngPrevRowSel
     FlexGrid.FillStyle = lngPrevFillStyle
 End Sub
-Public Sub PrintFlexGrid(FlexGrid As MSHFlexGrid)
-    Dim sMsg As String
-    Dim HWidth, HHeight As Integer
-    Dim PrevX, PrevY As Integer
-    On Error Resume Next
-    Printer.ScaleMode = 1
-    Printer.Orientation = vbPRORLandscape
-    With Printer
-        .ScaleMode = 1
-        Printer.Print
-        .FontSize = 20
-        sMsg = strReportType
-        HWidth = Printer.TextWidth(sMsg) / 2 ' Get one-half width.
-        HHeight = Printer.TextHeight(sMsg) / 2 ' Get one-half height.
-        Printer.CurrentX = Printer.ScaleWidth / 2 - HWidth
-        'Printer.CurrentY = Printer.ScaleHeight - 2000 ' / 2 - HHeight
-        Printer.Print sMsg
-        Printer.FontSize = 8
-        Printer.Print "      " & sAddlMsg
-    End With
-    Printer.FontSize = 7
-    Printer.Print ""
-    Printer.Print ""
-    Printer.Print "    Report date: " & Date & " " & Time & "      Printed by: " & UCase$(Environ$("USERNAME"))
-    Const GAP = 20
-    Dim xmax, xmin As Single
-    xmin = 200
-    xmax = 9500 '10000
-    Dim ymax, ymin As Single
-    ymin = 2000
-    ymax = 11000
-    Dim X As Single
-    Dim c As Integer
-    Dim R As Integer
-    With Printer.Font
-        .Name = FlexGrid.Font.Name
-        .Size = 7
-    End With
-    With FlexGrid
-        ' See how wide the whole thing is.
-        xmax = xmin + GAP
-        For c = 0 To .Cols - 1
-            xmax = xmax + .ColWidth(c) + 2 * GAP
-        Next c
-        ' Print each row.
-        Printer.CurrentY = ymin
-        For R = 0 To .Rows - 1
-            ' Draw a line above this row.
-            If R > 0 Then Printer.Line (xmin, Printer.CurrentY)-(xmax, Printer.CurrentY)
-            Printer.CurrentY = Printer.CurrentY + GAP
-            ' Print the entries on this row.
-            X = xmin + GAP
-            For c = 0 To .Cols - 1
-                Printer.CurrentX = X
-                Printer.Print BoundedText(Printer, .TextMatrix(R, c), .ColWidth(c));
-                X = X + .ColWidth(c) + 2 * GAP
-            Next c
-            Printer.CurrentY = Printer.CurrentY + GAP
-            ' Move to the next line.
-            Printer.Print
-            '            PrevX = Printer.CurrentX
-            '            PrevY = Printer.CurrentY
-            '
-            '            Printer.CurrentX = xmax
-            '            Printer.CurrentY = ymax + 200
-            '
-            '            Printer.Print "Page " & Printer.Page
-            '
-            '            Printer.CurrentX = PrevX
-            '            Printer.CurrentY = PrevY
-            '
-            ' if near end of page, start a new one
-            If Printer.CurrentY >= ymax Then
-                Printer.Line (xmin, ymin)-(xmax, Printer.CurrentY), , B
-                X = xmin
-                For c = 0 To .Cols - 2
-                    X = X + .ColWidth(c) + 2 * GAP
-                    Printer.Line (X, ymin)-(X, Printer.CurrentY)
-                Next c
-                Printer.NewPage
-                Printer.CurrentX = xmax
-                Printer.CurrentY = ymax + 200
-                Printer.Print "Page " & Printer.Page
-                Printer.CurrentX = xmin
-                ymin = 400
-                Printer.CurrentY = ymin
-            End If
-        Next R
-        ymax = Printer.CurrentY
-        ' Draw a box around everything.
-        Printer.Line (xmin, ymin)-(xmax, ymax), , B
-        ' Draw lines between the columns.
-        X = xmin
-        For c = 0 To .Cols - 2
-            X = X + .ColWidth(c) + 2 * GAP
-            Printer.Line (X, ymin)-(X, Printer.CurrentY)
-        Next c
-    End With
-    Printer.EndDoc
-End Sub
-Private Sub PrintFlexGridColor(FlexGrid As MSHFlexGrid)
-    On Error Resume Next
-    FlexGrid.Redraw = False
-    'Dim sMsg As String
-    Dim intPadding    As Integer
-    Dim PrevX         As Integer, PrevY As Integer, intMidStart As Integer, intMidLen As Integer, intTotLen As Integer
-    Dim strSizedTxt   As String, strOrigTxt As String
-    Dim bolLongLine   As Boolean
-    Dim TwipPix       As Long
-    Dim lngYTopOfGrid As Long
-    bolLongLine = False
-    Dim sMsg            As String
-    Dim intCenterOffset As Long
-    Dim lngStartY       As Long, lngStartX As Long, lngEndX As Long, lngEndY As Long
-    Dim xmax            As Single, xmin As Single
-    xmin = 300
-    xmax = 14800
-    Dim ymax As Single, ymin As Single
-    ymin = 1500
-    ymax = 10800
-    Printer.Font.Underline = False
+Public Sub BuildGridPrint(Grid As MSHFlexGrid)
+    Dim intPadding As Integer 'Cell Padding
+    Dim lngCursX As Long, lngCursY As Long
+    Dim intPage As Integer
+    Dim Row       As Long, Col As Long
+    Dim RowHeight As Long, ColWidth() As Long
+    Dim GAP As Integer
+    Dim lngXMin      As Long, lngXMax As Long, lngYMin As Long, lngYMax As Long, lngYMinNoHeader 'Constraints for cursor. Keeps it on da pappahs\
+    Dim lngStartTxtX As Long, lngStartTxtY As Long
+    intPadding = 100
+    GAP = 40
+    lngXMin = 300
+    lngXMax = 15000
+    lngYMin = 1500
+    lngYMinNoHeader = 600 'no header space needed after first page
+    lngYMax = 10800
     Printer.ScaleMode = 1
     Printer.Orientation = vbPRORLandscape
     Printer.DrawWidth = 1
     Printer.DrawStyle = vbSolid
-    sMsg = strReportType
-    Printer.Print sMsg
-    Printer.FontSize = 8
-    Printer.Print "      " & sAddlMsg
-    With Printer
-        .ScaleMode = 1
-        Printer.Print
-        .FontSize = 20
-        Printer.CurrentX = (xmax / 2) - (Printer.TextWidth(sMsg) / 2)
-        Printer.Print sMsg
-        Printer.FontSize = 8
-    End With
-    Printer.FontSize = 7
-    ' Printer.Print "    " & strReportMsg
-    'Printer.Print ""
-    Printer.Print "    Report date: " & Date & " " & Time & "      Printed by: " & UCase$(Environ$("USERNAME"))
-    Const GAP = 40
-    With Printer.Font
-        .Name = FlexGrid.Font.Name
-        .Size = 9
-    End With
-    Printer.Print ""
-    Printer.DrawStyle = vbDash
-    Printer.Line (xmin, Printer.CurrentY)-(xmax, Printer.CurrentY), vbBlack
-    Printer.DrawStyle = vbSolid
-    Printer.Print ""
-    PrevY = Printer.CurrentY
-    '    Dim xBoxEnd As Single, lngCenterXStartPos As Long
-    '    Printer.Font.Size = 7
-    '    lngCenterXStartPos = (xmax / 2) - (Printer.TextWidth(strReportInfo) / 2)
-    '    xBoxEnd = lngCenterXStartPos + Printer.TextWidth(strReportInfo)
-    '    Printer.Line (lngCenterXStartPos, PrevY)-(xBoxEnd, Printer.CurrentY + (Printer.TextHeight(strReportInfo) * 3)), &H80000016, BF
-    '    Printer.Font.Bold = True
-    '    Printer.CurrentX = (xmax / 2) - (Printer.TextWidth("Attendance Stats") / 2)
-    '    Printer.CurrentY = PrevY
-    '    Printer.Print "Attendance Stats"
-    '    Printer.Font.Bold = False
-    '    Printer.CurrentX = lngCenterXStartPos
-    '    Printer.Print strReportInfo
-    '    Printer.CurrentX = (xmax / 2) - (Printer.TextWidth(strReportEntryCount) / 2)
-    '    Printer.Print strReportEntryCount
-    '    Printer.Line (lngCenterXStartPos, PrevY)-(xBoxEnd, Printer.CurrentY), vbBlack, B
-    '    Printer.Print ""
-    Printer.Font.Size = 9
-    Printer.DrawStyle = vbSolid
-    Dim X As Single, XFirstColumn As Single
-    Dim c As Integer, cc As Integer
-    Dim R As Integer
-    intMidStart = 1
-    With FlexGrid
-        PrevX = Printer.CurrentX
-        PrevY = Printer.CurrentY
-        Printer.CurrentX = xmax - 600
-        Printer.CurrentY = ymax + 300
-        Printer.ForeColor = vbBlack
-        Printer.Font.Underline = False
-        Printer.Print "Page " & Printer.Page
-        Printer.CurrentX = PrevX
-        Printer.CurrentY = PrevY
-        intPadding = 150
-        TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
-        XFirstColumn = xmin ' + TwipPix + 2 ' * GAP
-        lngYTopOfGrid = Printer.CurrentY
-        Printer.CurrentY = Printer.CurrentY + GAP
-        'If FlexGrid.Header = True Then
-        X = xmin + GAP
-        '        For c = 1 To .Cols
-        '            Printer.CurrentX = x
-        '            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-        '            PrevY = Printer.CurrentY
-        '            If c = .Cols Then
-        '                lngStartY = Printer.CurrentY - GAP + 5
-        '                lngStartX = Printer.CurrentX - GAP + 5
-        '                lngEndX = xmax
-        '
-        '                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
-        '                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
-        '            Else
-        '                lngStartY = Printer.CurrentY - GAP + 5
-        '                lngStartX = Printer.CurrentX - GAP + 5
-        '                lngEndX = Printer.CurrentX + TwipPix + GAP
-        '                lngEndY = Printer.CurrentY + Printer.TextHeight(.ColHeader(c)) + GAP
-        '                Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), &H80000016, BF
-        '            End If
-        '            Printer.CurrentX = lngStartX + GAP
-        '            Printer.CurrentY = PrevY
-        '
-        '            Printer.Print BoundedText(Printer, .ColHeader(c), TwipPix);
-        '            TwipPix = .ColWidth(c) * Screen.TwipsPerPixelX
-        '            x = x + TwipPix + 2 * GAP
-        '        Next c
-        'Printer.CurrentY = Printer.CurrentY + GAP
-        'Printer.Print
-        ' End If
-        For R = 0 To .Rows - 1
-            'If bolStop = True Then
-            ' Printer.EndDoc
-            ' bolStop = False
-            ' frmpBar.Visible = False
-            ' Exit Sub
-            'End If
-            ' Draw a line above this row.
-            If R > 0 Then
-                Printer.Line (XFirstColumn, Printer.CurrentY)-(XFirstColumn + .ColWidth(1) + GAP, Printer.CurrentY), vbBlack
-            End If
-            Printer.CurrentY = Printer.CurrentY + GAP
-            ' Print the entries on this row.
-            X = xmin + GAP
-            For c = 1 To 1 '.Cols - 1
-                If frmPrinters.optCenterJust And c < .Cols Then
-                    intCenterOffset = ((.ColWidth(c)) / 2) - (Printer.TextWidth(.TextMatrix(R, c)) / 2)
-                Else
-                    intCenterOffset = 0
-                End If
-                Printer.CurrentX = X
-                If .TextMatrix(R, c) <> "" And Printer.TextWidth(.TextMatrix(R, c)) + intPadding >= xmax - Printer.CurrentX Then           '.ColWidth(c)
-                    lngStartY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c))
-                    strOrigTxt = .TextMatrix(R, c)
-                    Do Until intTotLen >= Len(strOrigTxt)
-                        Do Until Printer.TextWidth(strSizedTxt) + intPadding >= xmax - Printer.CurrentX Or intTotLen >= Len(strOrigTxt)
-                            intMidLen = intMidLen + 1
-                            intTotLen = intTotLen + 1
-                            strSizedTxt = Mid$(strOrigTxt, intMidStart, intMidLen)
-                        Loop
-                        intMidStart = intMidStart + intMidLen ' - 1
-                        intMidLen = 1
-                        'Printer.Font.Underline = .CellFontUnderline(R, c).Underline
-                        '                        If .CellFontUnderline(R, c).Underline = True Then
-                        '                            Printer.ForeColor = vbBlack
-                        '                        Else
-                        '                            Printer.ForeColor = &H404040
-                        '                        End If
-                        Printer.Print strSizedTxt 'Left$(.CellText (R, c), i)
-                        lngEndY = Printer.CurrentY + GAP
-                        PrevY = Printer.CurrentY
-                        .Row = R
-                        .ColSel = .Cols - 1
-                        Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
-                        Printer.CurrentY = PrevY + 5
-                        If Printer.CurrentY >= ymax Then ' new page
-                            Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY + GAP), vbBlack, B
-                            X = xmin
-                            '                            For cc = 1 To 1 '.Cols - 1
-                            '                                TwipPix = .ColWidth(cc) ' * Screen.TwipsPerPixelX
-                            '                                X = X + TwipPix + 2 * GAP
-                            '                                Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack
-                            '                            Next cc
-                            Printer.NewPage
-                            Printer.CurrentX = xmax - 600
-                            Printer.CurrentY = ymax + 300
-                            Printer.ForeColor = vbBlack
-                            Printer.Font.Underline = False
-                            Printer.Print "Page " & Printer.Page
-                            Printer.CurrentX = xmin
-                            ymin = 400
-                            lngYTopOfGrid = ymin
-                            Printer.CurrentY = ymin
-                            lngStartY = Printer.CurrentY '+ Printer.TextHeight(.CellText(R, c))
-                        End If
-                        Printer.CurrentX = X + GAP
-                        strSizedTxt = ""
-                    Loop
-                    intMidStart = 1
-                    intMidLen = 0
-                    intTotLen = 0
-                    strSizedTxt = ""
-                    bolLongLine = True
-                Else
-                    'bolLongLine = False
-                    PrevY = Printer.CurrentY - GAP ' + 10
-                    '                    If c = 3 Then
-                    lngStartY = Printer.CurrentY - GAP + 5
-                    lngStartX = Printer.CurrentX - GAP + 5
-                    lngEndX = Printer.CurrentX + .ColWidth(c) + GAP  ' - 10
-                    lngEndY = Printer.CurrentY + Printer.TextHeight(.TextMatrix(R, c)) + GAP - 5
-                    .Row = R
-                    .ColSel = .Cols - 1
-                    Printer.Line (lngStartX, lngStartY)-(lngEndX, lngEndY), .CellBackColor, BF
-                    '                    End If
-                    Printer.CurrentX = X + intCenterOffset
-                    TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
-                    '                    Printer.Font.Underline = .CellFontUnderline(R, c)
-                    '                    If .CellFontUnderline(R, c) = True Then
-                    '                        Printer.ForeColor = vbBlack
-                    '                    Else
-                    '                        Printer.ForeColor = &H404040   '&H808080
-                    '                    End If
-                    Printer.CurrentX = X + intCenterOffset
-                    Printer.CurrentY = PrevY + GAP
-                    Printer.Print BoundedText(Printer, .TextMatrix(R, c), TwipPix);
-                End If
-                TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
-                X = X + TwipPix + 2 * GAP
-            Next c
-            Printer.CurrentY = Printer.CurrentY + GAP
-            ' Move to the next line.
-            If bolLongLine = True Then
-                bolLongLine = False
+    lngCursX = lngXMin
+    lngCursY = lngYMin
+    Printer.FontSize = prntFontSize
+    intPage = 1
+    With Grid
+        .Redraw = False
+        ReDim GridPrint(Grid.Rows - 1, Grid.Cols - 1) 'expand gridarray
+        For Row = 0 To Grid.Rows - 1
+            For Col = 1 To Grid.Cols - 1
+                GridPrint(Row, Col).intPage = intPage 'calc and add print coords and data
+                GridPrint(Row, Col).lngLeft = lngCursX
+                GridPrint(Row, Col).lngTop = lngCursY
+                GridPrint(Row, Col).intTextHeight = Printer.TextHeight(.TextMatrix(Row, Col))
+                GridPrint(Row, Col).intRowHeight = Printer.TextHeight(.TextMatrix(Row, Col)) + intPadding
+                RowHeight = GridPrint(Row, Col).intRowHeight
+                GridPrint(Row, Col).intTextWidth = Printer.TextWidth(.TextMatrix(Row, Col))
+                GridPrint(Row, Col).lngTotalWidth = Printer.TextWidth(.TextMatrix(Row, Col)) + intPadding
+                GridPrint(Row, Col).lngTextLeft = GridPrint(Row, Col).lngLeft + GAP '
+                GridPrint(Row, Col).lngTextTop = GridPrint(Row, Col).lngTop + GAP '
+                GridPrint(Row, Col).intColWidth = .ColWidth(Col)
+                GridPrint(Row, Col).strText = BoundedText(Printer, .TextMatrix(Row, Col), .ColWidth(Col))
+                GridPrint(Row, Col).lngRight = GridPrint(Row, Col).lngLeft + GridPrint(Row, Col).intColWidth + GAP 'GridPrint(Row, Col).lngTotalWidth
+                GridPrint(Row, Col).lngBottom = GridPrint(Row, Col).lngTop + GridPrint(Row, Col).intRowHeight
+                .Row = Row
+                .ColSel = .Cols - 1
+                GridPrint(Row, Col).lngBackColor = .CellBackColor
+                lngCursX = GridPrint(Row, Col).lngRight
+            Next Col
+            lngCursX = lngXMin
+            If lngCursY + RowHeight >= lngYMax Then 'we are running out of space. next page.
+                intPage = intPage + 1
+                lngYMin = lngYMinNoHeader
+                lngCursX = lngXMin
+                lngCursY = lngYMin
             Else
-                Printer.Print
-                bolLongLine = False
+                lngCursY = lngCursY + RowHeight
             End If
-            ' if near end of page, start a new one
-            If Printer.CurrentY >= ymax And R < .Rows Then
-                Printer.Line (XFirstColumn, lngYTopOfGrid)-(xmax, Printer.CurrentY), vbBlack, B
-                X = xmin
-                ' Draw lines between the columns.
-                '                For c = 1 To 1 '.Cols - 1 '3
-                '                    TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX '+ GAP
-                '                    X = X + TwipPix + 2 * GAP
-                '                    Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'ymax
-                '                Next c
-                Printer.NewPage
-                Printer.CurrentX = xmax - 600
-                Printer.CurrentY = ymax + 300
-                Printer.ForeColor = vbBlack
-                Printer.Font.Underline = False
-                Printer.Print "Page " & Printer.Page
-                Printer.CurrentX = xmin
-                ymin = 400
-                lngYTopOfGrid = ymin
-                Printer.CurrentY = ymin
-            End If
-        Next R
-        ymax = Printer.CurrentY
-        'Draw a box around everything.
-        Printer.Line (XFirstColumn, lngYTopOfGrid)-(lngEndX, ymax), vbBlack, B
-        X = xmin
-        ' Draw lines between the columns.
-        '        For c = 1 To 1 '.Cols - 1 '3
-        '            TwipPix = .ColWidth(c) ' * Screen.TwipsPerPixelX
-        '            X = X + TwipPix + 2 * GAP
-        '
-        '            Printer.Line (X, lngYTopOfGrid)-(X, Printer.CurrentY), vbBlack 'Printer.CurrentY
-        '        Next c
+        Next Row
+        GridPrint(UBound(GridPrint, 1), UBound(GridPrint, 2)).intTotPage = intPage
+        .Redraw = True
     End With
-    Printer.EndDoc
 End Sub
-Private Function BoundedText(ByVal ptr As Object, _
-                             ByVal txt As String, _
-                             ByVal max_wid As Single) As String
-    On Error GoTo EF
-    Do While Printer.TextWidth(txt) > max_wid
-        txt = Left$(txt, Len(txt) - 1)
-    Loop
-    BoundedText = txt
-EF:
-End Function
 Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
     On Error Resume Next
     Dim z, Y As Integer
     z = 1
     Y = 600
     TargetGrid.ScrollBars = flexScrollBarNone
-    Dim col(), i, b As Integer
-    ReDim col(TargetGrid.Cols)
+    Dim Col(), i, b As Integer
+    ReDim Col(TargetGrid.Cols)
     For i = 0 To TargetGrid.Rows - 1
         For b = 0 To TargetGrid.Cols - 1
-            If TextWidth(TargetGrid.TextMatrix(i, b)) > col(b) Then col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
+            If TextWidth(TargetGrid.TextMatrix(i, b)) > Col(b) Then Col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
         Next b
     Next i
     For b = 0 To TargetGrid.Cols - 1
         If b = 4 Then
-            TargetGrid.ColWidth(b) = (col(b) * z) + Y
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
         Else
-            TargetGrid.ColWidth(b) = (col(b) * z) + Y
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
         End If
         TargetGrid.ColAlignment(b) = flexAlignLeftCenter
     Next b
@@ -3876,13 +3567,9 @@ Public Sub SubmitFile()
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
     RefreshAfterEdit
-
-    
     If DBConcurrent = 1 And Err.Number = 0 Then
         ShowBanner colFiled, "Job Packet Filed Successfully."
     Else
-     
-    
     End If
     Exit Sub
 errs:
@@ -4588,6 +4275,7 @@ Private Sub ShowAllClosed()
             Flexgrid1.TextMatrix(Line, 5) = !idCustPoNum
             Flexgrid1.TextMatrix(Line, 6) = !idCreator
             Flexgrid1.TextMatrix(Line, 7) = !idCreateDate
+            Flexgrid1.TextMatrix(Line, 8) = !idDate
             If !idAction = "CREATED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H80C0FF)
                 Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idCreator
@@ -4690,6 +4378,7 @@ Private Sub ShowAllOpen()
             Flexgrid1.TextMatrix(Line, 5) = !idCustPoNum
             Flexgrid1.TextMatrix(Line, 6) = !idCreator
             Flexgrid1.TextMatrix(Line, 7) = !idCreateDate
+            Flexgrid1.TextMatrix(Line, 8) = !idDate
             If !idAction = "CREATED" Then
                 Call FlexGridRowColor(Flexgrid1, Line, &H80C0FF)
                 Flexgrid1.TextMatrix(Line, 9) = "Job packet was CREATED by " & !idCreator
@@ -4772,8 +4461,11 @@ Private Sub cmdPrintHistory_Click()
         End If
         strReportType = "Packet History"
         sAddlMsg = "Job Number: " & txtJobNo.Text & "   Job Description: " & txtTicketDescription.Text
-        PrintFlexGrid FlexGridHist
+        'PrintFlexGrid FlexGridHist
         'PrintFlexGridColor FlexGridHist
+        BuildGridPrint FlexGridHist
+        PrintHeaders strReportType, sAddlMsg
+        PrintGridArray GridPrint()
     Else
         MsgBox "Nothing to print!"
     End If
@@ -4798,7 +4490,11 @@ Private Sub cmdPrintReport_Click()
     Flexgrid1.ColWidth(8) = 1290
     Flexgrid1.ColWidth(9) = 3525
     'PrintFlexGrid Flexgrid1
-    PrintFlexGridColor Flexgrid1
+    'PrintFlexGridColor Flexgrid1
+    'PrintGridRW Flexgrid1
+    BuildGridPrint Flexgrid1
+    PrintHeaders strReportType, sAddlMsg
+    PrintGridArray GridPrint()
     SizeTheSheet Flexgrid1
 End Sub
 Private Sub cmdRefresh_Click()
@@ -4945,17 +4641,17 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
     If Button = 1 Then
         intRowSel = FlexGridHist.RowSel
         If FlexGridHist.TextMatrix(FlexGridHist.RowSel, 4) = "com" Then
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             FlexGridHist.Row = intRowSel - 1
             FlexGridHist.ColSel = FlexGridHist.Cols - 1
             FlexGridHist.RowSel = intRowSel
         ElseIf (FlexGridHist.RowSel + 1) < FlexGridHist.Rows And FlexGridHist.TextMatrix((FlexGridHist.RowSel + 1), 4) = "com" Then
             intRowSel = FlexGridHist.RowSel
             FlexGridHist.Row = 0
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             FlexGridHist.ColSel = 0
             FlexGridHist.RowSel = 0
-            FlexGridHist.col = 0
+            FlexGridHist.Col = 0
             FlexGridHist.Row = intRowSel
             FlexGridHist.ColSel = FlexGridHist.Cols - 1
             FlexGridHist.RowSel = intRowSel + 1
@@ -5064,7 +4760,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
@@ -5364,7 +5060,7 @@ End Sub
 Private Sub mnuDelete_Click()
     Dim blah
     If bolHasTicket Then
-        blah = MsgBox("Are you sure you want to delete this packet?" & vbCrLf & vbCrLf & "Job#: " & txtJobNo.Text & vbCrLf & "Desc: " & txtTicketDescription.Text & vbCrLf, vbYesNo + vbExclamation, "Delete Packet")
+        blah = MsgBox("Are you sure you want to delete this packet?" & vbCrLf & vbCrLf & "Job#: " & txtJobNo.Text & vbCrLf & "Desc: " & txtTicketDescription.Text & vbCrLf, vbYesNo + vbQuestion, "Delete Packet")
         If blah = vbYes Then
             DeletePacket txtJobNo.Text
         Else

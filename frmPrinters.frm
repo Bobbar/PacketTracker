@@ -36,6 +36,7 @@ Begin VB.Form frmPrinters
          Left            =   3960
          TabIndex        =   4
          Top             =   1260
+         Visible         =   0   'False
          Width           =   1695
          Begin VB.OptionButton optCenterJust 
             Caption         =   "Center Justify"
@@ -74,11 +75,20 @@ Begin VB.Form frmPrinters
       End
       Begin VB.CommandButton cmdStart 
          Caption         =   "Start Printing"
-         Height          =   480
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   540
          Left            =   2280
          TabIndex        =   1
-         Top             =   1560
-         Width           =   1215
+         Top             =   1440
+         Width           =   1395
       End
       Begin VB.Label Label1 
          AutoSize        =   -1  'True

@@ -359,7 +359,7 @@ Public Sub DeleteEntry(strGUID As String, strDesc As String)
     Dim strSQL1 As String
     On Error Resume Next
     Dim blah
-    blah = MsgBox("Are you sure you want to delete this entry?" & vbCrLf & vbCrLf & "      Job #: " & Form1.txtJobNo.Text & vbCrLf & "Description:  " & strDesc & vbCrLf & vbCrLf & "      This cannot be undone!", vbCritical + vbYesNo, "Are you sure?")
+    blah = MsgBox("Are you sure you want to delete this entry?" & vbCrLf & vbCrLf & "      Job #: " & Form1.txtJobNo.Text & vbCrLf & "Description:  " & strDesc & vbCrLf & vbCrLf & "      This cannot be undone!", vbQuestion + vbYesNo, "Are you sure?")
     If blah = vbNo Then
         Exit Sub
     ElseIf blah = vbYes Then
@@ -540,8 +540,7 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
     With rs
-      If CBool(!idAdmins) Then CheckForAdmin = True
-       
+        If CBool(!idAdmins) Then CheckForAdmin = True
     End With
 End Function
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
@@ -573,9 +572,9 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
         For c = 0 To 2
             dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
             dest.Row = R
-            dest.col = c
+            dest.Col = c
             Source.Row = R
-            Source.col = c
+            Source.Col = c
             dest.CellFontBold = Source.CellFontBold
             dest.CellFontItalic = Source.CellFontItalic
             dest.CellAlignment = Source.CellAlignment
@@ -583,7 +582,7 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
         Next c
         Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
         dest.Row = R
-        dest.col = 0
+        dest.Col = 0
         Set dest.CellPicture = Source.CellPicture 'HistoryIcons(1)
         dest.CellPictureAlignment = flexAlignCenterCenter
         dest.RowHeight(R) = Source.RowHeight(R)
@@ -632,7 +631,7 @@ Public Function GetFlexGridRowColor(FlexGrid As MSHFlexGrid, ByVal lngRow As Lon
     '    lngPrevColSel = FlexGrid.ColSel
     '    lngPrevRowSel = FlexGrid.RowSel
     '    lngPrevFillStyle = FlexGrid.FillStyle
-    FlexGrid.col = FlexGrid.FixedCols
+    FlexGrid.Col = FlexGrid.FixedCols
     FlexGrid.Row = lngRow
     'FlexGrid.ColSel = FlexGrid.Cols - 1
     FlexGrid.RowSel = lngRow

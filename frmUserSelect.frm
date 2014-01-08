@@ -64,5 +64,5 @@ Private Sub cmbUsers_Click()
 End Sub
 
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
- frmUserSelect.Hide
+    frmUserSelect.Hide
 End Sub

@@ -107,8 +107,8 @@ Private Declare Function SendMessage _
 Private LeftOffset, TopOffset As Integer
 Sub FlexSort(Mode As String)
     If FlexGrid.MouseRow = 0 And Mode = "A" Then
-        FlexGrid.col = FlexGrid.MouseCol
-        If FlexGrid.col = 10 Then
+        FlexGrid.Col = FlexGrid.MouseCol
+        If FlexGrid.Col = 10 Then
             FlexGrid.Sort = flexSortGenericAscending
         Else
             FlexGrid.Sort = flexSortStringAscending
@@ -117,8 +117,8 @@ Sub FlexSort(Mode As String)
         'do nothing
     End If
     If FlexGrid.MouseRow = 0 And Mode = "D" Then
-        FlexGrid.col = FlexGrid.MouseCol
-        If FlexGrid.col = 10 Then
+        FlexGrid.Col = FlexGrid.MouseCol
+        If FlexGrid.Col = 10 Then
             FlexGrid.Sort = flexSortGenericDescending
         Else
             FlexGrid.Sort = flexSortStringDescending
@@ -183,7 +183,7 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
     On Error Resume Next
     'Set MSFlexGrid to appropriate Cell
     FlexGrid.Row = MyRow
-    FlexGrid.col = MyCol
+    FlexGrid.Col = MyCol
     'Set textbox width to match current width of selected cell
     Text1.Width = FlexGrid.ColWidth(MyCol)
     Text1.FontSize = FlexGrid.CellFontSize
