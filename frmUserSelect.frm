@@ -46,7 +46,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
 Private Sub cmbUsers_Click()
     If strUserIndex(0, cmbUsers.ListIndex) <> "" Then
         strLocalUser = UCase$(strUserIndex(0, cmbUsers.ListIndex))
@@ -62,7 +61,6 @@ Private Sub cmbUsers_Click()
         ShowBanner colClosed, "Faux user set to " & strLocalUser
     End If
 End Sub
-
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     frmUserSelect.Hide
 End Sub

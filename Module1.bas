@@ -208,6 +208,10 @@ Public Declare Function RoundRect _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
+Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String)
+    Dim blah
+    blah = MsgBox(lngErrNum & " - " & strErrDescription, vbExclamation + vbOKOnly, "Yikes!")
+End Sub
 Public Function DBConcurrent() As Integer 'Does the state of the packet stored locally match what's in the DB? NO = 0, YES = 1, NOTFOUND = 2
     Dim strSQL1 As String
     Dim rs      As New ADODB.Recordset
@@ -227,16 +231,10 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
             End If
         End If
     End With
-    Form1.CommsUp
     Exit Function
 errs:
-    If Err.Number = -2147467259 Then
-        Form1.CommsDown
-    Else
-        Form1.CommsUp
-    End If
+    ErrHandle Err.Number, Err.Description
 End Function
-
 Public Function GetEmail(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
@@ -246,7 +244,6 @@ Public Function GetEmail(strUsername As String) As String
         End If
     Next i
 End Function
-
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
@@ -765,7 +762,6 @@ Public Sub ShowBanner(Color As Long, _
         Form1.tmrBannerWait.Enabled = True
     End If
 End Sub
-
 Public Sub OpenCloseBanner(Color As Long, _
                            Text As String, _
                            Optional Ticks As Integer, _

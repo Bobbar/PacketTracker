@@ -34,12 +34,12 @@ Begin VB.Form Form1
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1155
-      Left            =   3300
+      Left            =   3180
       ScaleHeight     =   1155
       ScaleWidth      =   5595
       TabIndex        =   50
       TabStop         =   0   'False
-      Top             =   1260
+      Top             =   960
       Width           =   5595
       Begin VB.Label lblClose 
          Alignment       =   2  'Center
@@ -269,7 +269,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   3
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -290,8 +290,9 @@ Begin VB.Form Form1
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":1C82
@@ -300,13 +301,12 @@ Begin VB.Form Form1
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
       TabPicture(3)   =   "Form1.frx":1E1C
-      Tab(3).ControlEnabled=   -1  'True
+      Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame6"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   74
          Top             =   480
          Width           =   11775
@@ -675,7 +675,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -1247,7 +1247,7 @@ Begin VB.Form Form1
          TabIndex        =   22
          TabStop         =   0   'False
          Text            =   "%USERNAME%"
-         Top             =   3000
+         Top             =   2940
          Width           =   1815
       End
       Begin VB.TextBox txtActionDate 
@@ -1267,11 +1267,12 @@ Begin VB.Form Form1
          BackColor       =   &H8000000F&
          BorderStyle     =   0  'None
          Enabled         =   0   'False
-         Height          =   285
-         Left            =   120
+         Height          =   225
+         Left            =   2160
          TabIndex        =   17
          Text            =   "%DATETIME%"
-         Top             =   3480
+         Top             =   900
+         Visible         =   0   'False
          Width           =   2055
       End
       Begin VB.TextBox txtTicketStatus 
@@ -1330,6 +1331,47 @@ Begin VB.Form Form1
          Top             =   1800
          Width           =   1935
       End
+      Begin VB.Label lblModifyBy 
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "%Modifiy By%"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   6.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   165
+         Left            =   360
+         TabIndex        =   128
+         ToolTipText     =   "Last Modified By"
+         Top             =   3360
+         Width           =   990
+      End
+      Begin VB.Label lblModifyDate 
+         BackStyle       =   0  'Transparent
+         Caption         =   "%Modifiy Date%"
+         Enabled         =   0   'False
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   6.75
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   315
+         Left            =   360
+         TabIndex        =   127
+         ToolTipText     =   "Last Modified Date"
+         Top             =   3540
+         Width           =   1830
+      End
       Begin VB.Label lblText 
          AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
@@ -1378,7 +1420,7 @@ Begin VB.Form Form1
          Height          =   195
          Left            =   240
          TabIndex        =   66
-         Top             =   2760
+         Top             =   2700
          Width           =   1695
       End
       Begin VB.Label Label24 
@@ -2136,7 +2178,6 @@ Public Sub GetUserIndex()
         End With
     Loop
     HideData
-    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -2144,11 +2185,7 @@ errs:
             Dim blah
             blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
             Unload Me
-        Else
-            CommsDown
         End If
-    Else
-        CommsUp
     End If
 End Sub
 Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
@@ -2394,7 +2431,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     Dim b       As Integer
     Dim R       As Integer
     Dim CRow    As Integer
-    On Error GoTo errhandle
+    On Error GoTo ErrHandle
     If Trim$(JobNum) = "" Then Exit Sub
     txtJobNo.Text = JobNum
     SetBoxesForEdit "All"
@@ -2425,6 +2462,13 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
         txtTicketAction.Text = !idAction
         txtTicketDescription.Text = !idDescription
         strLatestComment = !idComment
+        If !idLastModifiedBy <> "NOONE" Then
+            lblModifyBy.Caption = "Modified By: " & !idLastModifiedBy
+            lblModifyDate.Caption = "Modified Date: " & vbCrLf & !idLastModified
+        Else
+            lblModifyBy.Caption = ""
+            lblModifyDate.Caption = ""
+        End If
         frmComments.txtComment.Text = strLatestComment
         frmComments.txtComment.Locked = True
         strPlant = !idPlant
@@ -2490,9 +2534,8 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
     FlexHistLastTopRow = 0
     Screen.MousePointer = vbDefault
     lblChars.Visible = False
-    CommsUp
     Exit Sub
-errhandle:
+ErrHandle:
     If Hex$(Err.Number) = 80040201 Then
         bolHasTicket = False
         Screen.MousePointer = vbDefault
@@ -2515,13 +2558,9 @@ errhandle:
         HideData
     ElseIf Err.Number = -2147467259 Then
         Screen.MousePointer = vbDefault
-        CommsDown
-    ElseIf Err.Number = 0 Then
-        Screen.MousePointer = vbDefault
-        CommsUp
+        ErrHandle Err.Number, Err.Description
     Else
-        Dim blah
-        blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
+        ErrHandle Err.Number, Err.Description
         'Resume Next
         ClearFields
     End If
@@ -2753,14 +2792,8 @@ NextLoop:
         FlexGridOUT.RowSel = FlexOUTLastSel(0)
         FlexGridOUT.SetFocus
     End If
-    CommsUp
     Exit Sub
 errs:
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        CommsUp
-    End If
     Resume Next
 End Sub
 Public Sub ShowData()
@@ -2809,51 +2842,6 @@ Public Sub RefreshAll()
         RefreshHistory
     End If
     GetMyPackets
-End Sub
-Public Sub CommsDown()
-    On Error Resume Next
-    Set pbData.Picture = picDataPics(1)
-    optReceive.Enabled = False
-    optMove.Enabled = False
-    cmbUsers.Visible = False
-    lblUser.Visible = False
-    optClose.Enabled = False
-    optCreate.Enabled = False
-    optReOpen.Enabled = False
-    optFile.Enabled = False
-    bolCanEdit = False
-    cmdSubmit.Enabled = False
-    cmdRefreshHist.Enabled = False
-    cmdTimeLine.Enabled = False
-    cmdFilterReport.Enabled = False
-    cmdAllOpenReport.Enabled = False
-    cmdAllClosedReport.Enabled = False
-    cmdGetInBox.Enabled = False
-    cmdGetOutBox.Enabled = False
-    If bolMessageDelivered = False Then
-        StatusBar1.Panels.Item(1).Text = "Cannot communicate with server! Program suspended until the server has been detected."
-        ShowBanner vbRed, "! The program has lost the connection to the server. Packet Tracker has gone into suspend mode. !", 500, , vbWhite
-        bolMessageDelivered = True
-    Else
-        cn_global.Close
-        cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    End If
-End Sub
-Public Sub CommsUp()
-    If bolMessageDelivered = True Then
-        StatusBar1.Panels.Item(1).Text = ""
-        ShowBanner vbGreen, "Connection restored!", 250
-        bolMessageDelivered = False
-    Else
-    End If
-    Set pbData.Picture = picDataPics(0)
-    cmdRefreshHist.Enabled = True
-    cmdTimeLine.Enabled = True
-    cmdFilterReport.Enabled = True
-    cmdAllOpenReport.Enabled = True
-    cmdAllClosedReport.Enabled = True
-    cmdGetInBox.Enabled = True
-    cmdGetOutBox.Enabled = True
 End Sub
 Public Sub FlexGridRedrawHeight()
     Dim ColLoop As Long
@@ -2932,7 +2920,6 @@ Private Sub SetBoxesForEdit(EnabledControl As String)
         EditMode = False
     End If
 End Sub
-
 Private Sub cmdEdit_Click()
     On Error GoTo errs
     Dim blah
@@ -2997,6 +2984,9 @@ Private Sub cmdEdit_Click()
                 If ActiveText = "txtCustPoNo" And txtCustPoNo <> PrevCustPoNo Then !idCustPoNum = UCase$(txtCustPoNo.Text)
                 If ActiveText = "txtSalesNo" And txtSalesNo <> PrevSalesNo Then !idSalesNum = UCase$(txtSalesNo.Text)
                 If ActiveText = "txtTicketDescription" And txtTicketDescription <> PrevDescription Then !idDescription = txtTicketDescription.Text
+                !idCreateDate = !idCreateDate
+                !idLastModified = Now()
+                !idLastModifiedBy = strLocalUser
                 rs.Update
                 rs.MoveNext
             End With
@@ -3012,7 +3002,8 @@ Private Sub cmdEdit_Click()
         bolOptionClicked = False
         imgComment.Picture = ButtonPics(4)
         imgComment.Enabled = False
-        RefreshAll
+        'RefreshAll
+        OpenPacket txtJobNo.Text
         cmdEdit.Visible = False
         cmdEdit.Picture = ButtonPics(1)
         cmdEdit.ToolTipText = "Edit Field"
@@ -3339,15 +3330,9 @@ Public Sub RefreshHistory() 'Redraws History Grid
     FlexGridHist.TopRow = FlexHistLastTopRow
     FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
     HideData
-    CommsUp
     Exit Sub
 errs:
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        CommsUp
-        MsgBox (Err.Number & " - " & Err.Description)
-    End If
+    ErrHandle Err.Number, Err.Description
 End Sub
 Public Sub SetControls()
     If strTicketAction = "FILED" And strCurUser <> strLocalUser Then
@@ -3905,7 +3890,6 @@ Public Sub DisableBoxes()
     cmbPlant.Enabled = False
     lblChars.Visible = False
 End Sub
-
 Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh History Grid.
     Dim rs As New ADODB.Recordset
     Dim strSQL1, strSQL2 As String
@@ -3935,6 +3919,13 @@ Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh 
         txtTicketStatus.Text = !idStatus
         strPlant = !idPlant
         cmbPlant.Text = strPlant
+        If !idLastModifiedBy <> "NOONE" Then
+            lblModifyBy.Caption = "Modified By: " & !idLastModifiedBy
+            lblModifyDate.Caption = "Modified Date: " & vbCrLf & !idLastModified
+        Else
+            lblModifyBy.Caption = ""
+            lblModifyDate.Caption = ""
+        End If
         If txtJobNo.Text = "" Then
             DisableBoxes
             tmrRefresher.Enabled = False
@@ -3954,14 +3945,10 @@ Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh 
     End With
     'GetMyPackets
     HideData
-    CommsUp
     Exit Sub
 errs:
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        CommsUp
-    End If
+    'If Err.Number = -2147467259 Then
+    ErrHandle Err.Number, Err.Description
 End Sub
 Public Sub RefreshAfterEdit()
     RefreshFields
@@ -4024,6 +4011,8 @@ Public Sub ClearAllButJobN()
     FlexGridHist.Visible = False
     bolCanEdit = False
     FlexHistLastTopRow = 0
+    lblModifyBy.Caption = ""
+    lblModifyDate.Caption = ""
 End Sub
 Public Sub ClearFields()
     ClearBanners
@@ -4091,6 +4080,8 @@ Public Sub ClearFields()
     bolCanEdit = False
     EditMode = False
     FlexHistLastTopRow = 0
+    lblModifyBy.Caption = ""
+    lblModifyDate.Caption = ""
 End Sub
 Public Sub GetTopHits()
     Dim sGet          As String
@@ -4166,7 +4157,6 @@ Public Sub UpdateUserList()
     Next i
     frmReportFilter.cmbUsers.ListIndex = 0
     Err.Clear
-    CommsUp
     Exit Sub
 errs:
     If Err.Number = -2147467259 Then
@@ -4174,11 +4164,7 @@ errs:
             Dim blah
             blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
             Unload Me
-        Else
-            CommsDown
         End If
-    Else
-        CommsUp
     End If
 End Sub
 Private Sub cmbPlant_Click()
@@ -4310,19 +4296,12 @@ Private Sub ShowAllClosed()
     Screen.MousePointer = vbDefault
     TotT = lngQryTimes(intQryIndex) * 0.001
     StatusBar1.Panels.Item(1).Text = Line - 1 & " results returned in " & TotT & " seconds"
-    CommsUp
     Exit Sub
 errs:
-    If Err.Number = -2147467259 Then
-        CommsDown
-        Screen.MousePointer = vbDefault
-    Else
-        CommsUp
-        Screen.MousePointer = vbDefault
-    End If
+    Screen.MousePointer = vbDefault
     bolRunning = False
+    ErrHandle Err.Number, Err.Description
 End Sub
-
 Private Sub ShowAllOpen()
     bolRunning = True
     Dim rs      As New ADODB.Recordset
@@ -4413,18 +4392,12 @@ Private Sub ShowAllOpen()
     Screen.MousePointer = vbDefault
     TotT = lngQryTimes(intQryIndex) * 0.001
     StatusBar1.Panels.Item(1).Text = Line - 1 & " results returned in " & TotT & " seconds"
-    CommsUp
     Exit Sub
 errs:
     Screen.MousePointer = vbDefault
-    If Err.Number = -2147467259 Then
-        CommsDown
-    Else
-        CommsUp
-    End If
     bolRunning = False
+    ErrHandle Err.Number, Err.Description
 End Sub
-
 Private Sub cmdAllOpenReport_Click()
     If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
         Exit Sub
@@ -4629,7 +4602,6 @@ Private Sub FlexGrid1_KeyPress(KeyAscii As Integer)
         Call cmdSearch_Click
     End If
 End Sub
-
 Private Sub FlexGridHist_Click()
     Set WhichGrid = FlexGridHist
 End Sub
@@ -4861,6 +4833,7 @@ Private Sub Form_Load()
         Wait 5000
     End If
     frmSplash.Hide
+    ClearFields
     'Command line arguments
     Commands() = Split(Command$, " ")
     For i = 0 To UBound(Commands)
@@ -4896,7 +4869,6 @@ Private Sub SetupAdmin()
     intFormHMin = intFormHMin + 300
     intFormHMax = intFormHMax + 300
 End Sub
-
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     Call WheelUnHook
     cn_global.Close
@@ -4948,7 +4920,6 @@ End Sub
 Private Sub frmConfirm_Click()
     BannerClick strConfirmClickCase
 End Sub
-
 Private Sub frmKey_MouseMove(Index As Integer, _
                              Button As Integer, _
                              Shift As Integer, _
@@ -5021,11 +4992,9 @@ Private Sub Label12_Click()
         End If
     End If
 End Sub
-
 Private Sub lblClose_Click()
     CloseBanner
 End Sub
-
 Private Sub lblColorKey_MouseMove(Index As Integer, _
                                   Button As Integer, _
                                   Shift As Integer, _
@@ -5056,7 +5025,6 @@ Private Sub List1_MouseDown(Button As Integer, Shift As Integer, X As Single, Y 
     List1.Visible = False
     List1.Clear
 End Sub
-
 Private Sub mnuDelete_Click()
     Dim blah
     If bolHasTicket Then
@@ -5099,7 +5067,6 @@ Private Sub mnuRedirect_Click()
         blah = MsgBox("Please open a packet first!", vbOKOnly + vbExclamation, "No packet open")
     End If
 End Sub
-
 Private Sub optClose_Click()
     cmdSubmit.Enabled = True
     SetBoxesForEdit "All"
@@ -5179,7 +5146,6 @@ Private Sub optReOpen_Click()
     imgComment.Enabled = True
     frmComments.txtComment.Locked = False
 End Sub
-
 Private Sub SSTab1_Click(PreviousTab As Integer)
     If SSTab1.Tab = 0 Then Set WhichGrid = FlexGridHist
     If SSTab1.Tab = 1 Then Set WhichGrid = Flexgrid1

@@ -647,7 +647,6 @@ Private Sub Form_Resize()
     pbDrawArea.Refresh
     'cmdCantSeeMe.SetFocus
 End Sub
-
 Private Sub pbDrawArea_MouseMove(Button As Integer, _
                                  Shift As Integer, _
                                  X As Single, _
@@ -701,7 +700,6 @@ Private Sub pbDrawArea_MouseMove(Button As Integer, _
         End If
     End If
 End Sub
-
 Private Sub VScroll1_Change()
     pbDrawArea.Top = -(VScroll1.Value)
     pbDrawArea.Refresh

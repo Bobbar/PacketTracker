@@ -57,7 +57,6 @@ Public Sub DateRangeReport()
 SkipQryRebuild:
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strQry)
-    Debug.Print strQry
     If rs.RecordCount <= 0 Then
         Screen.MousePointer = vbDefault
         ShowBanner &HC0FFFF, "No packets were found that meet the specified criteria.", 300
