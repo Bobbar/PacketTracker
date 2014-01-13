@@ -123,6 +123,7 @@ Public intTicksWaited        As Integer
 Public bolBannerOpen         As Boolean
 Public intTicksToWait        As Integer
 Public intPrevInPackets      As Integer
+Public intTotINPack          As Integer, intTotRECPack As Integer
 Public sngShapeResize        As Single
 Public intShpTimerStartWidth As Integer
 Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
@@ -208,6 +209,7 @@ Public Declare Function RoundRect _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
+Public strCurrentPacketGUID    As String
 Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
     Dim blah
     Select Case lngErrNum
@@ -237,9 +239,10 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
         If rs.RecordCount < 1 Then
             DBConcurrent = 2
         Else
-            If strTicketAction <> !idAction Or strTicketStatus <> !idStatus Then
+            If strTicketAction <> !idAction Or strTicketStatus <> !idStatus Or strCurrentPacketGUID <> !idGUID Then
                 DBConcurrent = 0
-            ElseIf strTicketAction = !idAction And strTicketStatus = !idStatus Then
+                strCurrentPacketGUID = !idGUID
+            ElseIf strTicketAction = !idAction And strTicketStatus = !idStatus And strCurrentPacketGUID = !idGUID Then
                 DBConcurrent = 1
             End If
         End If

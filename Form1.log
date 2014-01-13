@@ -1,0 +1,16 @@
+Line 215: Property Picture in cmdEdit could not be set.
+Line 287: Property TabPicture(0) in SSTab1 had an invalid file reference.
+Line 292: Property TabPicture(1) in SSTab1 had an invalid file reference.
+Line 298: Property TabPicture(2) in SSTab1 had an invalid file reference.
+Line 303: Property TabPicture(3) in SSTab1 had an invalid file reference.
+Line 408: Property Picture in cmdPrintOnPack had an invalid file reference.
+Line 457: Property Picture in imgNewWindowOut had an invalid file reference.
+Line 592: Property Picture in cmdPrintInPack had an invalid file reference.
+Line 642: Property Picture in imgNewWindowIn had an invalid file reference.
+Line 816: Property Picture in cmdPrintReport had an invalid file reference.
+Line 883: Property Picture in imgNewWindow had an invalid file reference.
+Line 1007: Property Picture in picOlder had an invalid file reference.
+Line 1031: Property Picture in cmdPrintHistory had an invalid file reference.
+Line 1080: Property Text in Text1 could not be set.
+Line 1126: Property Picture in imgNewWindowHist had an invalid file reference.
+Line 1892: Property Picture in imgComment had an invalid file reference.

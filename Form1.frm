@@ -34,12 +34,12 @@ Begin VB.Form Form1
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1155
-      Left            =   3180
+      Left            =   3060
       ScaleHeight     =   1155
       ScaleWidth      =   5595
       TabIndex        =   50
       TabStop         =   0   'False
-      Top             =   960
+      Top             =   -180
       Width           =   5595
       Begin VB.Label lblClose 
          Alignment       =   2  'Center
@@ -242,6 +242,7 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -267,7 +268,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   3
+      Tab             =   2
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -293,18 +294,18 @@ Begin VB.Form Form1
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":175E
-      Tab(2).ControlEnabled=   0   'False
+      Tab(2).ControlEnabled=   -1  'True
       Tab(2).Control(0)=   "Frame5"
+      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
       TabPicture(3)   =   "Form1.frx":18F8
-      Tab(3).ControlEnabled=   -1  'True
+      Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame6"
-      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   74
          Top             =   480
          Width           =   11775
@@ -488,7 +489,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame5 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   73
          Top             =   480
          Width           =   11775
@@ -2458,6 +2459,7 @@ Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills
         strCurUser = !idUser
         txtTicketAction.Text = !idAction
         txtTicketDescription.Text = !idDescription
+        strCurrentPacketGUID = !idGUID
         strLatestComment = !idComment
         If !idLastModifiedBy <> "NOONE" Then
             lblModifyBy.Caption = "Modified By: " & !idLastModifiedBy
@@ -2669,15 +2671,13 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim LineIN, LineOUT, Row As Integer
+    Dim intINPack As Integer, intRECPack As Integer
+    Dim i         As Long
     On Error GoTo errs
     strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
+    Debug.Print strSQL1
+    
     cn_global.CursorLocation = adUseClient
-    'FlexGridOUT.Clear
-    FlexGridOUT.Redraw = False
-    FlexGridOUT.Rows = 2
-    'FlexGridIN.Clear
-    FlexGridIN.Redraw = False
-    FlexGridIN.Rows = 2
     ShowData
     Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount <= 0 Then
@@ -2689,9 +2689,31 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
         FlexGridIN.Visible = False
         FlexGridIN.Redraw = True
         HideData
-        'FlexGridOUT.Clear
-        'FlexGridIN.Clear
         Exit Sub
+    End If
+    'count packets for change detection
+    Do Until rs.EOF
+        With rs
+            If !idAction = "INTRANSIT" Then intINPack = intINPack + 1
+            If !idAction = "RECEIVED" Or !idAction = "CREATED" Or !idAction = "REOPENED" Then intRECPack = intRECPack + 1
+            .MoveNext
+        End With
+    Loop
+    rs.MoveFirst
+    If rs.RecordCount > 0 Then 'only refresh if something has changed
+        If intINPack = intTotINPack And intRECPack = intTotRECPack Then
+            HideData
+            rs.Close
+            Exit Sub
+        End If
+        If intINPack <> intTotINPack Or intRECPack <> intTotRECPack Then
+            intTotINPack = intINPack
+            intTotRECPack = intRECPack
+            FlexGridOUT.Redraw = False
+            FlexGridOUT.Rows = 2
+            FlexGridIN.Redraw = False
+            FlexGridIN.Rows = 2
+        End If
     End If
     LineIN = 1
     LineOUT = 1
@@ -2699,6 +2721,12 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     FlexGridOUT.Rows = rs.RecordCount + 1
     FlexGridIN.Rows = rs.RecordCount + 1
     ' Create header row
+    FlexGridOUT.Cols = 10
+    FlexGridIN.Cols = 10
+    FlexGridOUT.FixedCols = 1
+    FlexGridOUT.FixedRows = 1
+    FlexGridIN.FixedCols = 1
+    FlexGridIN.FixedRows = 1
     Do Until rs.EOF
         With rs
             If !idAction = "CREATED" And !idUser = strLocalUser Or !idAction = "RECEIVED" And !idUser = strLocalUser Or !idAction = "REOPENED" And !idUser = strLocalUser Then
@@ -2753,10 +2781,16 @@ NextLoop:
     FlexGridIN.Redraw = True
     FlexGridIN.Visible = True
     FlexGridOUT.Visible = True
-    If LineIN <= 1 Then FlexGridIN.Visible = False
-    If LineOUT <= 1 Then FlexGridOUT.Visible = False
-    FlexGridIN.TopRow = intFlexGridInLastRow
-    FlexGridOUT.TopRow = intFlexGridOutLastRow
+    If LineIN <= 1 Then
+        FlexGridIN.Visible = False
+    Else
+        FlexGridIN.TopRow = intFlexGridInLastRow
+    End If
+    If LineOUT <= 1 Then
+        FlexGridOUT.Visible = False
+    Else
+        FlexGridOUT.TopRow = intFlexGridOutLastRow
+    End If
     SSTab1.TabCaption(3) = "On-hand Packets (" & FlexGridOUT.Rows - 1 & ")"
     SSTab1.TabCaption(2) = "Incoming Packets (" & FlexGridIN.Rows - 1 & ")"
     If FlexGridIN.Rows - 1 > intPrevInPackets And Verbose Then
@@ -2765,7 +2799,6 @@ NextLoop:
     Else
         intPrevInPackets = FlexGridIN.Rows - 1
     End If
-    ' intPrevInPackets = FlexGridIN.Rows - 1
     If SSTab1.Tab = 2 And ProgHasFocus = True Then
         If Me.ActiveControl.Name <> "SSTab1" Then
             Exit Sub
@@ -2777,7 +2810,7 @@ NextLoop:
         FlexGridIN.ColSel = FlexINLastSel(1)
         FlexGridIN.RowSel = FlexINLastSel(0)
         FlexGridIN.SetFocus
-    ElseIf SSTab1.Tab = 3 And ProgHasFocus = True And Me.ActiveControl.Name = "SSTab2" Or Me.ActiveControl.Name = "FlexGridOUT" Then
+    ElseIf SSTab1.Tab = 3 And ProgHasFocus = True Then ' And Me.ActiveControl.Name = "SSTab2" Or Me.ActiveControl.Name = "FlexGridOUT"
         If Me.ActiveControl.Name <> "SSTab2" Then
             Exit Sub
         ElseIf Me.ActiveControl.Name <> "FlexGridOUT" Then
@@ -3887,7 +3920,7 @@ Public Sub DisableBoxes()
     cmbPlant.Enabled = False
     lblChars.Visible = False
 End Sub
-Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh History Grid.
+Public Sub RefreshFields() 'Fills fields, does not refresh History Grid.
     Dim rs As New ADODB.Recordset
     Dim strSQL1, strSQL2 As String
     On Error GoTo errs
@@ -4079,6 +4112,8 @@ Public Sub ClearFields()
     FlexHistLastTopRow = 0
     lblModifyBy.Caption = ""
     lblModifyDate.Caption = ""
+    intFlexGridInLastRow = 1
+    intFlexGridOutLastRow = 1
 End Sub
 Public Sub GetTopHits()
     Dim sGet          As String
@@ -4729,15 +4764,15 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode)
+    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode or WILL CAUSE CRASHES)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
         Call WheelHook(Form1)
     End If
     lblAppVersion.Caption = App.Major & "." & App.Minor & "." & App.Revision
-    intFlexGridInLastRow = 0
-    intFlexGridOutLastRow = 0
+    intFlexGridInLastRow = 1
+    intFlexGridOutLastRow = 1
     intPrevInPackets = 0
     intShpTimerStartWidth = 3000
     intCachedBanners = 0
@@ -5044,6 +5079,7 @@ Private Sub mnuFauxUser_Click()
     If Not mnuFauxUser.Checked Then
         frmUserSelect.Show
     Else
+        ClearFields
         strLocalUser = UCase$(Environ$("USERNAME"))
         Form1.txtLocalUser.Enabled = True
         Form1.txtLocalUser.Locked = True

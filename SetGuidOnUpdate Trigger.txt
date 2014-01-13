@@ -1,0 +1,8 @@
+USE `ticketdb`;
+DELIMITER $$
+
+CREATE TRIGGER `SetGuidOnUpdate` BEFORE UPDATE ON packetlist FOR EACH ROW
+-- Edit trigger body code below this line. Do not edit lines above this one
+BEGIN
+SET NEW.idGUID = UUID();
+END
