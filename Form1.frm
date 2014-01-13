@@ -216,7 +216,6 @@ Begin VB.Form Form1
       Height          =   370
       Left            =   7080
       MaskColor       =   &H00FFFFFF&
-      Picture         =   "Form1.frx":0D5C
       Style           =   1  'Graphical
       TabIndex        =   43
       TabStop         =   0   'False
@@ -243,7 +242,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -269,7 +267,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   1
+      Tab             =   3
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -284,29 +282,29 @@ Begin VB.Form Form1
          Strikethrough   =   0   'False
       EndProperty
       TabCaption(0)   =   "History"
-      TabPicture(0)   =   "Form1.frx":12E0
+      TabPicture(0)   =   "Form1.frx":0D5C
       Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Frame1"
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
-      TabPicture(1)   =   "Form1.frx":1810
-      Tab(1).ControlEnabled=   -1  'True
+      TabPicture(1)   =   "Form1.frx":128C
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "Frame4"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
-      TabPicture(2)   =   "Form1.frx":1C82
+      TabPicture(2)   =   "Form1.frx":175E
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Frame5"
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
-      TabPicture(3)   =   "Form1.frx":1E1C
-      Tab(3).ControlEnabled=   0   'False
+      TabPicture(3)   =   "Form1.frx":18F8
+      Tab(3).ControlEnabled=   -1  'True
       Tab(3).Control(0)=   "Frame6"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       Begin VB.Frame Frame6 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   74
          Top             =   480
          Width           =   11775
@@ -397,7 +395,7 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":250E
+            Picture         =   "Form1.frx":1FEA
             Style           =   1  'Graphical
             TabIndex        =   37
             TabStop         =   0   'False
@@ -450,7 +448,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":40A2
+            Picture         =   "Form1.frx":3B7E
             ToolTipText     =   "Open grid in a new window"
             Top             =   1080
             Width           =   450
@@ -581,7 +579,7 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":4197
+            Picture         =   "Form1.frx":3C73
             Style           =   1  'Graphical
             TabIndex        =   36
             TabStop         =   0   'False
@@ -635,7 +633,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":5D2B
+            Picture         =   "Form1.frx":5807
             ToolTipText     =   "Open grid in a new window"
             Top             =   1080
             Width           =   450
@@ -675,7 +673,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -805,7 +803,7 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":5E20
+            Picture         =   "Form1.frx":58FC
             Style           =   1  'Graphical
             TabIndex        =   27
             TabStop         =   0   'False
@@ -876,7 +874,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":79B4
+            Picture         =   "Form1.frx":7490
             ToolTipText     =   "Open grid in a new window"
             Top             =   1680
             Width           =   450
@@ -996,7 +994,6 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   300
             Left            =   1560
-            Picture         =   "Form1.frx":7AA9
             ScaleHeight     =   300
             ScaleWidth      =   9810
             TabIndex        =   41
@@ -1020,7 +1017,7 @@ Begin VB.Form Form1
             Height          =   840
             Left            =   600
             MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":945C
+            Picture         =   "Form1.frx":7585
             Style           =   1  'Graphical
             TabIndex        =   25
             TabStop         =   0   'False
@@ -1094,7 +1091,6 @@ Begin VB.Form Form1
             MultiLine       =   -1  'True
             TabIndex        =   39
             TabStop         =   0   'False
-            Text            =   "Form1.frx":AFF0
             Top             =   240
             Visible         =   0   'False
             Width           =   8025
@@ -1119,7 +1115,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   450
             Left            =   600
-            Picture         =   "Form1.frx":AFF8
+            Picture         =   "Form1.frx":9119
             ToolTipText     =   "Open grid in a new window"
             Top             =   1560
             Width           =   450
@@ -1164,6 +1160,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   750
             Left            =   1320
+            Picture         =   "Form1.frx":920E
             ScaleHeight     =   750
             ScaleWidth      =   765
             TabIndex        =   49
@@ -1885,7 +1882,7 @@ Begin VB.Form Form1
          Appearance      =   0  'Flat
          Height          =   555
          Left            =   4080
-         Picture         =   "Form1.frx":B0ED
+         Picture         =   "Form1.frx":98C9
          ToolTipText     =   "Add Note"
          Top             =   2520
          Width           =   540
@@ -2558,9 +2555,9 @@ ErrHandle:
         HideData
     ElseIf Err.Number = -2147467259 Then
         Screen.MousePointer = vbDefault
-        ErrHandle Err.Number, Err.Description
+        ErrHandle Err.Number, Err.Description, "OpenPacket"
     Else
-        ErrHandle Err.Number, Err.Description
+        ErrHandle Err.Number, Err.Description, "OpenPacket"
         'Resume Next
         ClearFields
     End If
@@ -3332,7 +3329,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     HideData
     Exit Sub
 errs:
-    ErrHandle Err.Number, Err.Description
+    ErrHandle Err.Number, Err.Description, "RefreshHistory"
 End Sub
 Public Sub SetControls()
     If strTicketAction = "FILED" And strCurUser <> strLocalUser Then
@@ -3948,7 +3945,7 @@ Public Sub RefreshFields() 'Fills fields, refreshes MyPackets, does not refresh 
     Exit Sub
 errs:
     'If Err.Number = -2147467259 Then
-    ErrHandle Err.Number, Err.Description
+    ErrHandle Err.Number, Err.Description, "RefreshFields"
 End Sub
 Public Sub RefreshAfterEdit()
     RefreshFields
@@ -4300,7 +4297,7 @@ Private Sub ShowAllClosed()
 errs:
     Screen.MousePointer = vbDefault
     bolRunning = False
-    ErrHandle Err.Number, Err.Description
+    ErrHandle Err.Number, Err.Description, "ShowAllClosed"
 End Sub
 Private Sub ShowAllOpen()
     bolRunning = True
@@ -4396,7 +4393,7 @@ Private Sub ShowAllOpen()
 errs:
     Screen.MousePointer = vbDefault
     bolRunning = False
-    ErrHandle Err.Number, Err.Description
+    ErrHandle Err.Number, Err.Description, "ShowAllOpen"
 End Sub
 Private Sub cmdAllOpenReport_Click()
     If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
@@ -4761,7 +4758,11 @@ Private Sub Form_Load()
     strServerAddress = "10.35.1.40"
     strUsername = "TicketApp"
     strPassword = "yb4w4"
-    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    If ConnectToDB Then
+        frmSplash.lblStatus.Caption = "Connected!"
+        DoEvents
+        Wait 500
+    End If
     intFormHMax = 10500
     intFormHMin = 5535
     If CheckForAdmin(strLocalUser) Then
@@ -4856,7 +4857,7 @@ Private Sub Form_Load()
     frmpBar.Left = 4440
     Exit Sub
 errs:
-    ErrToss = True
+4   ErrToss = True
     frmSplash.Print Err.Description
     Err.Clear
     DoEvents
@@ -4870,10 +4871,7 @@ Private Sub SetupAdmin()
     intFormHMax = intFormHMax + 300
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
-    Call WheelUnHook
-    cn_global.Close
-    Unload Me
-    End
+    EndProgram
 End Sub
 Private Sub Form_Unload(Cancel As Integer)
     Hook Me.hwnd, False
@@ -5338,7 +5336,7 @@ Private Sub tmrScroll_Timer()
     If TheX <= 0 - pbScrollBox.TextWidth(strCommentText) Then
         TheX = pbScrollBox.ScaleWidth
     Else
-        TheX = TheX - 15 ' larger number means faster scrolling
+        TheX = TheX - 14 ' larger number means faster scrolling
     End If
     pbScrollBox.CurrentX = TheX
     pbScrollBox.CurrentY = 22 'TheY

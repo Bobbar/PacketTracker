@@ -208,9 +208,22 @@ Public Declare Function RoundRect _
                             ByVal X3 As Long, _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
-Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String)
+Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
     Dim blah
-    blah = MsgBox(lngErrNum & " - " & strErrDescription, vbExclamation + vbOKOnly, "Yikes!")
+    Select Case lngErrNum
+        Case -2147467259, 3704
+            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub & vbCrLf & vbCrLf & "Try to re-connect?", vbExclamation + vbYesNo, "Yikes!")
+            If blah = vbYes Then
+                Set cn_global = Nothing
+                If ConnectToDB Then
+                    MsgBox "Connected!"
+                End If
+            ElseIf blah = vbNo Then
+                EndProgram
+            End If
+        Case Else
+            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub, vbExclamation + vbOKOnly, "Yikes!")
+    End Select
 End Sub
 Public Function DBConcurrent() As Integer 'Does the state of the packet stored locally match what's in the DB? NO = 0, YES = 1, NOTFOUND = 2
     Dim strSQL1 As String
@@ -233,7 +246,7 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
     End With
     Exit Function
 errs:
-    ErrHandle Err.Number, Err.Description
+    ErrHandle Err.Number, Err.Description, "DBConcurrent"
 End Function
 Public Function GetEmail(strUsername As String) As String
     Dim i As Integer
@@ -924,3 +937,22 @@ Public Sub WheelUnHook()
     WorkFlag = SetWindowLong(LocalHwnd, GWL_WNDPROC, LocalPrevWndProc)
     Set MyForm = Nothing
 End Sub
+Public Sub EndProgram()
+    Call WheelUnHook
+    If cn_global.State <> 0 Then cn_global.Close
+    Unload Form1
+    End
+End Sub
+Public Function ConnectToDB() As Boolean
+    On Error GoTo errs
+    ConnectToDB = False
+    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    If cn_global.State = 1 Then
+        ConnectToDB = True
+    Else
+        ConnectToDB = False
+    End If
+    Exit Function
+errs:
+    ErrHandle Err.Number, Err.Description, "ConnectToDB"
+End Function
