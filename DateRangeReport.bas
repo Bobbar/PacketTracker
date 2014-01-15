@@ -1,6 +1,7 @@
 Attribute VB_Name = "modDateRangeReport"
 Option Explicit
 Public Sub DateRangeReport()
+    StartTimer
     bolRunning = True
     Dim StartTime2 As Long
     StartTime2 = GetTickCount
@@ -93,6 +94,8 @@ SkipQryRebuild:
     Form1.pBar.Max = rs.RecordCount
     Form1.frmpBar.Visible = True
     'DoEvents
+    
+   Debug.Print StopTimer
     Do Until rs.EOF
         With rs
             dtTicketDate = Format$(!idDate, "MM/DD/YYYY")

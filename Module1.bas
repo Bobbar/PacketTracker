@@ -210,6 +210,16 @@ Public Declare Function RoundRect _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
 Public strCurrentPacketGUID    As String
+Public Declare Function ShellExecute Lib "shell32.dll" Alias "ShellExecuteA" (ByVal hwnd As Long, ByVal lpOperation As String, ByVal lpFile As String, ByVal lpParameters As String, ByVal lpDirectory As String, ByVal nShowCmd As Long) As Long
+Public strTempFileLoc As String
+
+Public strStream As ADODB.Stream
+Public strCurJobNum As String
+Public Const lngMaxFileSize As Long = 60000000
+
+
+
+
 Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
     Dim blah
     Select Case lngErrNum
@@ -941,9 +951,12 @@ Public Sub WheelUnHook()
     Set MyForm = Nothing
 End Sub
 Public Sub EndProgram()
+  On Error Resume Next
+  
     Call WheelUnHook
     If cn_global.State <> 0 Then cn_global.Close
     Unload Form1
+    Kill strTempFileLoc & "*.*"
     End
 End Sub
 Public Function ConnectToDB() As Boolean
