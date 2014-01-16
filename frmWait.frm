@@ -1,5 +1,6 @@
 VERSION 5.00
 Begin VB.Form frmWait 
+   BackColor       =   &H0083BFFC&
    BorderStyle     =   0  'None
    Caption         =   "Wait"
    ClientHeight    =   1755
@@ -23,6 +24,9 @@ Begin VB.Form frmWait
    ShowInTaskbar   =   0   'False
    StartUpPosition =   2  'CenterScreen
    Begin VB.Frame Frame1 
+      Appearance      =   0  'Flat
+      BackColor       =   &H0083BFFC&
+      ForeColor       =   &H80000008&
       Height          =   1695
       Left            =   60
       TabIndex        =   0

@@ -8,10 +8,10 @@ Begin VB.Form Form1
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Job Packet Tracker"
-   ClientHeight    =   10140
+   ClientHeight    =   10530
    ClientLeft      =   45
    ClientTop       =   675
-   ClientWidth     =   12210
+   ClientWidth     =   12285
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -23,11 +23,41 @@ Begin VB.Form Form1
    EndProperty
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
-   ScaleHeight     =   10140
-   ScaleWidth      =   12210
+   ScaleHeight     =   10530
+   ScaleWidth      =   12285
    StartUpPosition =   2  'CenterScreen
+   Begin ComctlLib.StatusBar StatusBar1 
+      Align           =   2  'Align Bottom
+      Height          =   375
+      Left            =   0
+      TabIndex        =   0
+      Top             =   10155
+      Width           =   12285
+      _ExtentX        =   21669
+      _ExtentY        =   661
+      SimpleText      =   ""
+      _Version        =   327682
+      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
+         NumPanels       =   1
+         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
+            Alignment       =   1
+            AutoSize        =   1
+            Object.Width           =   21616
+            Key             =   ""
+            Object.Tag             =   ""
+         EndProperty
+      EndProperty
+      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         Name            =   "Tahoma"
+         Size            =   9
+         Charset         =   0
+         Weight          =   700
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+   End
    Begin VB.PictureBox frmConfirm 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
@@ -35,15 +65,16 @@ Begin VB.Form Form1
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1155
-      Left            =   3060
+      Left            =   3480
       ScaleHeight     =   1155
       ScaleWidth      =   5595
-      TabIndex        =   38
+      TabIndex        =   105
       TabStop         =   0   'False
       Top             =   0
       Width           =   5595
       Begin VB.Label lblClose 
          Alignment       =   2  'Center
+         AutoSize        =   -1  'True
          BackStyle       =   0  'Transparent
          Caption         =   "X"
          BeginProperty Font 
@@ -60,7 +91,7 @@ Begin VB.Form Form1
          Left            =   4800
          MouseIcon       =   "Form1.frx":08CA
          MousePointer    =   2  'Cross
-         TabIndex        =   84
+         TabIndex        =   107
          Top             =   120
          Width           =   255
       End
@@ -103,459 +134,162 @@ Begin VB.Form Form1
          EndProperty
          Height          =   270
          Left            =   240
-         TabIndex        =   83
+         TabIndex        =   106
          Top             =   420
          Visible         =   0   'False
          Width           =   1260
       End
    End
-   Begin VB.Frame frmTimers 
-      Caption         =   "Timers"
-      Height          =   5535
-      Left            =   9840
-      TabIndex        =   73
-      Top             =   -1260
-      Visible         =   0   'False
-      Width           =   2295
-      Begin MSComDlg.CommonDialog dlgDialog 
-         Left            =   1260
-         Top             =   4680
-         _ExtentX        =   847
-         _ExtentY        =   847
-         _Version        =   393216
-      End
-      Begin MSComctlLib.ImageList ImgList 
-         Left            =   120
-         Top             =   4380
-         _ExtentX        =   1005
-         _ExtentY        =   1005
-         BackColor       =   -2147483643
-         MaskColor       =   12632256
-         _Version        =   393216
-      End
-      Begin VB.Timer tmrLiveSearch 
-         Enabled         =   0   'False
-         Interval        =   250
-         Left            =   120
-         Top             =   495
-      End
-      Begin VB.Timer tmrBannerWait 
-         Enabled         =   0   'False
-         Interval        =   20
-         Left            =   120
-         Top             =   3840
-      End
-      Begin VB.Timer tmrReSizer 
-         Enabled         =   0   'False
-         Interval        =   1
-         Left            =   120
-         Top             =   1440
-      End
-      Begin VB.Timer tmrButtonFlasher 
-         Interval        =   50
-         Left            =   120
-         Top             =   2880
-      End
-      Begin VB.Timer tmrRefresher 
-         Interval        =   7000
-         Left            =   120
-         Top             =   1920
-      End
-      Begin VB.Timer tmrDateTime 
-         Enabled         =   0   'False
-         Interval        =   1000
-         Left            =   120
-         Top             =   2400
-      End
-      Begin VB.Timer tmrScroll 
-         Interval        =   5
-         Left            =   120
-         Top             =   960
-      End
-      Begin VB.Timer tmrConfirmSlider 
-         Enabled         =   0   'False
-         Interval        =   1
-         Left            =   120
-         Top             =   3360
-      End
-   End
-   Begin VB.Frame frmpBar 
-      BackColor       =   &H00C0C0C0&
-      BorderStyle     =   0  'None
-      Height          =   1575
-      Left            =   3960
-      TabIndex        =   67
-      Top             =   6000
-      Visible         =   0   'False
-      Width           =   5355
-      Begin ComctlLib.ProgressBar pBar 
-         Height          =   405
-         Left            =   120
-         TabIndex        =   68
-         Top             =   840
-         Width           =   5115
-         _ExtentX        =   9022
-         _ExtentY        =   714
-         _Version        =   327682
-         BorderStyle     =   1
-         Appearance      =   0
-      End
-      Begin VB.Label Label46 
-         Alignment       =   2  'Center
-         BackStyle       =   0  'Transparent
-         Caption         =   "Progress..."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   9
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   330
-         Left            =   120
-         TabIndex        =   69
-         Top             =   360
-         Width           =   5190
-      End
-   End
-   Begin VB.CommandButton cmdEdit 
-      Height          =   370
-      Left            =   7080
-      MaskColor       =   &H00FFFFFF&
-      Style           =   1  'Graphical
-      TabIndex        =   32
-      TabStop         =   0   'False
-      ToolTipText     =   "Edit Field"
-      Top             =   720
-      UseMaskColor    =   -1  'True
-      Visible         =   0   'False
-      Width           =   375
-   End
-   Begin ComctlLib.StatusBar StatusBar1 
-      Align           =   2  'Align Bottom
-      Height          =   375
+   Begin TabDlg.SSTab SSTabMain 
+      Height          =   9915
       Left            =   0
-      TabIndex        =   41
-      Top             =   9765
-      Width           =   12210
-      _ExtentX        =   21537
-      _ExtentY        =   661
-      SimpleText      =   ""
-      _Version        =   327682
-      BeginProperty Panels {0713E89E-850A-101B-AFC0-4210102A8DA7} 
-         NumPanels       =   1
-         BeginProperty Panel1 {0713E89F-850A-101B-AFC0-4210102A8DA7} 
-            Alignment       =   1
-            AutoSize        =   1
-            Object.Width           =   21484
-            TextSave        =   ""
-            Key             =   ""
-            Object.Tag             =   ""
-         EndProperty
-      EndProperty
+      TabIndex        =   1
+      Top             =   0
+      Width           =   12255
+      _ExtentX        =   21616
+      _ExtentY        =   17489
+      _Version        =   393216
+      Style           =   1
+      Tabs            =   2
+      Tab             =   1
+      TabsPerRow      =   2
+      TabHeight       =   706
+      ShowFocusRect   =   0   'False
+      ForeColor       =   16738822
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   9
+         Size            =   11.25
          Charset         =   0
          Weight          =   700
          Underline       =   0   'False
-         Italic          =   0   'False
+         Italic          =   -1  'True
          Strikethrough   =   0   'False
       EndProperty
-   End
-   Begin TabDlg.SSTab SSTab1 
-      CausesValidation=   0   'False
-      Height          =   5175
-      Left            =   120
-      TabIndex        =   23
-      ToolTipText     =   "Click to expand"
-      Top             =   4320
-      Width           =   11955
-      _ExtentX        =   21087
-      _ExtentY        =   9128
-      _Version        =   393216
-      Tabs            =   5
-      Tab             =   1
-      TabsPerRow      =   5
-      TabHeight       =   706
-      WordWrap        =   0   'False
-      ShowFocusRect   =   0   'False
-      BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-         Name            =   "Tahoma"
-         Size            =   8.25
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      TabCaption(0)   =   "History"
+      TabCaption(0)   =   "Job Packets"
       TabPicture(0)   =   "Form1.frx":0D5C
       Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "Frame1"
-      Tab(0).ControlCount=   1
-      TabCaption(1)   =   "Attachments"
-      TabPicture(1)   =   "Form1.frx":128C
+      Tab(0).Control(0)=   "cmdEdit"
+      Tab(0).Control(0).Enabled=   0   'False
+      Tab(0).Control(1)=   "frmTimers"
+      Tab(0).Control(2)=   "frmpBar"
+      Tab(0).Control(3)=   "SSTab1"
+      Tab(0).Control(4)=   "FramePacketInfo"
+      Tab(0).Control(5)=   "FrameTrackingInfo"
+      Tab(0).ControlCount=   6
+      TabCaption(1)   =   "RFQs"
+      TabPicture(1)   =   "Form1.frx":0D78
       Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "Frame9"
-      Tab(1).Control(0).Enabled=   0   'False
-      Tab(1).ControlCount=   1
-      TabCaption(2)   =   "Search"
-      TabPicture(2)   =   "Form1.frx":144D
-      Tab(2).ControlEnabled=   0   'False
-      Tab(2).Control(0)=   "Frame4"
-      Tab(2).Control(0).Enabled=   0   'False
-      Tab(2).ControlCount=   1
-      TabCaption(3)   =   "Incoming"
-      TabPicture(3)   =   "Form1.frx":191F
-      Tab(3).ControlEnabled=   0   'False
-      Tab(3).Control(0)=   "Frame5"
-      Tab(3).Control(0).Enabled=   0   'False
-      Tab(3).ControlCount=   1
-      TabCaption(4)   =   "On-Hand"
-      TabPicture(4)   =   "Form1.frx":1AB9
-      Tab(4).ControlEnabled=   0   'False
-      Tab(4).Control(0)=   "Frame6"
-      Tab(4).ControlCount=   1
-      Begin VB.Frame Frame6 
-         Height          =   4575
-         Left            =   -74880
-         TabIndex        =   122
-         Top             =   480
-         Width           =   11775
-         Begin VB.Frame frmKey 
-            BorderStyle     =   0  'None
-            Height          =   1455
-            Index           =   3
-            Left            =   10920
-            TabIndex        =   125
-            Top             =   3000
-            Visible         =   0   'False
-            Width           =   768
-            Begin VB.Label lblReceived 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FFFF&
-               Caption         =   "Received"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   129
-               Top             =   480
-               Width           =   765
-            End
-            Begin VB.Label lblInTransit 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FF80&
-               Caption         =   "In-Transit"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   130
-               Top             =   240
-               Width           =   765
-            End
-            Begin VB.Label lblCreated 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080C0FF&
-               Caption         =   "Created"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   131
-               Top             =   0
-               Width           =   765
-            End
-            Begin VB.Label lblClosed 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H008080FF&
-               Caption         =   "Closed"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   128
-               Top             =   720
-               Width           =   765
-            End
-            Begin VB.Label lblFiled 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF8080&
-               Caption         =   "Filed"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   127
-               Top             =   960
-               Width           =   765
-            End
-            Begin VB.Label lblReopened 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF80FF&
-               Caption         =   "Reopened"
-               Height          =   195
-               Index           =   3
-               Left            =   0
-               TabIndex        =   126
-               Top             =   1200
-               Width           =   765
-            End
-         End
-         Begin VB.CommandButton cmdPrintOnPack 
-            Caption         =   "&Print"
-            Height          =   840
-            Left            =   600
-            MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":21AB
-            Style           =   1  'Graphical
-            TabIndex        =   124
-            TabStop         =   0   'False
-            ToolTipText     =   "Print Report"
-            Top             =   3600
-            UseMaskColor    =   -1  'True
-            Width           =   855
-         End
-         Begin VB.CommandButton cmdGetOutBox 
-            Caption         =   "Refresh Packets"
-            Height          =   360
+      Tab(1).ControlCount=   0
+      Begin VB.CommandButton cmdEdit 
+         Height          =   375
+         Left            =   -67920
+         MaskColor       =   &H00FFFFFF&
+         Style           =   1  'Graphical
+         TabIndex        =   6
+         TabStop         =   0   'False
+         ToolTipText     =   "Edit Field"
+         Top             =   1080
+         UseMaskColor    =   -1  'True
+         Visible         =   0   'False
+         Width           =   375
+      End
+      Begin VB.Frame frmTimers 
+         Caption         =   "Timers"
+         Height          =   5535
+         Left            =   -65340
+         TabIndex        =   2
+         Top             =   3060
+         Visible         =   0   'False
+         Width           =   855
+         Begin VB.Timer tmrConfirmSlider 
+            Enabled         =   0   'False
+            Interval        =   1
             Left            =   120
-            TabIndex        =   123
-            TabStop         =   0   'False
-            ToolTipText     =   "Maually refresh my packets"
-            Top             =   480
-            Width           =   1335
+            Top             =   3360
          End
-         Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridOUT 
-            Height          =   4215
-            Left            =   1560
-            TabIndex        =   132
-            TabStop         =   0   'False
-            Top             =   240
-            Width           =   10095
-            _ExtentX        =   17806
-            _ExtentY        =   7435
-            _Version        =   393216
-            Rows            =   0
-            FixedRows       =   0
-            AllowBigSelection=   0   'False
-            ScrollTrack     =   -1  'True
-            FocusRect       =   0
-            HighLight       =   2
-            AllowUserResizing=   1
-            Appearance      =   0
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "Tahoma"
-               Size            =   9.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            _NumberOfBands  =   1
-            _Band(0).Cols   =   2
-         End
-         Begin VB.Image imgNewWindowOut 
-            Appearance      =   0  'Flat
-            Height          =   450
-            Left            =   600
-            Picture         =   "Form1.frx":3D3F
-            ToolTipText     =   "Open grid in a new window"
-            Top             =   1080
-            Width           =   450
-         End
-         Begin VB.Label lblColorKey 
-            Alignment       =   2  'Center
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BackStyle       =   0  'Transparent
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   "Color Key"
-            ForeColor       =   &H80000008&
-            Height          =   255
-            Index           =   3
+         Begin VB.Timer tmrScroll 
+            Interval        =   5
             Left            =   120
-            TabIndex        =   134
+            Top             =   960
+         End
+         Begin VB.Timer tmrDateTime 
+            Enabled         =   0   'False
+            Interval        =   1000
+            Left            =   120
+            Top             =   2400
+         End
+         Begin VB.Timer tmrRefresher 
+            Interval        =   7000
+            Left            =   120
+            Top             =   1920
+         End
+         Begin VB.Timer tmrButtonFlasher 
+            Interval        =   50
+            Left            =   120
             Top             =   2880
-            Width           =   1335
          End
-         Begin VB.Label Label45 
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "On-hand Packets"
-            Height          =   195
-            Left            =   6120
-            TabIndex        =   133
-            Top             =   2160
-            Width           =   1230
+         Begin VB.Timer tmrReSizer 
+            Enabled         =   0   'False
+            Interval        =   1
+            Left            =   120
+            Top             =   1440
          End
-         Begin VB.Shape Shape4 
-            Height          =   4215
-            Left            =   1560
-            Top             =   240
-            Width           =   10095
+         Begin VB.Timer tmrBannerWait 
+            Enabled         =   0   'False
+            Interval        =   20
+            Left            =   120
+            Top             =   3840
+         End
+         Begin VB.Timer tmrLiveSearch 
+            Enabled         =   0   'False
+            Interval        =   250
+            Left            =   120
+            Top             =   495
+         End
+         Begin MSComDlg.CommonDialog dlgDialog 
+            Left            =   120
+            Top             =   4920
+            _ExtentX        =   847
+            _ExtentY        =   847
+            _Version        =   393216
+         End
+         Begin MSComctlLib.ImageList ImgList 
+            Left            =   120
+            Top             =   4320
+            _ExtentX        =   1005
+            _ExtentY        =   1005
+            BackColor       =   -2147483643
+            MaskColor       =   12632256
+            _Version        =   393216
          End
       End
-      Begin VB.Frame Frame9 
-         Height          =   4575
-         Left            =   120
-         TabIndex        =   116
-         Top             =   480
-         Width           =   11775
-         Begin VB.CommandButton cmdDelete 
-            Caption         =   "Delete"
-            Height          =   240
+      Begin VB.Frame frmpBar 
+         BackColor       =   &H00C0C0C0&
+         BorderStyle     =   0  'None
+         Height          =   1575
+         Left            =   -71160
+         TabIndex        =   3
+         Top             =   6000
+         Visible         =   0   'False
+         Width           =   5355
+         Begin ComctlLib.ProgressBar pBar 
+            Height          =   405
             Left            =   120
-            TabIndex        =   119
-            Top             =   4140
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdSave 
-            Caption         =   "Save to"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   118
-            Top             =   1020
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdNew 
-            Caption         =   "Add"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   360
-            Left            =   120
-            TabIndex        =   117
-            Top             =   420
-            Width           =   1335
-         End
-         Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexAttach 
-            Height          =   4215
-            Left            =   1560
-            TabIndex        =   120
-            Top             =   240
-            Visible         =   0   'False
-            Width           =   10095
-            _ExtentX        =   17806
-            _ExtentY        =   7435
-            _Version        =   393216
-            FocusRect       =   0
-            SelectionMode   =   1
+            TabIndex        =   4
+            Top             =   840
+            Width           =   5115
+            _ExtentX        =   9022
+            _ExtentY        =   714
+            _Version        =   327682
+            BorderStyle     =   1
             Appearance      =   0
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+         End
+         Begin VB.Label Label46 
+            Alignment       =   2  'Center
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Progress..."
+            BeginProperty Font 
                Name            =   "Tahoma"
                Size            =   9
                Charset         =   0
@@ -564,1045 +298,1118 @@ Begin VB.Form Form1
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            _NumberOfBands  =   1
-            _Band(0).Cols   =   2
-         End
-         Begin VB.Shape Shape1 
-            Height          =   4215
-            Left            =   1560
-            Top             =   240
-            Width           =   10095
-         End
-         Begin VB.Label Label16 
-            Alignment       =   2  'Center
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "No Attachments"
-            Height          =   195
-            Left            =   1620
-            TabIndex        =   121
-            Top             =   2100
-            Width           =   9915
+            Height          =   330
+            Left            =   120
+            TabIndex        =   5
+            Top             =   360
+            Width           =   5190
          End
       End
-      Begin VB.Frame Frame4 
-         Height          =   4575
+      Begin TabDlg.SSTab SSTab1 
+         CausesValidation=   0   'False
+         Height          =   5175
          Left            =   -74880
-         TabIndex        =   100
-         Top             =   480
-         Width           =   11775
-         Begin VB.CommandButton cmdHeatMap 
-            Caption         =   "Entry Heat Map"
-            Height          =   360
-            Left            =   0
-            TabIndex        =   112
-            ToolTipText     =   "Shows heat map of packet entries. (More entries = hotter)"
-            Top             =   4200
-            Visible         =   0   'False
-            Width           =   1335
+         TabIndex        =   7
+         ToolTipText     =   "Click to expand"
+         Top             =   4620
+         Width           =   12015
+         _ExtentX        =   21193
+         _ExtentY        =   9128
+         _Version        =   393216
+         Tabs            =   5
+         Tab             =   3
+         TabsPerRow      =   5
+         TabHeight       =   706
+         WordWrap        =   0   'False
+         ShowFocusRect   =   0   'False
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         TabCaption(0)   =   "History"
+         TabPicture(0)   =   "Form1.frx":0D94
+         Tab(0).ControlEnabled=   0   'False
+         Tab(0).Control(0)=   "FrameHistory"
+         Tab(0).ControlCount=   1
+         TabCaption(1)   =   "Attachments"
+         TabPicture(1)   =   "Form1.frx":12C4
+         Tab(1).ControlEnabled=   0   'False
+         Tab(1).Control(0)=   "FrameAttachments"
+         Tab(1).ControlCount=   1
+         TabCaption(2)   =   "Search"
+         TabPicture(2)   =   "Form1.frx":1485
+         Tab(2).ControlEnabled=   0   'False
+         Tab(2).Control(0)=   "FrameSearch"
+         Tab(2).ControlCount=   1
+         TabCaption(3)   =   "Incoming"
+         TabPicture(3)   =   "Form1.frx":1957
+         Tab(3).ControlEnabled=   -1  'True
+         Tab(3).Control(0)=   "FrameIncoming"
+         Tab(3).Control(0).Enabled=   0   'False
+         Tab(3).ControlCount=   1
+         TabCaption(4)   =   "On-Hand"
+         TabPicture(4)   =   "Form1.frx":1AF1
+         Tab(4).ControlEnabled=   0   'False
+         Tab(4).Control(0)=   "FrameOnHand"
+         Tab(4).ControlCount=   1
+         Begin VB.Frame FrameOnHand 
+            Height          =   4575
+            Left            =   -74880
+            TabIndex        =   123
+            Top             =   480
+            Width           =   11775
+            Begin VB.CommandButton cmdGetOutBox 
+               Caption         =   "Refresh Packets"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   132
+               TabStop         =   0   'False
+               ToolTipText     =   "Maually refresh my packets"
+               Top             =   420
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdPrintOnPack 
+               Caption         =   "&Print"
+               Height          =   840
+               Left            =   600
+               MaskColor       =   &H00FFFFFF&
+               Picture         =   "Form1.frx":21E3
+               Style           =   1  'Graphical
+               TabIndex        =   131
+               TabStop         =   0   'False
+               ToolTipText     =   "Print Report"
+               Top             =   3600
+               UseMaskColor    =   -1  'True
+               Width           =   855
+            End
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   3
+               Left            =   10920
+               TabIndex        =   124
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   130
+                  Top             =   1200
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   129
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   128
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   127
+                  Top             =   0
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   126
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   125
+                  Top             =   480
+                  Width           =   765
+               End
+            End
+            Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridOUT 
+               Height          =   4215
+               Left            =   1560
+               TabIndex        =   133
+               TabStop         =   0   'False
+               Top             =   240
+               Width           =   10095
+               _ExtentX        =   17806
+               _ExtentY        =   7435
+               _Version        =   393216
+               Rows            =   0
+               FixedRows       =   0
+               AllowBigSelection=   0   'False
+               ScrollTrack     =   -1  'True
+               FocusRect       =   0
+               HighLight       =   2
+               AllowUserResizing=   1
+               Appearance      =   0
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   9.75
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               _NumberOfBands  =   1
+               _Band(0).Cols   =   2
+            End
+            Begin VB.Shape Shape4 
+               Height          =   4215
+               Left            =   1560
+               Top             =   240
+               Width           =   10095
+            End
+            Begin VB.Label Label45 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "On-hand Packets"
+               Height          =   195
+               Left            =   6120
+               TabIndex        =   135
+               Top             =   2160
+               Width           =   1230
+            End
+            Begin VB.Label lblColorKey 
+               Alignment       =   2  'Center
+               Appearance      =   0  'Flat
+               AutoSize        =   -1  'True
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               BorderStyle     =   1  'Fixed Single
+               Caption         =   "Color Key"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   3
+               Left            =   120
+               TabIndex        =   134
+               Top             =   2880
+               Width           =   1335
+            End
+            Begin VB.Image imgNewWindowOut 
+               Appearance      =   0  'Flat
+               Height          =   450
+               Left            =   600
+               Picture         =   "Form1.frx":3D77
+               ToolTipText     =   "Open grid in a new window"
+               Top             =   1080
+               Width           =   450
+            End
          End
-         Begin VB.CommandButton cmdPrintReport 
-            Caption         =   "&Print"
-            Height          =   840
-            Left            =   600
-            MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":3E34
-            Style           =   1  'Graphical
-            TabIndex        =   111
-            TabStop         =   0   'False
-            ToolTipText     =   "Print Report"
-            Top             =   3600
-            UseMaskColor    =   -1  'True
-            Width           =   855
-         End
-         Begin VB.CommandButton cmdFilterReport 
-            Caption         =   "Custom Search"
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   8.25
-               Charset         =   0
-               Weight          =   700
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   480
+         Begin VB.Frame FrameIncoming 
+            Height          =   4575
             Left            =   120
             TabIndex        =   110
-            TabStop         =   0   'False
-            ToolTipText     =   "Run a custom filtered search"
-            Top             =   240
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdAllOpenReport 
-            Caption         =   "All Opened"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   108
-            TabStop         =   0   'False
-            ToolTipText     =   "Display all currently open packets"
-            Top             =   795
-            Width           =   1335
-         End
-         Begin VB.Frame frmKey 
-            BorderStyle     =   0  'None
-            Height          =   1455
-            Index           =   1
-            Left            =   10920
-            TabIndex        =   101
-            Top             =   3000
-            Visible         =   0   'False
-            Width           =   768
-            Begin VB.Label lblReopened 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF80FF&
-               Caption         =   "Reopened"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   107
-               Top             =   1200
-               Width           =   765
-            End
-            Begin VB.Label lblFiled 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF8080&
-               Caption         =   "Filed"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   106
-               Top             =   960
-               Width           =   765
-            End
-            Begin VB.Label lblClosed 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H008080FF&
-               Caption         =   "Closed"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   105
-               Top             =   720
-               Width           =   765
-            End
-            Begin VB.Label lblReceived 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FFFF&
-               Caption         =   "Received"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   104
-               Top             =   480
-               Width           =   765
-            End
-            Begin VB.Label lblInTransit 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FF80&
-               Caption         =   "In-Transit"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   103
-               Top             =   240
-               Width           =   765
-            End
-            Begin VB.Label lblCreated 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080C0FF&
-               Caption         =   "Created"
-               Height          =   195
-               Index           =   1
-               Left            =   0
-               TabIndex        =   102
-               Top             =   0
-               Width           =   765
-            End
-         End
-         Begin MSHierarchicalFlexGridLib.MSHFlexGrid Flexgrid1 
-            Height          =   4215
-            Left            =   1560
-            TabIndex        =   113
-            TabStop         =   0   'False
-            Top             =   240
-            Visible         =   0   'False
-            Width           =   10095
-            _ExtentX        =   17806
-            _ExtentY        =   7435
-            _Version        =   393216
-            Rows            =   0
-            FixedRows       =   0
-            RowHeightMin    =   285
-            AllowBigSelection=   0   'False
-            ScrollTrack     =   -1  'True
-            FocusRect       =   0
-            GridLinesUnpopulated=   1
-            SelectionMode   =   1
-            AllowUserResizing=   1
-            Appearance      =   0
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "Tahoma"
-               Size            =   9
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            _NumberOfBands  =   1
-            _Band(0).Cols   =   2
-         End
-         Begin VB.CommandButton cmdAllClosedReport 
-            Caption         =   "All Closed"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   109
-            TabStop         =   0   'False
-            ToolTipText     =   "Display all currently closed packets"
-            Top             =   1200
-            Width           =   1335
-         End
-         Begin VB.Shape Shape5 
-            Height          =   4215
-            Left            =   1560
-            Top             =   240
-            Width           =   10095
-         End
-         Begin VB.Label Label47 
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "Packet Search"
-            Height          =   195
-            Left            =   6120
-            TabIndex        =   115
-            Top             =   2160
-            Width           =   555
-         End
-         Begin VB.Image imgNewWindow 
-            Appearance      =   0  'Flat
-            Height          =   450
-            Left            =   600
-            Picture         =   "Form1.frx":59C8
-            ToolTipText     =   "Open grid in a new window"
-            Top             =   1680
-            Width           =   450
-         End
-         Begin VB.Label lblColorKey 
-            Alignment       =   2  'Center
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BackStyle       =   0  'Transparent
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   "Color Key"
-            ForeColor       =   &H80000008&
-            Height          =   255
-            Index           =   1
-            Left            =   120
-            TabIndex        =   114
-            Top             =   2880
-            Width           =   1335
-         End
-      End
-      Begin VB.Frame Frame5 
-         Height          =   4575
-         Left            =   -74880
-         TabIndex        =   87
-         Top             =   480
-         Width           =   11775
-         Begin VB.CommandButton cmdGetInBox 
-            Caption         =   "Refresh Packets"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   96
-            TabStop         =   0   'False
-            ToolTipText     =   "Maually refresh my packets"
             Top             =   480
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdPrintInPack 
-            Caption         =   "&Print"
-            Height          =   840
-            Left            =   600
-            MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":5ABD
-            Style           =   1  'Graphical
-            TabIndex        =   95
-            TabStop         =   0   'False
-            ToolTipText     =   "Print Report"
-            Top             =   3600
-            UseMaskColor    =   -1  'True
-            Width           =   855
-         End
-         Begin VB.Frame frmKey 
-            BorderStyle     =   0  'None
-            Height          =   1455
-            Index           =   2
-            Left            =   10920
-            TabIndex        =   88
-            Top             =   3000
-            Visible         =   0   'False
-            Width           =   768
-            Begin VB.Label lblReopened 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF80FF&
-               Caption         =   "Reopened"
-               Height          =   195
-               Index           =   2
-               Left            =   0
-               TabIndex        =   89
-               Top             =   1200
-               Width           =   765
+            Width           =   11775
+            Begin VB.CommandButton cmdGetInBox 
+               Caption         =   "Refresh Packets"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   119
+               TabStop         =   0   'False
+               ToolTipText     =   "Maually refresh my packets"
+               Top             =   420
+               Width           =   1335
             End
-            Begin VB.Label lblFiled 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF8080&
-               Caption         =   "Filed"
-               Height          =   195
-               Index           =   2
-               Left            =   0
-               TabIndex        =   90
-               Top             =   960
-               Width           =   765
+            Begin VB.CommandButton cmdPrintInPack 
+               Caption         =   "&Print"
+               Height          =   840
+               Left            =   600
+               MaskColor       =   &H00FFFFFF&
+               Picture         =   "Form1.frx":3E6C
+               Style           =   1  'Graphical
+               TabIndex        =   118
+               TabStop         =   0   'False
+               ToolTipText     =   "Print Report"
+               Top             =   3600
+               UseMaskColor    =   -1  'True
+               Width           =   855
             End
-            Begin VB.Label lblClosed 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H008080FF&
-               Caption         =   "Closed"
-               Height          =   195
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
                Index           =   2
-               Left            =   0
-               TabIndex        =   91
-               Top             =   720
-               Width           =   765
+               Left            =   10920
+               TabIndex        =   111
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   117
+                  Top             =   1200
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   116
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   115
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   114
+                  Top             =   480
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   113
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   112
+                  Top             =   0
+                  Width           =   765
+               End
             End
-            Begin VB.Label lblReceived 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FFFF&
-               Caption         =   "Received"
-               Height          =   195
-               Index           =   2
-               Left            =   0
-               TabIndex        =   92
-               Top             =   480
-               Width           =   765
-            End
-            Begin VB.Label lblInTransit 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FF80&
-               Caption         =   "In-Transit"
-               Height          =   195
-               Index           =   2
-               Left            =   0
-               TabIndex        =   93
+            Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridIN 
+               Height          =   4215
+               Left            =   1560
+               TabIndex        =   120
+               TabStop         =   0   'False
                Top             =   240
-               Width           =   765
+               Width           =   10095
+               _ExtentX        =   17806
+               _ExtentY        =   7435
+               _Version        =   393216
+               Rows            =   0
+               FixedRows       =   0
+               AllowBigSelection=   0   'False
+               ScrollTrack     =   -1  'True
+               FocusRect       =   0
+               HighLight       =   2
+               FillStyle       =   1
+               AllowUserResizing=   1
+               Appearance      =   0
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   9.75
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               _NumberOfBands  =   1
+               _Band(0).Cols   =   2
             End
-            Begin VB.Label lblCreated 
+            Begin VB.Label Label44 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Incoming Packets"
+               Height          =   195
+               Left            =   6120
+               TabIndex        =   122
+               Top             =   2160
+               Width           =   1245
+            End
+            Begin VB.Shape Shape3 
+               Height          =   4215
+               Left            =   1560
+               Top             =   240
+               Width           =   10095
+            End
+            Begin VB.Label lblColorKey 
+               Alignment       =   2  'Center
+               Appearance      =   0  'Flat
+               AutoSize        =   -1  'True
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               BorderStyle     =   1  'Fixed Single
+               Caption         =   "Color Key"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   2
+               Left            =   120
+               TabIndex        =   121
+               Top             =   2880
+               Width           =   1335
+            End
+            Begin VB.Image imgNewWindowIn 
+               Appearance      =   0  'Flat
+               Height          =   450
+               Left            =   600
+               Picture         =   "Form1.frx":5A00
+               ToolTipText     =   "Open grid in a new window"
+               Top             =   1080
+               Width           =   450
+            End
+         End
+         Begin VB.Frame FrameHistory 
+            ClipControls    =   0   'False
+            Height          =   4575
+            Left            =   -74880
+            TabIndex        =   30
+            Top             =   480
+            Width           =   11775
+            Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridHist 
+               Height          =   4215
+               Left            =   1560
+               TabIndex        =   42
+               TabStop         =   0   'False
+               Top             =   240
+               Visible         =   0   'False
+               Width           =   10095
+               _ExtentX        =   17806
+               _ExtentY        =   7435
+               _Version        =   393216
+               BackColor       =   16777215
+               Rows            =   0
+               FixedRows       =   0
+               FixedCols       =   0
+               WordWrap        =   -1  'True
+               AllowBigSelection=   0   'False
+               ScrollTrack     =   -1  'True
+               FocusRect       =   0
+               HighLight       =   0
+               GridLines       =   0
+               GridLinesFixed  =   0
+               ScrollBars      =   2
+               SelectionMode   =   1
+               AllowUserResizing=   1
+               Appearance      =   0
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   9.75
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               _NumberOfBands  =   1
+               _Band(0).Cols   =   2
+            End
+            Begin VB.CommandButton cmdRefreshHist 
+               Caption         =   "Refresh History"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   41
+               TabStop         =   0   'False
+               ToolTipText     =   "Manually refresh history data"
+               Top             =   360
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdPrintHistory 
+               Caption         =   "&Print"
+               Height          =   840
+               Left            =   600
+               MaskColor       =   &H00FFFFFF&
+               Picture         =   "Form1.frx":5AF5
+               Style           =   1  'Graphical
+               TabIndex        =   40
+               TabStop         =   0   'False
+               ToolTipText     =   "Print History"
+               Top             =   3600
+               UseMaskColor    =   -1  'True
+               Width           =   855
+            End
+            Begin VB.CommandButton cmdTimeLine 
+               Caption         =   "View Timeline"
+               Height          =   480
+               Left            =   120
+               TabIndex        =   39
+               TabStop         =   0   'False
+               ToolTipText     =   "Displays a visual representation of packet activity"
+               Top             =   960
+               Width           =   1335
+            End
+            Begin VB.PictureBox picOlder 
+               Appearance      =   0  'Flat
+               AutoRedraw      =   -1  'True
+               AutoSize        =   -1  'True
+               BackColor       =   &H80000005&
+               BorderStyle     =   0  'None
+               ForeColor       =   &H80000008&
+               Height          =   300
+               Left            =   1560
+               ScaleHeight     =   300
+               ScaleWidth      =   9810
+               TabIndex        =   38
+               TabStop         =   0   'False
+               Top             =   4140
+               Visible         =   0   'False
+               Width           =   9810
+            End
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   0
+               Left            =   10920
+               TabIndex        =   31
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   37
+                  Top             =   0
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   36
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   35
+                  Top             =   480
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   34
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   33
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   32
+                  Top             =   1200
+                  Width           =   765
+               End
+            End
+            Begin VB.TextBox Text1 
+               Alignment       =   2  'Center
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   9.75
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   360
+               Left            =   1320
+               MultiLine       =   -1  'True
+               TabIndex        =   43
+               TabStop         =   0   'False
+               Top             =   240
+               Visible         =   0   'False
+               Width           =   8025
+            End
+            Begin VB.Label Label15 
                Alignment       =   2  'Center
                AutoSize        =   -1  'True
-               BackColor       =   &H0080C0FF&
-               Caption         =   "Created"
+               BackStyle       =   0  'Transparent
+               Caption         =   "History Viewer"
                Height          =   195
-               Index           =   2
-               Left            =   0
-               TabIndex        =   94
-               Top             =   0
-               Width           =   765
+               Left            =   6120
+               TabIndex        =   45
+               Top             =   2160
+               Width           =   1035
+            End
+            Begin VB.Shape Shape2 
+               Height          =   4215
+               Left            =   1560
+               Top             =   240
+               Width           =   10095
+            End
+            Begin VB.Image imgNewWindowHist 
+               Appearance      =   0  'Flat
+               Height          =   450
+               Left            =   600
+               Picture         =   "Form1.frx":7689
+               ToolTipText     =   "Open grid in a new window"
+               Top             =   1560
+               Width           =   450
+            End
+            Begin VB.Label lblColorKey 
+               Alignment       =   2  'Center
+               Appearance      =   0  'Flat
+               AutoSize        =   -1  'True
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               BorderStyle     =   1  'Fixed Single
+               Caption         =   "Color Key"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   0
+               Left            =   120
+               TabIndex        =   44
+               Top             =   2880
+               Width           =   1335
             End
          End
-         Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridIN 
-            Height          =   4215
-            Left            =   1560
-            TabIndex        =   97
-            TabStop         =   0   'False
-            Top             =   240
-            Width           =   10095
-            _ExtentX        =   17806
-            _ExtentY        =   7435
-            _Version        =   393216
-            Rows            =   0
-            FixedRows       =   0
-            AllowBigSelection=   0   'False
-            ScrollTrack     =   -1  'True
-            FocusRect       =   0
-            HighLight       =   2
-            FillStyle       =   1
-            AllowUserResizing=   1
-            Appearance      =   0
-            BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-               Name            =   "Tahoma"
-               Size            =   9.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            _NumberOfBands  =   1
-            _Band(0).Cols   =   2
+         Begin VB.Frame FrameSearch 
+            Height          =   4575
+            Left            =   -74880
+            TabIndex        =   14
+            Top             =   480
+            Width           =   11775
+            Begin VB.CommandButton cmdAllClosedReport 
+               Caption         =   "All Closed"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   27
+               TabStop         =   0   'False
+               ToolTipText     =   "Display all currently closed packets"
+               Top             =   1200
+               Width           =   1335
+            End
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   1
+               Left            =   10920
+               TabIndex        =   19
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   25
+                  Top             =   0
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   24
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   23
+                  Top             =   480
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   22
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   21
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   1
+                  Left            =   0
+                  TabIndex        =   20
+                  Top             =   1200
+                  Width           =   765
+               End
+            End
+            Begin VB.CommandButton cmdAllOpenReport 
+               Caption         =   "All Opened"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   18
+               TabStop         =   0   'False
+               ToolTipText     =   "Display all currently open packets"
+               Top             =   795
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdFilterReport 
+               Caption         =   "Custom Search"
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   480
+               Left            =   120
+               TabIndex        =   17
+               TabStop         =   0   'False
+               ToolTipText     =   "Run a custom filtered search"
+               Top             =   240
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdPrintReport 
+               Caption         =   "&Print"
+               Height          =   840
+               Left            =   600
+               MaskColor       =   &H00FFFFFF&
+               Picture         =   "Form1.frx":777E
+               Style           =   1  'Graphical
+               TabIndex        =   16
+               TabStop         =   0   'False
+               ToolTipText     =   "Print Report"
+               Top             =   3600
+               UseMaskColor    =   -1  'True
+               Width           =   855
+            End
+            Begin VB.CommandButton cmdHeatMap 
+               Caption         =   "Entry Heat Map"
+               Height          =   360
+               Left            =   0
+               TabIndex        =   15
+               ToolTipText     =   "Shows heat map of packet entries. (More entries = hotter)"
+               Top             =   4200
+               Visible         =   0   'False
+               Width           =   1335
+            End
+            Begin MSHierarchicalFlexGridLib.MSHFlexGrid Flexgrid1 
+               Height          =   4215
+               Left            =   1560
+               TabIndex        =   26
+               TabStop         =   0   'False
+               Top             =   240
+               Visible         =   0   'False
+               Width           =   10095
+               _ExtentX        =   17806
+               _ExtentY        =   7435
+               _Version        =   393216
+               Rows            =   0
+               FixedRows       =   0
+               RowHeightMin    =   285
+               AllowBigSelection=   0   'False
+               ScrollTrack     =   -1  'True
+               FocusRect       =   0
+               GridLinesUnpopulated=   1
+               SelectionMode   =   1
+               AllowUserResizing=   1
+               Appearance      =   0
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   9
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               _NumberOfBands  =   1
+               _Band(0).Cols   =   2
+            End
+            Begin VB.Label lblColorKey 
+               Alignment       =   2  'Center
+               Appearance      =   0  'Flat
+               AutoSize        =   -1  'True
+               BackColor       =   &H80000005&
+               BackStyle       =   0  'Transparent
+               BorderStyle     =   1  'Fixed Single
+               Caption         =   "Color Key"
+               ForeColor       =   &H80000008&
+               Height          =   255
+               Index           =   1
+               Left            =   120
+               TabIndex        =   29
+               Top             =   2880
+               Width           =   1335
+            End
+            Begin VB.Image imgNewWindow 
+               Appearance      =   0  'Flat
+               Height          =   450
+               Left            =   600
+               Picture         =   "Form1.frx":9312
+               ToolTipText     =   "Open grid in a new window"
+               Top             =   1680
+               Width           =   450
+            End
+            Begin VB.Label Label47 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Packet Search"
+               Height          =   195
+               Left            =   6120
+               TabIndex        =   28
+               Top             =   2160
+               Width           =   555
+            End
+            Begin VB.Shape Shape5 
+               Height          =   4215
+               Left            =   1560
+               Top             =   240
+               Width           =   10095
+            End
          End
-         Begin VB.Label Label44 
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "Incoming Packets"
-            Height          =   195
-            Left            =   6120
-            TabIndex        =   99
-            Top             =   2160
-            Width           =   1245
-         End
-         Begin VB.Shape Shape3 
-            Height          =   4215
-            Left            =   1560
-            Top             =   240
-            Width           =   10095
-         End
-         Begin VB.Label lblColorKey 
-            Alignment       =   2  'Center
-            Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BackStyle       =   0  'Transparent
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   "Color Key"
-            ForeColor       =   &H80000008&
-            Height          =   255
-            Index           =   2
-            Left            =   120
-            TabIndex        =   98
-            Top             =   2880
-            Width           =   1335
-         End
-         Begin VB.Image imgNewWindowIn 
-            Appearance      =   0  'Flat
-            Height          =   450
-            Left            =   600
-            Picture         =   "Form1.frx":7651
-            ToolTipText     =   "Open grid in a new window"
-            Top             =   1080
-            Width           =   450
+         Begin VB.Frame FrameAttachments 
+            Height          =   4575
+            Left            =   -74880
+            TabIndex        =   8
+            Top             =   480
+            Width           =   11775
+            Begin VB.CommandButton cmdNew 
+               Caption         =   "Add"
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   360
+               Left            =   120
+               TabIndex        =   11
+               Top             =   420
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdSave 
+               Caption         =   "Save to"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   10
+               Top             =   1020
+               Width           =   1335
+            End
+            Begin VB.CommandButton cmdDelete 
+               Caption         =   "Delete"
+               Height          =   240
+               Left            =   120
+               TabIndex        =   9
+               Top             =   4140
+               Width           =   1335
+            End
+            Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexAttach 
+               Height          =   4215
+               Left            =   1560
+               TabIndex        =   12
+               Top             =   240
+               Visible         =   0   'False
+               Width           =   10095
+               _ExtentX        =   17806
+               _ExtentY        =   7435
+               _Version        =   393216
+               BackColor       =   12434877
+               FocusRect       =   0
+               SelectionMode   =   1
+               Appearance      =   0
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   9.75
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               _NumberOfBands  =   1
+               _Band(0).Cols   =   2
+            End
+            Begin VB.Label Label16 
+               Alignment       =   2  'Center
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "No Attachments"
+               Height          =   195
+               Left            =   1620
+               TabIndex        =   13
+               Top             =   2100
+               Width           =   9915
+            End
+            Begin VB.Shape Shape1 
+               Height          =   4215
+               Left            =   1560
+               Top             =   240
+               Width           =   10095
+            End
          End
       End
-      Begin VB.Frame Frame1 
-         ClipControls    =   0   'False
-         Height          =   4575
+      Begin VB.Frame FramePacketInfo 
+         Caption         =   "Packet Info."
+         Height          =   3975
          Left            =   -74880
-         TabIndex        =   57
+         TabIndex        =   73
          Top             =   480
-         Width           =   11775
-         Begin VB.Frame frmKey 
-            BorderStyle     =   0  'None
-            Height          =   1455
-            Index           =   0
-            Left            =   10920
-            TabIndex        =   75
-            Top             =   3000
+         Width           =   7215
+         Begin MSComctlLib.ImageCombo cmbUsers 
+            Height          =   330
+            Left            =   1680
+            TabIndex        =   76
+            Top             =   2220
             Visible         =   0   'False
-            Width           =   768
-            Begin VB.Label lblReopened 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF80FF&
-               Caption         =   "Reopened"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   81
-               Top             =   1200
-               Width           =   765
-            End
-            Begin VB.Label lblFiled 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H00FF8080&
-               Caption         =   "Filed"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   80
-               Top             =   960
-               Width           =   765
-            End
-            Begin VB.Label lblClosed 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H008080FF&
-               Caption         =   "Closed"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   79
-               Top             =   720
-               Width           =   765
-            End
-            Begin VB.Label lblReceived 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FFFF&
-               Caption         =   "Received"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   78
-               Top             =   480
-               Width           =   765
-            End
-            Begin VB.Label lblInTransit 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080FF80&
-               Caption         =   "In-Transit"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   77
-               Top             =   240
-               Width           =   765
-            End
-            Begin VB.Label lblCreated 
-               Alignment       =   2  'Center
-               AutoSize        =   -1  'True
-               BackColor       =   &H0080C0FF&
-               Caption         =   "Created"
-               Height          =   195
-               Index           =   0
-               Left            =   0
-               TabIndex        =   76
-               Top             =   0
-               Width           =   765
-            End
-         End
-         Begin VB.PictureBox picOlder 
-            Appearance      =   0  'Flat
-            AutoRedraw      =   -1  'True
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BorderStyle     =   0  'None
-            ForeColor       =   &H80000008&
-            Height          =   300
-            Left            =   1560
-            ScaleHeight     =   300
-            ScaleWidth      =   9810
-            TabIndex        =   30
-            TabStop         =   0   'False
-            Top             =   4140
-            Visible         =   0   'False
-            Width           =   9810
-         End
-         Begin VB.CommandButton cmdTimeLine 
-            Caption         =   "View Timeline"
-            Height          =   480
-            Left            =   120
-            TabIndex        =   29
-            TabStop         =   0   'False
-            ToolTipText     =   "Displays a visual representation of packet activity"
-            Top             =   960
-            Width           =   1335
-         End
-         Begin VB.CommandButton cmdPrintHistory 
-            Caption         =   "&Print"
-            Height          =   840
-            Left            =   600
-            MaskColor       =   &H00FFFFFF&
-            Picture         =   "Form1.frx":7746
-            Style           =   1  'Graphical
-            TabIndex        =   25
-            TabStop         =   0   'False
-            ToolTipText     =   "Print History"
-            Top             =   3600
-            UseMaskColor    =   -1  'True
-            Width           =   855
-         End
-         Begin VB.CommandButton cmdRefreshHist 
-            Caption         =   "Refresh History"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   24
-            TabStop         =   0   'False
-            ToolTipText     =   "Manually refresh history data"
-            Top             =   360
-            Width           =   1335
-         End
-         Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridHist 
-            Height          =   4215
-            Left            =   1560
-            TabIndex        =   27
-            TabStop         =   0   'False
-            Top             =   240
-            Visible         =   0   'False
-            Width           =   10095
-            _ExtentX        =   17806
-            _ExtentY        =   7435
+            Width           =   2235
+            _ExtentX        =   3942
+            _ExtentY        =   582
             _Version        =   393216
-            BackColor       =   16777215
-            Rows            =   0
-            FixedRows       =   0
-            FixedCols       =   0
-            WordWrap        =   -1  'True
-            AllowBigSelection=   0   'False
-            ScrollTrack     =   -1  'True
-            FocusRect       =   0
-            HighLight       =   0
-            GridLines       =   0
-            GridLinesFixed  =   0
-            ScrollBars      =   2
-            SelectionMode   =   1
-            AllowUserResizing=   1
-            Appearance      =   0
+            ForeColor       =   -2147483640
+            BackColor       =   -2147483643
             BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
                Name            =   "Tahoma"
-               Size            =   9.75
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            _NumberOfBands  =   1
-            _Band(0).Cols   =   2
-         End
-         Begin VB.TextBox Text1 
-            Alignment       =   2  'Center
-            Appearance      =   0  'Flat
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   9.75
+               Size            =   8.25
                Charset         =   0
                Weight          =   700
                Underline       =   0   'False
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   360
-            Left            =   1320
-            MultiLine       =   -1  'True
-            TabIndex        =   28
-            TabStop         =   0   'False
-            Top             =   240
-            Visible         =   0   'False
-            Width           =   8025
          End
-         Begin VB.Label lblColorKey 
-            Alignment       =   2  'Center
+         Begin VB.ListBox List1 
             Appearance      =   0  'Flat
-            AutoSize        =   -1  'True
-            BackColor       =   &H80000005&
-            BackStyle       =   0  'Transparent
-            BorderStyle     =   1  'Fixed Single
-            Caption         =   "Color Key"
-            ForeColor       =   &H80000008&
-            Height          =   255
-            Index           =   0
-            Left            =   120
-            TabIndex        =   82
-            Top             =   2880
-            Width           =   1335
-         End
-         Begin VB.Image imgNewWindowHist 
-            Appearance      =   0  'Flat
-            Height          =   450
-            Left            =   600
-            Picture         =   "Form1.frx":92DA
-            ToolTipText     =   "Open grid in a new window"
-            Top             =   1560
-            Width           =   450
-         End
-         Begin VB.Shape Shape2 
-            Height          =   4215
-            Left            =   1560
-            Top             =   240
-            Width           =   10095
-         End
-         Begin VB.Label Label15 
-            Alignment       =   2  'Center
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "History Viewer"
-            Height          =   195
-            Left            =   6120
-            TabIndex        =   59
-            Top             =   2160
-            Width           =   1035
-         End
-      End
-   End
-   Begin VB.Frame Frame2 
-      Caption         =   "Tracking Info."
-      Height          =   3975
-      Left            =   7380
-      TabIndex        =   48
-      Top             =   120
-      Width           =   4695
-      Begin VB.Frame Frame7 
-         Height          =   1215
-         Left            =   2490
-         TabIndex        =   66
-         Top             =   2730
-         Width           =   2175
-         Begin VB.PictureBox pbData 
-            Appearance      =   0  'Flat
-            AutoRedraw      =   -1  'True
-            AutoSize        =   -1  'True
-            BorderStyle     =   0  'None
-            ForeColor       =   &H80000008&
-            Height          =   750
-            Left            =   1320
-            Picture         =   "Form1.frx":93CF
-            ScaleHeight     =   750
-            ScaleWidth      =   765
-            TabIndex        =   37
-            TabStop         =   0   'False
-            Top             =   360
-            Width           =   765
-         End
-         Begin VB.CommandButton cmdRefresh 
-            Caption         =   "Refresh"
-            Height          =   360
-            Left            =   120
-            TabIndex        =   34
-            TabStop         =   0   'False
-            ToolTipText     =   "Manually refresh all data"
-            Top             =   510
-            Width           =   990
-         End
-         Begin VB.CheckBox chkAutoRefresh 
-            Alignment       =   1  'Right Justify
-            Caption         =   "Auto Refresh"
-            Height          =   255
-            Left            =   120
-            TabIndex        =   33
-            TabStop         =   0   'False
-            Top             =   195
-            Value           =   1  'Checked
-            Width           =   1260
-         End
-         Begin VB.Label lblQryTime 
-            Alignment       =   2  'Center
-            BackStyle       =   0  'Transparent
-            Caption         =   "%AVG QRY TIME MS%"
             BeginProperty Font 
                Name            =   "Tahoma"
-               Size            =   6.75
+               Size            =   12
                Charset         =   0
                Weight          =   400
                Underline       =   0   'False
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            ForeColor       =   &H00808080&
-            Height          =   195
-            Left            =   135
-            TabIndex        =   74
-            ToolTipText     =   "Avg. Query Time"
+            Height          =   1455
+            Left            =   240
+            Sorted          =   -1  'True
+            TabIndex        =   77
+            TabStop         =   0   'False
             Top             =   960
-            Width           =   1080
+            Visible         =   0   'False
+            Width           =   2055
          End
-      End
-      Begin VB.PictureBox pbScrollBox 
-         Appearance      =   0  'Flat
-         AutoRedraw      =   -1  'True
-         BackColor       =   &H80000005&
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   285
-         Left            =   240
-         ScaleHeight     =   255
-         ScaleWidth      =   4185
-         TabIndex        =   31
-         TabStop         =   0   'False
-         Top             =   1200
-         Width           =   4215
-      End
-      Begin VB.TextBox txtLocalUser 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Enabled         =   0   'False
-         Height          =   285
-         Left            =   240
-         Locked          =   -1  'True
-         TabIndex        =   22
-         TabStop         =   0   'False
-         Text            =   "%USERNAME%"
-         Top             =   2940
-         Width           =   1815
-      End
-      Begin VB.TextBox txtActionDate 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Height          =   285
-         Left            =   2520
-         Locked          =   -1  'True
-         TabIndex        =   26
-         TabStop         =   0   'False
-         Top             =   600
-         Width           =   1935
-      End
-      Begin VB.TextBox txtDateTime 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         BackColor       =   &H8000000F&
-         BorderStyle     =   0  'None
-         Enabled         =   0   'False
-         Height          =   225
-         Left            =   2160
-         TabIndex        =   17
-         Text            =   "%DATETIME%"
-         Top             =   900
-         Visible         =   0   'False
-         Width           =   2055
-      End
-      Begin VB.TextBox txtTicketStatus 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Height          =   285
-         Left            =   240
-         Locked          =   -1  'True
-         TabIndex        =   21
-         TabStop         =   0   'False
-         Top             =   1800
-         Width           =   1815
-      End
-      Begin VB.TextBox txtTicketAction 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         ForeColor       =   &H00000000&
-         Height          =   285
-         Left            =   240
-         Locked          =   -1  'True
-         TabIndex        =   7
-         TabStop         =   0   'False
-         Top             =   600
-         Width           =   2055
-      End
-      Begin VB.TextBox txtCreateDate 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Height          =   285
-         Left            =   2520
-         Locked          =   -1  'True
-         TabIndex        =   20
-         TabStop         =   0   'False
-         Top             =   2400
-         Width           =   1935
-      End
-      Begin VB.TextBox txtCreator 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Height          =   285
-         Left            =   240
-         Locked          =   -1  'True
-         TabIndex        =   19
-         TabStop         =   0   'False
-         Top             =   2400
-         Width           =   1815
-      End
-      Begin VB.TextBox txtTicketOwner 
-         Alignment       =   2  'Center
-         Appearance      =   0  'Flat
-         Height          =   285
-         Left            =   2520
-         Locked          =   -1  'True
-         TabIndex        =   18
-         TabStop         =   0   'False
-         Top             =   1800
-         Width           =   1935
-      End
-      Begin VB.Label lblModifyBy 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "%Modifiy By%"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   165
-         Left            =   360
-         TabIndex        =   86
-         ToolTipText     =   "Last Modified By"
-         Top             =   3360
-         Width           =   990
-      End
-      Begin VB.Label lblModifyDate 
-         BackStyle       =   0  'Transparent
-         Caption         =   "%Modifiy Date%"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   315
-         Left            =   360
-         TabIndex        =   85
-         ToolTipText     =   "Last Modified Date"
-         Top             =   3540
-         Width           =   1830
-      End
-      Begin VB.Label lblText 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   1320
-         TabIndex        =   65
-         Top             =   2760
-         Visible         =   0   'False
-         Width           =   45
-      End
-      Begin VB.Label Label43 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Latest Note"
-         Height          =   195
-         Left            =   240
-         TabIndex        =   64
-         Top             =   960
-         Width           =   840
-      End
-      Begin VB.Label Label25 
-         Alignment       =   2  'Center
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "@"
-         Height          =   195
-         Left            =   2280
-         TabIndex        =   61
-         Top             =   630
-         Width           =   255
-      End
-      Begin VB.Label Label6 
-         Alignment       =   2  'Center
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Local User"
-         Height          =   195
-         Left            =   240
-         TabIndex        =   54
-         Top             =   2700
-         Width           =   1695
-      End
-      Begin VB.Label Label24 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Action Date"
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   60
-         Top             =   360
-         Width           =   840
-      End
-      Begin VB.Label Label2 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Current Status"
-         Height          =   195
-         Left            =   240
-         TabIndex        =   53
-         Top             =   1560
-         Width           =   1065
-      End
-      Begin VB.Label Label1 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Latest Action"
-         Height          =   195
-         Left            =   240
-         TabIndex        =   52
-         Top             =   360
-         Width           =   945
-      End
-      Begin VB.Label Label10 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Create Date"
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   51
-         Top             =   2160
-         Width           =   1605
-      End
-      Begin VB.Label Label9 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Packet Creator"
-         Height          =   195
-         Left            =   240
-         TabIndex        =   50
-         Top             =   2160
-         Width           =   1080
-      End
-      Begin VB.Label Label11 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Current Packet Owner"
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   49
-         Top             =   1560
-         Width           =   1605
-      End
-   End
-   Begin VB.Frame Frame3 
-      Caption         =   "Packet Info."
-      Height          =   3975
-      Left            =   120
-      TabIndex        =   42
-      Top             =   120
-      Width           =   7215
-      Begin VB.PictureBox pbSubmitBox 
-         BorderStyle     =   0  'None
-         FillStyle       =   0  'Solid
-         ForeColor       =   &H00000000&
-         Height          =   855
-         Left            =   2040
-         ScaleHeight     =   855
-         ScaleWidth      =   2295
-         TabIndex        =   39
-         TabStop         =   0   'False
-         Top             =   3060
-         Width           =   2295
-         Begin VB.CommandButton cmdSubmit 
+         Begin VB.Frame Frame8 
+            Height          =   735
+            Left            =   5010
+            TabIndex        =   93
+            Top             =   3205
+            Width           =   2175
+            Begin VB.CommandButton cmdShowMore 
+               Caption         =   "Show Tabs"
+               Height          =   360
+               Left            =   480
+               TabIndex        =   94
+               TabStop         =   0   'False
+               ToolTipText     =   "Show additional features"
+               Top             =   240
+               Width           =   1575
+            End
+            Begin VB.Label Label17 
+               Alignment       =   2  'Center
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "â"
+               BeginProperty Font 
+                  Name            =   "Wingdings"
+                  Size            =   15.75
+                  Charset         =   2
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   345
+               Left            =   80
+               TabIndex        =   95
+               Top             =   240
+               Width           =   405
+            End
+         End
+         Begin VB.TextBox txtDrawNoRev 
             Appearance      =   0  'Flat
-            Caption         =   "Submit"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   2520
+            Locked          =   -1  'True
+            MaxLength       =   40
+            TabIndex        =   92
+            Top             =   2040
+            Width           =   2055
+         End
+         Begin VB.OptionButton optReceive 
+            Appearance      =   0  'Flat
+            Caption         =   "Receive Packet"
             Enabled         =   0   'False
             BeginProperty Font 
                Name            =   "Tahoma"
@@ -1613,545 +1420,825 @@ Begin VB.Form Form1
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   465
-            Left            =   240
-            MaskColor       =   &H000000FF&
-            TabIndex        =   40
-            ToolTipText     =   "Submit update"
-            Top             =   180
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   180
+            TabIndex        =   91
+            Top             =   3120
             Width           =   1815
          End
-      End
-      Begin MSComctlLib.ImageCombo cmbUsers 
-         Height          =   330
-         Left            =   1680
-         TabIndex        =   36
-         Top             =   2580
-         Visible         =   0   'False
-         Width           =   2235
-         _ExtentX        =   3942
-         _ExtentY        =   582
-         _Version        =   393216
-         ForeColor       =   -2147483640
-         BackColor       =   -2147483643
-         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-      End
-      Begin VB.ListBox List1 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   1455
-         Left            =   240
-         Sorted          =   -1  'True
-         TabIndex        =   8
-         TabStop         =   0   'False
-         Top             =   960
-         Visible         =   0   'False
-         Width           =   2055
-      End
-      Begin VB.ComboBox cmbPlant 
-         Appearance      =   0  'Flat
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   405
-         Left            =   4800
-         Style           =   2  'Dropdown List
-         TabIndex        =   6
-         Top             =   2760
-         Width           =   2175
-      End
-      Begin VB.OptionButton optFile 
-         Appearance      =   0  'Flat
-         Caption         =   "File Packet"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   195
-         Left            =   180
-         TabIndex        =   14
-         Top             =   3510
-         Width           =   1455
-      End
-      Begin VB.OptionButton optReOpen 
-         Appearance      =   0  'Flat
-         Caption         =   "Reopen/Unfile Packet"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   180
-         TabIndex        =   10
-         Top             =   2040
-         Width           =   2175
-      End
-      Begin VB.TextBox txtTicketDescription 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   2520
-         Locked          =   -1  'True
-         MaxLength       =   100
-         TabIndex        =   1
-         Top             =   600
-         Width           =   4455
-      End
-      Begin VB.CommandButton cmdClear 
-         Caption         =   "Clear All"
-         Height          =   360
-         Left            =   1440
-         TabIndex        =   16
-         Top             =   1080
-         Width           =   855
-      End
-      Begin VB.TextBox txtJobNo 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   240
-         MaxLength       =   15
-         TabIndex        =   0
-         Top             =   600
-         Width           =   2055
-      End
-      Begin VB.OptionButton optCreate 
-         Appearance      =   0  'Flat
-         Caption         =   "New Packet"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   180
-         TabIndex        =   15
-         TabStop         =   0   'False
-         Top             =   1680
-         Width           =   1455
-      End
-      Begin VB.OptionButton optClose 
-         Appearance      =   0  'Flat
-         Caption         =   "Close Packet"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   180
-         TabIndex        =   11
-         Top             =   2400
-         Width           =   1935
-      End
-      Begin VB.CommandButton cmdSearch 
-         Caption         =   "Open"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   360
-         Left            =   240
-         TabIndex        =   9
-         Top             =   1080
-         Width           =   990
-      End
-      Begin VB.TextBox txtPartNoRev 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   2520
-         Locked          =   -1  'True
-         MaxLength       =   40
-         TabIndex        =   2
-         Top             =   1320
-         Width           =   2055
-      End
-      Begin VB.TextBox txtCustPoNo 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   4800
-         Locked          =   -1  'True
-         MaxLength       =   40
-         TabIndex        =   5
-         Top             =   2040
-         Width           =   2175
-      End
-      Begin VB.TextBox txtSalesNo 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   4800
-         Locked          =   -1  'True
-         MaxLength       =   40
-         TabIndex        =   3
-         Top             =   1320
-         Width           =   2175
-      End
-      Begin VB.OptionButton optMove 
-         Appearance      =   0  'Flat
-         Caption         =   "Send Packet To"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   330
-         Left            =   180
-         TabIndex        =   12
-         Top             =   2730
-         Width           =   1695
-      End
-      Begin VB.OptionButton optReceive 
-         Appearance      =   0  'Flat
-         Caption         =   "Receive Packet"
-         Enabled         =   0   'False
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H80000008&
-         Height          =   255
-         Left            =   180
-         TabIndex        =   13
-         Top             =   3120
-         Width           =   1815
-      End
-      Begin VB.TextBox txtDrawNoRev 
-         Appearance      =   0  'Flat
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   12
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   375
-         Left            =   2520
-         Locked          =   -1  'True
-         MaxLength       =   40
-         TabIndex        =   4
-         Top             =   2040
-         Width           =   2055
-      End
-      Begin VB.Frame Frame8 
-         Height          =   735
-         Left            =   5010
-         TabIndex        =   70
-         Top             =   3205
-         Width           =   2175
-         Begin VB.CommandButton cmdShowMore 
-            Caption         =   "Show Tabs"
-            Height          =   360
-            Left            =   480
-            TabIndex        =   35
-            TabStop         =   0   'False
-            ToolTipText     =   "Show additional features"
-            Top             =   240
-            Width           =   1575
-         End
-         Begin VB.Label Label17 
-            Alignment       =   2  'Center
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "â"
+         Begin VB.OptionButton optMove 
+            Appearance      =   0  'Flat
+            Caption         =   "Send Packet To"
+            Enabled         =   0   'False
             BeginProperty Font 
-               Name            =   "Wingdings"
-               Size            =   15.75
-               Charset         =   2
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   330
+            Left            =   180
+            TabIndex        =   90
+            Top             =   2730
+            Width           =   1695
+         End
+         Begin VB.TextBox txtSalesNo 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
                Weight          =   400
                Underline       =   0   'False
                Italic          =   0   'False
                Strikethrough   =   0   'False
             EndProperty
-            Height          =   345
-            Left            =   80
-            TabIndex        =   71
-            Top             =   240
-            Width           =   405
+            Height          =   375
+            Left            =   4800
+            Locked          =   -1  'True
+            MaxLength       =   40
+            TabIndex        =   89
+            Top             =   1320
+            Width           =   2175
+         End
+         Begin VB.TextBox txtCustPoNo 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   4800
+            Locked          =   -1  'True
+            MaxLength       =   40
+            TabIndex        =   88
+            Top             =   2040
+            Width           =   2175
+         End
+         Begin VB.TextBox txtPartNoRev 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   2520
+            Locked          =   -1  'True
+            MaxLength       =   40
+            TabIndex        =   87
+            Top             =   1320
+            Width           =   2055
+         End
+         Begin VB.CommandButton cmdSearch 
+            Caption         =   "Open"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   360
+            Left            =   240
+            TabIndex        =   86
+            Top             =   1080
+            Width           =   990
+         End
+         Begin VB.OptionButton optClose 
+            Appearance      =   0  'Flat
+            Caption         =   "Close Packet"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   180
+            TabIndex        =   85
+            Top             =   2400
+            Width           =   1935
+         End
+         Begin VB.OptionButton optCreate 
+            Appearance      =   0  'Flat
+            Caption         =   "New Packet"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   180
+            TabIndex        =   84
+            TabStop         =   0   'False
+            Top             =   1680
+            Width           =   1455
+         End
+         Begin VB.TextBox txtJobNo 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   240
+            MaxLength       =   15
+            TabIndex        =   83
+            Top             =   600
+            Width           =   2055
+         End
+         Begin VB.CommandButton cmdClear 
+            Caption         =   "Clear All"
+            Height          =   360
+            Left            =   1440
+            TabIndex        =   82
+            Top             =   1080
+            Width           =   855
+         End
+         Begin VB.TextBox txtTicketDescription 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   2520
+            Locked          =   -1  'True
+            MaxLength       =   100
+            TabIndex        =   81
+            Top             =   600
+            Width           =   4455
+         End
+         Begin VB.OptionButton optReOpen 
+            Appearance      =   0  'Flat
+            Caption         =   "Reopen/Unfile Packet"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   255
+            Left            =   180
+            TabIndex        =   80
+            Top             =   2040
+            Width           =   2175
+         End
+         Begin VB.OptionButton optFile 
+            Appearance      =   0  'Flat
+            Caption         =   "File Packet"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   195
+            Left            =   180
+            TabIndex        =   79
+            Top             =   3510
+            Width           =   1455
+         End
+         Begin VB.ComboBox cmbPlant 
+            Appearance      =   0  'Flat
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   405
+            Left            =   4800
+            Style           =   2  'Dropdown List
+            TabIndex        =   78
+            Top             =   2760
+            Width           =   2175
+         End
+         Begin VB.PictureBox pbSubmitBox 
+            BorderStyle     =   0  'None
+            FillStyle       =   0  'Solid
+            ForeColor       =   &H00000000&
+            Height          =   855
+            Left            =   2040
+            ScaleHeight     =   855
+            ScaleWidth      =   2295
+            TabIndex        =   74
+            TabStop         =   0   'False
+            Top             =   3060
+            Width           =   2295
+            Begin VB.CommandButton cmdSubmit 
+               Appearance      =   0  'Flat
+               Caption         =   "Submit"
+               Enabled         =   0   'False
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   8.25
+                  Charset         =   0
+                  Weight          =   700
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   465
+               Left            =   240
+               MaskColor       =   &H000000FF&
+               TabIndex        =   75
+               ToolTipText     =   "Submit update"
+               Top             =   180
+               Width           =   1815
+            End
+         End
+         Begin VB.Label Label3 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Part No. && Rev."
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   104
+            Top             =   1080
+            Width           =   1260
+         End
+         Begin VB.Label Label4 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Drawing No. && Rev."
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   103
+            Top             =   1800
+            Width           =   1590
+         End
+         Begin VB.Label Label5 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Customer && PO No."
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   4800
+            TabIndex        =   102
+            Top             =   1800
+            Width           =   1575
+         End
+         Begin VB.Label Label7 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Job Number"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   240
+            TabIndex        =   101
+            Top             =   360
+            Width           =   1005
+         End
+         Begin VB.Label Label8 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Sales No."
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   4800
+            TabIndex        =   100
+            Top             =   1080
+            Width           =   750
+         End
+         Begin VB.Label Label13 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Description"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   99
+            Top             =   360
+            Width           =   960
+         End
+         Begin VB.Label Label14 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Plant"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   4800
+            TabIndex        =   98
+            Top             =   2520
+            Width           =   435
+         End
+         Begin VB.Label lblUser 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Height          =   195
+            Left            =   2160
+            TabIndex        =   97
+            Top             =   2940
+            Visible         =   0   'False
+            Width           =   45
+         End
+         Begin VB.Label lblChars 
+            Alignment       =   2  'Center
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "(0/0)"
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00008000&
+            Height          =   165
+            Left            =   4080
+            TabIndex        =   96
+            ToolTipText     =   "Current Chars / Max Chars"
+            Top             =   1800
+            Visible         =   0   'False
+            Width           =   645
+         End
+         Begin VB.Image imgComment 
+            Appearance      =   0  'Flat
+            Height          =   555
+            Left            =   4080
+            Picture         =   "Form1.frx":9407
+            ToolTipText     =   "Add Note"
+            Top             =   2520
+            Width           =   540
          End
       End
-      Begin VB.Image imgComment 
-         Appearance      =   0  'Flat
-         Height          =   555
-         Left            =   4080
-         Picture         =   "Form1.frx":9A8A
-         ToolTipText     =   "Add Note"
-         Top             =   2520
-         Width           =   540
-      End
-      Begin VB.Label lblChars 
-         Alignment       =   2  'Center
-         BackStyle       =   0  'Transparent
-         Caption         =   "(0/0)"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   6.75
-            Charset         =   0
-            Weight          =   400
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         ForeColor       =   &H00008000&
-         Height          =   165
-         Left            =   4080
-         TabIndex        =   63
-         ToolTipText     =   "Current Chars / Max Chars"
-         Top             =   1800
-         Visible         =   0   'False
-         Width           =   645
-      End
-      Begin VB.Label lblUser 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Height          =   195
-         Left            =   2160
-         TabIndex        =   62
-         Top             =   2940
-         Visible         =   0   'False
-         Width           =   45
-      End
-      Begin VB.Label Label14 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Plant"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   4800
-         TabIndex        =   58
-         Top             =   2520
-         Width           =   435
-      End
-      Begin VB.Label Label13 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Description"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   56
-         Top             =   360
-         Width           =   960
-      End
-      Begin VB.Label Label8 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Sales No."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   4800
-         TabIndex        =   47
-         Top             =   1080
-         Width           =   750
-      End
-      Begin VB.Label Label7 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Job Number"
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   240
+      Begin VB.Frame FrameTrackingInfo 
+         Caption         =   "Tracking Info."
+         Height          =   3975
+         Left            =   -67620
          TabIndex        =   46
-         Top             =   360
-         Width           =   1005
+         Top             =   480
+         Width           =   4695
+         Begin VB.TextBox txtTicketOwner 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   2520
+            Locked          =   -1  'True
+            TabIndex        =   60
+            TabStop         =   0   'False
+            Top             =   1800
+            Width           =   1935
+         End
+         Begin VB.TextBox txtCreator 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   240
+            Locked          =   -1  'True
+            TabIndex        =   59
+            TabStop         =   0   'False
+            Top             =   2400
+            Width           =   1815
+         End
+         Begin VB.TextBox txtCreateDate 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   2520
+            Locked          =   -1  'True
+            TabIndex        =   58
+            TabStop         =   0   'False
+            Top             =   2400
+            Width           =   1935
+         End
+         Begin VB.TextBox txtTicketAction 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            ForeColor       =   &H00000000&
+            Height          =   285
+            Left            =   240
+            Locked          =   -1  'True
+            TabIndex        =   57
+            TabStop         =   0   'False
+            Top             =   600
+            Width           =   2055
+         End
+         Begin VB.TextBox txtTicketStatus 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   240
+            Locked          =   -1  'True
+            TabIndex        =   56
+            TabStop         =   0   'False
+            Top             =   1800
+            Width           =   1815
+         End
+         Begin VB.TextBox txtDateTime 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            BackColor       =   &H8000000F&
+            BorderStyle     =   0  'None
+            Enabled         =   0   'False
+            Height          =   225
+            Left            =   2160
+            TabIndex        =   55
+            Text            =   "%DATETIME%"
+            Top             =   900
+            Visible         =   0   'False
+            Width           =   2055
+         End
+         Begin VB.TextBox txtActionDate 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   2520
+            Locked          =   -1  'True
+            TabIndex        =   54
+            TabStop         =   0   'False
+            Top             =   600
+            Width           =   1935
+         End
+         Begin VB.TextBox txtLocalUser 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Enabled         =   0   'False
+            Height          =   285
+            Left            =   240
+            Locked          =   -1  'True
+            TabIndex        =   53
+            TabStop         =   0   'False
+            Text            =   "%USERNAME%"
+            Top             =   2940
+            Width           =   1815
+         End
+         Begin VB.PictureBox pbScrollBox 
+            Appearance      =   0  'Flat
+            AutoRedraw      =   -1  'True
+            BackColor       =   &H80000005&
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H80000008&
+            Height          =   285
+            Left            =   240
+            ScaleHeight     =   255
+            ScaleWidth      =   4185
+            TabIndex        =   52
+            TabStop         =   0   'False
+            Top             =   1200
+            Width           =   4215
+         End
+         Begin VB.Frame Frame7 
+            Height          =   1215
+            Left            =   2490
+            TabIndex        =   47
+            Top             =   2730
+            Width           =   2175
+            Begin VB.CheckBox chkAutoRefresh 
+               Alignment       =   1  'Right Justify
+               Caption         =   "Auto Refresh"
+               Height          =   255
+               Left            =   120
+               TabIndex        =   50
+               TabStop         =   0   'False
+               Top             =   195
+               Value           =   1  'Checked
+               Width           =   1260
+            End
+            Begin VB.CommandButton cmdRefresh 
+               Caption         =   "Refresh"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   49
+               TabStop         =   0   'False
+               ToolTipText     =   "Manually refresh all data"
+               Top             =   510
+               Width           =   990
+            End
+            Begin VB.PictureBox pbData 
+               Appearance      =   0  'Flat
+               AutoRedraw      =   -1  'True
+               AutoSize        =   -1  'True
+               BorderStyle     =   0  'None
+               ForeColor       =   &H80000008&
+               Height          =   750
+               Left            =   1320
+               Picture         =   "Form1.frx":9A2D
+               ScaleHeight     =   750
+               ScaleWidth      =   765
+               TabIndex        =   48
+               TabStop         =   0   'False
+               Top             =   360
+               Width           =   765
+            End
+            Begin VB.Label lblQryTime 
+               Alignment       =   2  'Center
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "%AVG QRY TIME MS%"
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   6.75
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               ForeColor       =   &H00808080&
+               Height          =   195
+               Left            =   135
+               TabIndex        =   51
+               ToolTipText     =   "Avg. Query Time"
+               Top             =   960
+               Width           =   1080
+            End
+         End
+         Begin VB.Label Label11 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Current Packet Owner"
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   72
+            Top             =   1560
+            Width           =   1605
+         End
+         Begin VB.Label Label9 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Packet Creator"
+            Height          =   195
+            Left            =   240
+            TabIndex        =   71
+            Top             =   2160
+            Width           =   1080
+         End
+         Begin VB.Label Label10 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Create Date"
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   70
+            Top             =   2160
+            Width           =   1605
+         End
+         Begin VB.Label Label1 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Latest Action"
+            Height          =   195
+            Left            =   240
+            TabIndex        =   69
+            Top             =   360
+            Width           =   945
+         End
+         Begin VB.Label Label2 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Current Status"
+            Height          =   195
+            Left            =   240
+            TabIndex        =   68
+            Top             =   1560
+            Width           =   1065
+         End
+         Begin VB.Label Label24 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Action Date"
+            Height          =   195
+            Left            =   2520
+            TabIndex        =   67
+            Top             =   360
+            Width           =   840
+         End
+         Begin VB.Label Label6 
+            Alignment       =   2  'Center
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Local User"
+            Height          =   195
+            Left            =   240
+            TabIndex        =   66
+            Top             =   2700
+            Width           =   1695
+         End
+         Begin VB.Label Label25 
+            Alignment       =   2  'Center
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "@"
+            Height          =   195
+            Left            =   2280
+            TabIndex        =   65
+            Top             =   630
+            Width           =   255
+         End
+         Begin VB.Label Label43 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Latest Note"
+            Height          =   195
+            Left            =   240
+            TabIndex        =   64
+            Top             =   960
+            Width           =   840
+         End
+         Begin VB.Label lblText 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   8.25
+               Charset         =   0
+               Weight          =   700
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   195
+            Left            =   1320
+            TabIndex        =   63
+            Top             =   2760
+            Visible         =   0   'False
+            Width           =   45
+         End
+         Begin VB.Label lblModifyDate 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "%Modifiy Date%"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   315
+            Left            =   360
+            TabIndex        =   62
+            ToolTipText     =   "Last Modified Date"
+            Top             =   3540
+            Width           =   1830
+         End
+         Begin VB.Label lblModifyBy 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "%Modifiy By%"
+            Enabled         =   0   'False
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   165
+            Left            =   360
+            TabIndex        =   61
+            ToolTipText     =   "Last Modified By"
+            Top             =   3360
+            Width           =   990
+         End
       End
-      Begin VB.Label Label5 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Customer && PO No."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   4800
-         TabIndex        =   45
-         Top             =   1800
-         Width           =   1575
-      End
-      Begin VB.Label Label4 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Drawing No. && Rev."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   44
-         Top             =   1800
-         Width           =   1590
-      End
-      Begin VB.Label Label3 
-         AutoSize        =   -1  'True
-         BackStyle       =   0  'Transparent
-         Caption         =   "Part No. && Rev."
-         BeginProperty Font 
-            Name            =   "Tahoma"
-            Size            =   8.25
-            Charset         =   0
-            Weight          =   700
-            Underline       =   0   'False
-            Italic          =   0   'False
-            Strikethrough   =   0   'False
-         EndProperty
-         Height          =   195
-         Left            =   2520
-         TabIndex        =   43
-         Top             =   1080
-         Width           =   1260
-      End
+   End
+   Begin VB.Label Label12 
+      AutoSize        =   -1  'True
+      BackStyle       =   0  'Transparent
+      Caption         =   "Coded by Bobby Lovell"
+      BeginProperty Font 
+         Name            =   "Tahoma"
+         Size            =   6.75
+         Charset         =   0
+         Weight          =   400
+         Underline       =   0   'False
+         Italic          =   0   'False
+         Strikethrough   =   0   'False
+      EndProperty
+      ForeColor       =   &H80000011&
+      Height          =   165
+      Left            =   10740
+      TabIndex        =   109
+      Top             =   9960
+      Width           =   1470
    End
    Begin VB.Label lblAppVersion 
       AutoSize        =   -1  'True
@@ -2169,29 +2256,9 @@ Begin VB.Form Form1
       ForeColor       =   &H80000011&
       Height          =   165
       Left            =   120
-      TabIndex        =   72
-      Top             =   9540
+      TabIndex        =   108
+      Top             =   9960
       Width           =   1290
-   End
-   Begin VB.Label Label12 
-      AutoSize        =   -1  'True
-      BackStyle       =   0  'Transparent
-      Caption         =   "Coded by Bobby Lovell"
-      BeginProperty Font 
-         Name            =   "Tahoma"
-         Size            =   6.75
-         Charset         =   0
-         Weight          =   400
-         Underline       =   0   'False
-         Italic          =   0   'False
-         Strikethrough   =   0   'False
-      EndProperty
-      ForeColor       =   &H80000011&
-      Height          =   165
-      Left            =   10560
-      TabIndex        =   55
-      Top             =   9540
-      Width           =   1470
    End
    Begin VB.Menu mnuAdmin 
       Caption         =   "Administrator"
@@ -3230,6 +3297,7 @@ procNoPicture:
     GoTo procExitSub
 End Function
 Public Sub DeleteAttachment(strGUID As String)
+    On Error GoTo errs:
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     cn_global.CursorLocation = adUseClient
@@ -3240,6 +3308,11 @@ Public Sub DeleteAttachment(strGUID As String)
         .Update
     End With
     GetAttachmentList strCurJobNum, FlexAttach
+    ShowBanner colGoodBlue, "Attachment Deleted"
+    Exit Sub
+errs:
+    ErrHandle Err.Number, Err.Description, "DeleteAttachment"
+    
 End Sub
 Private Sub cmdEdit_Click()
     On Error GoTo errs
@@ -3412,7 +3485,7 @@ End Sub
 Private Sub GetFadeColor()
     Dim FadeColor As Long
     Dim Color1, Color2
-    FadeColor = GetRealColor(Frame3.BackColor)
+    FadeColor = GetRealColor(FramePacketInfo.BackColor)
     ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
     Color1 = RGB(iRed, iGreen, iBlue)
     r1 = Color1 And (Not &HFFFFFF00)
@@ -4977,7 +5050,7 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
             FlexGridHist.RowSel = intRowSel + 1
         End If
     End If
-    If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
+    If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + FrameHistory.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + FrameHistory.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
 End Sub
 Private Sub FlexGridHist_Scroll()
     FlexHistLastTopRow = FlexGridHist.TopRow
@@ -5116,8 +5189,8 @@ Private Sub Form_Load()
         DoEvents
         Wait 500
     End If
-    intFormHMax = 10500
-    intFormHMin = 5535
+    intFormHMax = 11220 '10500
+    intFormHMin = 6150 '5535
     If CheckForAdmin(strLocalUser) Then
         SetupAdmin
         'do stuff to enable admin things
@@ -5220,8 +5293,8 @@ Private Sub SetupAdmin()
     bolIsAdmin = True
     FlexGridHist.HighLight = flexHighlightAlways
     mnuAdmin.Visible = True
-    intFormHMin = intFormHMin + 300
-    intFormHMax = intFormHMax + 300
+   ' intFormHMin = intFormHMin + 300
+    'intFormHMax = intFormHMax + 300
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     EndProgram
@@ -5229,7 +5302,7 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     Hook Me.hwnd, False
 End Sub
-Private Sub Frame1_MouseMove(Button As Integer, _
+Private Sub FrameHistory_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5238,10 +5311,10 @@ Private Sub Frame1_MouseMove(Button As Integer, _
         frmKey(i).Visible = False
     Next
 End Sub
-Private Sub Frame3_Click()
+Private Sub FramePacketInfo_Click()
     List1.Visible = False
 End Sub
-Private Sub Frame4_MouseMove(Button As Integer, _
+Private Sub FrameSearch_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5250,7 +5323,7 @@ Private Sub Frame4_MouseMove(Button As Integer, _
         frmKey(i).Visible = False
     Next
 End Sub
-Private Sub Frame5_MouseMove(Button As Integer, _
+Private Sub FrameIncoming_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5259,7 +5332,7 @@ Private Sub Frame5_MouseMove(Button As Integer, _
         frmKey(i).Visible = False
     Next
 End Sub
-Private Sub Frame6_MouseMove(Button As Integer, _
+Private Sub FrameOnHand_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5872,8 +5945,8 @@ Private Sub PositionEdit(WhatControl As TextBox)
     If EditMode = True Then Exit Sub
     If bolCanEdit = True Then
         cmdEdit.Visible = False
-        cmdEdit.Left = WhatControl.Left + WhatControl.Width + 105
-        cmdEdit.Top = WhatControl.Top + 120
+        cmdEdit.Left = WhatControl.Left + WhatControl.Width + 125
+        cmdEdit.Top = WhatControl.Top + 480
         cmdEdit.Visible = True
         ActiveText = WhatControl.Name
     Else

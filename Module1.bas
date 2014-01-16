@@ -118,6 +118,7 @@ Public Const colReceived     As Long = &H80FFFF
 Public Const colClosed       As Long = &H8080FF
 Public Const colFiled        As Long = &HFF8080
 Public Const colReopened     As Long = &HFF80FF
+Public Const colGoodBlue As Long = &HF29F68
 Public bolWaitToClose        As Boolean
 Public intTicksWaited        As Integer
 Public bolBannerOpen         As Boolean
