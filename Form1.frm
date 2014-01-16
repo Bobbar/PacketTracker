@@ -250,6 +250,7 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
+            TextSave        =   ""
             Key             =   ""
             Object.Tag             =   ""
          EndProperty
@@ -305,11 +306,13 @@ Begin VB.Form Form1
       TabPicture(2)   =   "Form1.frx":144D
       Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Frame4"
+      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "Incoming"
       TabPicture(3)   =   "Form1.frx":191F
       Tab(3).ControlEnabled=   0   'False
       Tab(3).Control(0)=   "Frame5"
+      Tab(3).Control(0).Enabled=   0   'False
       Tab(3).ControlCount=   1
       TabCaption(4)   =   "On-Hand"
       TabPicture(4)   =   "Form1.frx":1AB9
