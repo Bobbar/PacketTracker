@@ -284,6 +284,101 @@ Dim ret As Long
 Dim a   As POINTAPI
 Dim b   As Long
 Dim c   As Long
+Public Sub DrawLines()
+    Dim i As Integer
+    With frmTimeLine
+        .pbDrawArea.Cls
+        For i = 0 To UBound(dGrid) 'draw grid
+            .pbDrawArea.DrawStyle = 0
+            .pbDrawArea.FillColor = dGrid(i).Color
+            .pbDrawArea.Line (dGrid(i).Left, dGrid(i).Top)-(dGrid(i).Left + dGrid(i).Width, dGrid(i).Top + dGrid(0).Height), dGrid(i).Color, B
+        Next
+        If chkDayLines.Value = 1 Then
+            For i = 0 To UBound(dDayLine) 'draw day lines
+                .pbDrawArea.DrawStyle = 2
+                .pbDrawArea.Line (dDayLine(i).X1, dDayLine(i).Y1)-(dDayLine(i).X2, dDayLine(i).Y2), &H404040
+            Next
+        End If
+        .pbDrawArea.DrawStyle = 0
+        If dPointLine.Visible Then .pbDrawArea.Line (dPointLine.X1, dPointLine.Y1)-(dPointLine.X2, dPointLine.Y2)
+        For i = 0 To UBound(dLine) 'draw bars
+            If i = UBound(dLine) Then
+                .pbDrawArea.Font.Size = 25
+                .pbDrawArea.Font.Name = "Wingdings 3"
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FillStyle = dLine(i).FillStyle
+                .pbDrawArea.FillColor = dLine(i).Color
+                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+                .pbDrawArea.CurrentX = dLine(i).Left + dLine(i).Width + 40
+                .pbDrawArea.CurrentY = dLine(i).Top - 100
+                .pbDrawArea.Print Chr$(52)
+            Else
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FillStyle = dLine(i).FillStyle
+                .pbDrawArea.FillColor = dLine(i).Color
+                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
+            End If
+        Next
+        .pbDrawArea.FillStyle = 0
+        .pbDrawArea.Font.Size = 9
+        .pbDrawArea.Font.Name = "Tahoma"
+        For i = 0 To UBound(dAction)
+            If dAction(i).Visible Then
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FillColor = dAction(i).Color
+                .pbDrawArea.Line (dAction(i).Left, dAction(i).Top)-(dAction(i).Left + dAction(i).Width, dAction(i).Top + dAction(0).Height), dAction(i).Color, B
+                If dNote(i).Visible Then
+                    If dNote(i).Width > dAction(i).Width Then
+                        .pbDrawArea.DrawStyle = 0
+                        .pbDrawArea.FillColor = dNote(i).Color
+                        .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dNote(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
+                        .pbDrawArea.CurrentX = dNote(i).Left ' + (dAction(i).Width / 2) - (dNote(i).Width / 2)
+                        .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
+                        If chkShowAll.Value = False Then
+                            .pbDrawArea.ForeColor = &H80000012
+                        Else
+                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
+                        End If
+                        .pbDrawArea.DrawStyle = 0
+                        .pbDrawArea.FontTransparent = True
+                        .pbDrawArea.Font.Italic = True
+                        .pbDrawArea.Print dNote(i).Text
+                    Else
+                        .pbDrawArea.DrawStyle = 0
+                        .pbDrawArea.FillColor = dNote(i).Color
+                        .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dAction(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
+                        .pbDrawArea.CurrentX = dNote(i).Left + (dAction(i).Width / 2) - (dNote(i).Width / 2)
+                        .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
+                        If chkShowAll.Value = False Then
+                            .pbDrawArea.ForeColor = &H80000012
+                        Else
+                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
+                        End If
+                        .pbDrawArea.DrawStyle = 0
+                        .pbDrawArea.FontTransparent = True
+                        .pbDrawArea.Font.Italic = True
+                        .pbDrawArea.Print dNote(i).Text
+                    End If
+                End If
+                .pbDrawArea.CurrentX = dAction(i).Left + (dAction(i).Width / 2) - (dAction(i).Width / 2)
+                .pbDrawArea.CurrentY = dAction(i).Top ' + (dAction(0).Height / 2)
+                If chkShowAll.Value = False Then
+                    .pbDrawArea.ForeColor = &H80000012
+                Else
+                    .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
+                End If
+                .pbDrawArea.DrawStyle = 0
+                .pbDrawArea.FontTransparent = True
+                .pbDrawArea.Font.Italic = False
+                .pbDrawArea.Print dAction(i).Text
+            End If
+        Next i
+        .pbDrawArea.DrawWidth = 5
+        .pbDrawArea.ForeColor = vbBlack
+        .pbDrawArea.Line (470, dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200)-((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width), dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200)
+        .pbDrawArea.DrawWidth = 1
+    End With
+End Sub
 Public Sub DrawTimeLine()
     Dim i, Days As Integer
     Dim DStep As Single
@@ -473,100 +568,14 @@ Public Sub ReDrawTimeLine()
     frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight
     DrawLines
 End Sub
-Public Sub DrawLines()
-    Dim i As Integer
-    With frmTimeLine
-        .pbDrawArea.Cls
-        For i = 0 To UBound(dGrid) 'draw grid
-            .pbDrawArea.DrawStyle = 0
-            .pbDrawArea.FillColor = dGrid(i).Color
-            .pbDrawArea.Line (dGrid(i).Left, dGrid(i).Top)-(dGrid(i).Left + dGrid(i).Width, dGrid(i).Top + dGrid(0).Height), dGrid(i).Color, B
-        Next
-        If chkDayLines.Value = 1 Then
-            For i = 0 To UBound(dDayLine) 'draw day lines
-                .pbDrawArea.DrawStyle = 2
-                .pbDrawArea.Line (dDayLine(i).X1, dDayLine(i).Y1)-(dDayLine(i).X2, dDayLine(i).Y2), &H404040
-            Next
-        End If
-        .pbDrawArea.DrawStyle = 0
-        If dPointLine.Visible Then .pbDrawArea.Line (dPointLine.X1, dPointLine.Y1)-(dPointLine.X2, dPointLine.Y2)
-        For i = 0 To UBound(dLine) 'draw bars
-            If i = UBound(dLine) Then
-                .pbDrawArea.Font.Size = 25
-                .pbDrawArea.Font.Name = "Wingdings 3"
-                .pbDrawArea.DrawStyle = 0
-                .pbDrawArea.FillStyle = dLine(i).FillStyle
-                .pbDrawArea.FillColor = dLine(i).Color
-                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
-                .pbDrawArea.CurrentX = dLine(i).Left + dLine(i).Width + 40
-                .pbDrawArea.CurrentY = dLine(i).Top - 100
-                .pbDrawArea.Print Chr$(52)
-            Else
-                .pbDrawArea.DrawStyle = 0
-                .pbDrawArea.FillStyle = dLine(i).FillStyle
-                .pbDrawArea.FillColor = dLine(i).Color
-                .pbDrawArea.Line (dLine(i).Left, dLine(i).Top)-(dLine(i).Left + dLine(i).Width, dLine(i).Top + dLine(0).Height), vbBlack, B
-            End If
-        Next
-        .pbDrawArea.FillStyle = 0
-        .pbDrawArea.Font.Size = 9
-        .pbDrawArea.Font.Name = "Tahoma"
-        For i = 0 To UBound(dAction)
-            If dAction(i).Visible Then
-                .pbDrawArea.DrawStyle = 0
-                .pbDrawArea.FillColor = dAction(i).Color
-                .pbDrawArea.Line (dAction(i).Left, dAction(i).Top)-(dAction(i).Left + dAction(i).Width, dAction(i).Top + dAction(0).Height), dAction(i).Color, B
-                If dNote(i).Visible Then
-                    If dNote(i).Width > dAction(i).Width Then
-                        .pbDrawArea.DrawStyle = 0
-                        .pbDrawArea.FillColor = dNote(i).Color
-                        .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dNote(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
-                        .pbDrawArea.CurrentX = dNote(i).Left ' + (dAction(i).Width / 2) - (dNote(i).Width / 2)
-                        .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
-                        If chkShowAll.Value = False Then
-                            .pbDrawArea.ForeColor = &H80000012
-                        Else
-                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
-                        End If
-                        .pbDrawArea.DrawStyle = 0
-                        .pbDrawArea.FontTransparent = True
-                        .pbDrawArea.Font.Italic = True
-                        .pbDrawArea.Print dNote(i).Text
-                    Else
-                        .pbDrawArea.DrawStyle = 0
-                        .pbDrawArea.FillColor = dNote(i).Color
-                        .pbDrawArea.Line (dNote(i).Left, dNote(i).Top)-(dNote(i).Left + dAction(i).Width, dNote(i).Top + dNote(0).Height), dNote(i).Color, B
-                        .pbDrawArea.CurrentX = dNote(i).Left + (dAction(i).Width / 2) - (dNote(i).Width / 2)
-                        .pbDrawArea.CurrentY = dNote(i).Top ' + (dAction(0).Height / 2)
-                        If chkShowAll.Value = False Then
-                            .pbDrawArea.ForeColor = &H80000012
-                        Else
-                            .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
-                        End If
-                        .pbDrawArea.DrawStyle = 0
-                        .pbDrawArea.FontTransparent = True
-                        .pbDrawArea.Font.Italic = True
-                        .pbDrawArea.Print dNote(i).Text
-                    End If
-                End If
-                .pbDrawArea.CurrentX = dAction(i).Left + (dAction(i).Width / 2) - (dAction(i).Width / 2)
-                .pbDrawArea.CurrentY = dAction(i).Top ' + (dAction(0).Height / 2)
-                If chkShowAll.Value = False Then
-                    .pbDrawArea.ForeColor = &H80000012
-                Else
-                    .pbDrawArea.ForeColor = &H80000012 '&HA4A4A4
-                End If
-                .pbDrawArea.DrawStyle = 0
-                .pbDrawArea.FontTransparent = True
-                .pbDrawArea.Font.Italic = False
-                .pbDrawArea.Print dAction(i).Text
-            End If
-        Next i
-        .pbDrawArea.DrawWidth = 5
-        .pbDrawArea.ForeColor = vbBlack
-        .pbDrawArea.Line (470, dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200)-((dLine(UBound(dLine)).Left + dLine(UBound(dLine)).Width), dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200)
-        .pbDrawArea.DrawWidth = 1
-    End With
+Private Sub CoordinateMouse()
+    On Error Resume Next
+    ret = GetCursorPos(a)
+    ScreenToClient Me.hwnd, a
+    b = a.X * Screen.TwipsPerPixelX
+    c = a.Y * Screen.TwipsPerPixelY
+    MouseX = b
+    MouseY = c + VScroll1.Value
 End Sub
 Private Sub UnloadControls()
 End Sub
@@ -610,15 +619,6 @@ Private Sub Form_Load()
     pbDrawArea.Width = picWindow.Width
     MouseXPrev = 0
     MouseYPrev = 0
-End Sub
-Private Sub CoordinateMouse()
-    On Error Resume Next
-    ret = GetCursorPos(a)
-    ScreenToClient Me.hwnd, a
-    b = a.X * Screen.TwipsPerPixelX
-    c = a.Y * Screen.TwipsPerPixelY
-    MouseX = b
-    MouseY = c + VScroll1.Value
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     UnloadControls
@@ -709,3 +709,4 @@ Private Sub VScroll1_Scroll()
     pbDrawArea.Top = -(VScroll1.Value)
     pbDrawArea.Refresh
 End Sub
+

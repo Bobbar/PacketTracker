@@ -158,7 +158,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   255197187
+            Format          =   170065923
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -183,7 +183,7 @@ Begin VB.Form frmReportFilter
             CalendarTitleBackColor=   -2147483635
             CalendarTrailingForeColor=   12632256
             CustomFormat    =   "MM-dd-yyyy"
-            Format          =   255197187
+            Format          =   42598403
             CurrentDate     =   40405
             MinDate         =   40405
          End
@@ -740,3 +740,4 @@ End Sub
 Private Sub MonthStart_Change()
     dtStartDate = MonthStart.Value
 End Sub
+

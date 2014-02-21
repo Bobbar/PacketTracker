@@ -1,5 +1,6 @@
 VERSION 5.00
 Object = "{0ECD9B60-23AA-11D0-B351-00A0C9055D8E}#6.0#0"; "MSHFLXGD.OCX"
+Object = "{86CF1D34-0C5F-11D2-A9FC-0000F8754DA1}#2.0#0"; "MSCOMCT2.OCX"
 Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Object = "{BDC217C8-ED16-11CD-956C-0000C04E4C0A}#1.1#0"; "TABCTL32.OCX"
@@ -8,7 +9,7 @@ Begin VB.Form Form1
    AutoRedraw      =   -1  'True
    BorderStyle     =   1  'Fixed Single
    Caption         =   "Job Packet Tracker"
-   ClientHeight    =   10530
+   ClientHeight    =   10935
    ClientLeft      =   45
    ClientTop       =   675
    ClientWidth     =   12285
@@ -24,15 +25,57 @@ Begin VB.Form Form1
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
    MaxButton       =   0   'False
-   ScaleHeight     =   10530
+   ScaleHeight     =   10935
    ScaleWidth      =   12285
    StartUpPosition =   2  'CenterScreen
+   Begin VB.Frame frmpBar 
+      BackColor       =   &H00C0C0C0&
+      BorderStyle     =   0  'None
+      Height          =   1575
+      Left            =   3480
+      TabIndex        =   158
+      Top             =   9360
+      Visible         =   0   'False
+      Width           =   5355
+      Begin ComctlLib.ProgressBar pBar 
+         Height          =   405
+         Left            =   120
+         TabIndex        =   159
+         Top             =   840
+         Width           =   5115
+         _ExtentX        =   9022
+         _ExtentY        =   714
+         _Version        =   327682
+         BorderStyle     =   1
+         Appearance      =   0
+      End
+      Begin VB.Label Label46 
+         Alignment       =   2  'Center
+         AutoSize        =   -1  'True
+         BackStyle       =   0  'Transparent
+         Caption         =   "Progress..."
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   9
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   330
+         Left            =   120
+         TabIndex        =   160
+         Top             =   360
+         Width           =   5190
+      End
+   End
    Begin ComctlLib.StatusBar StatusBar1 
       Align           =   2  'Align Bottom
       Height          =   375
       Left            =   0
       TabIndex        =   0
-      Top             =   10155
+      Top             =   10560
       Width           =   12285
       _ExtentX        =   21669
       _ExtentY        =   661
@@ -68,9 +111,9 @@ Begin VB.Form Form1
       Left            =   3480
       ScaleHeight     =   1155
       ScaleWidth      =   5595
-      TabIndex        =   105
+      TabIndex        =   102
       TabStop         =   0   'False
-      Top             =   0
+      Top             =   -960
       Width           =   5595
       Begin VB.Label lblClose 
          Alignment       =   2  'Center
@@ -91,7 +134,7 @@ Begin VB.Form Form1
          Left            =   4800
          MouseIcon       =   "Form1.frx":08CA
          MousePointer    =   2  'Cross
-         TabIndex        =   107
+         TabIndex        =   104
          Top             =   120
          Width           =   255
       End
@@ -134,7 +177,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   270
          Left            =   240
-         TabIndex        =   106
+         TabIndex        =   103
          Top             =   420
          Visible         =   0   'False
          Width           =   1260
@@ -144,7 +187,7 @@ Begin VB.Form Form1
       Height          =   9915
       Left            =   0
       TabIndex        =   1
-      Top             =   0
+      Top             =   60
       Width           =   12255
       _ExtentX        =   21616
       _ExtentY        =   17489
@@ -153,15 +196,15 @@ Begin VB.Form Form1
       Tabs            =   2
       Tab             =   1
       TabsPerRow      =   2
-      TabHeight       =   706
+      TabHeight       =   441
       ShowFocusRect   =   0   'False
       ForeColor       =   16738822
       BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
          Name            =   "Tahoma"
-         Size            =   11.25
+         Size            =   9.75
          Charset         =   0
          Weight          =   700
-         Underline       =   0   'False
+         Underline       =   -1  'True
          Italic          =   -1  'True
          Strikethrough   =   0   'False
       EndProperty
@@ -171,21 +214,555 @@ Begin VB.Form Form1
       Tab(0).Control(0)=   "cmdEdit"
       Tab(0).Control(0).Enabled=   0   'False
       Tab(0).Control(1)=   "frmTimers"
-      Tab(0).Control(2)=   "frmpBar"
-      Tab(0).Control(3)=   "SSTab1"
-      Tab(0).Control(4)=   "FramePacketInfo"
-      Tab(0).Control(5)=   "FrameTrackingInfo"
-      Tab(0).ControlCount=   6
+      Tab(0).Control(2)=   "SSTab1"
+      Tab(0).Control(3)=   "FramePacketInfo"
+      Tab(0).Control(4)=   "FrameTrackingInfo"
+      Tab(0).ControlCount=   5
       TabCaption(1)   =   "RFQs"
       TabPicture(1)   =   "Form1.frx":0D78
       Tab(1).ControlEnabled=   -1  'True
-      Tab(1).ControlCount=   0
+      Tab(1).Control(0)=   "SSTabRFQFunc"
+      Tab(1).Control(0).Enabled=   0   'False
+      Tab(1).Control(1)=   "FrameRFQNum"
+      Tab(1).Control(1).Enabled=   0   'False
+      Tab(1).Control(2)=   "SSTab2"
+      Tab(1).Control(2).Enabled=   0   'False
+      Tab(1).Control(3)=   "cmdRFQSubmit"
+      Tab(1).Control(3).Enabled=   0   'False
+      Tab(1).Control(4)=   "frmRFQTrack"
+      Tab(1).Control(4).Enabled=   0   'False
+      Tab(1).Control(5)=   "Frame2"
+      Tab(1).Control(5).Enabled=   0   'False
+      Tab(1).ControlCount=   6
+      Begin VB.Frame Frame2 
+         Caption         =   "Notes"
+         Height          =   1335
+         Left            =   2520
+         TabIndex        =   168
+         Top             =   3120
+         Width           =   6195
+         Begin VB.TextBox txtRFQNewNote 
+            Appearance      =   0  'Flat
+            Height          =   975
+            Left            =   180
+            TabIndex        =   169
+            Top             =   240
+            Width           =   5835
+         End
+      End
+      Begin VB.Frame frmRFQTrack 
+         Caption         =   "Tracking"
+         Height          =   4395
+         Left            =   9180
+         TabIndex        =   164
+         Top             =   240
+         Width           =   2955
+         Begin VB.TextBox txtRFQAssignedTo 
+            Alignment       =   2  'Center
+            Appearance      =   0  'Flat
+            Height          =   285
+            Left            =   120
+            TabIndex        =   166
+            Text            =   "Text2"
+            Top             =   600
+            Width           =   1215
+         End
+         Begin VB.Label Label32 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Assigned To"
+            Height          =   195
+            Left            =   300
+            TabIndex        =   165
+            Top             =   360
+            Width           =   870
+         End
+      End
+      Begin VB.CommandButton cmdRFQSubmit 
+         Caption         =   "Submit"
+         BeginProperty Font 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   700
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         Height          =   480
+         Left            =   360
+         TabIndex        =   153
+         Top             =   3600
+         Width           =   1530
+      End
+      Begin TabDlg.SSTab SSTab2 
+         Height          =   4875
+         Left            =   0
+         TabIndex        =   152
+         Top             =   4920
+         Width           =   12135
+         _ExtentX        =   21405
+         _ExtentY        =   8599
+         _Version        =   393216
+         TabHeight       =   520
+         TabCaption(0)   =   "History"
+         TabPicture(0)   =   "Form1.frx":0D94
+         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlCount=   0
+         TabCaption(1)   =   "Search"
+         TabPicture(1)   =   "Form1.frx":0DB0
+         Tab(1).ControlEnabled=   0   'False
+         Tab(1).ControlCount=   0
+         TabCaption(2)   =   "Reports"
+         TabPicture(2)   =   "Form1.frx":0DCC
+         Tab(2).ControlEnabled=   0   'False
+         Tab(2).ControlCount=   0
+      End
+      Begin VB.Frame FrameRFQNum 
+         Height          =   1455
+         Left            =   120
+         TabIndex        =   134
+         Top             =   600
+         Width           =   1995
+         Begin VB.CommandButton cmdRFQClear 
+            Caption         =   "Clear All"
+            Height          =   360
+            Left            =   900
+            TabIndex        =   155
+            Top             =   900
+            Width           =   930
+         End
+         Begin VB.CheckBox chkNew 
+            Caption         =   "New RFQ"
+            Height          =   375
+            Left            =   120
+            TabIndex        =   154
+            Top             =   900
+            Width           =   675
+         End
+         Begin VB.TextBox txtRFQNum 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   375
+            Left            =   120
+            TabIndex        =   135
+            Top             =   420
+            Width           =   1695
+         End
+         Begin VB.Label Label18 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "RFQ #:"
+            Height          =   195
+            Left            =   180
+            TabIndex        =   136
+            Top             =   180
+            Width           =   540
+         End
+      End
+      Begin TabDlg.SSTab SSTabRFQFunc 
+         Height          =   4395
+         Left            =   2220
+         TabIndex        =   133
+         Top             =   300
+         Width           =   6915
+         _ExtentX        =   12197
+         _ExtentY        =   7752
+         _Version        =   393216
+         Tabs            =   4
+         TabsPerRow      =   4
+         TabHeight       =   441
+         BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+            Name            =   "Tahoma"
+            Size            =   8.25
+            Charset         =   0
+            Weight          =   400
+            Underline       =   0   'False
+            Italic          =   0   'False
+            Strikethrough   =   0   'False
+         EndProperty
+         TabCaption(0)   =   "RFQ Info"
+         TabPicture(0)   =   "Form1.frx":0DE8
+         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).Control(0)=   "Frame1"
+         Tab(0).Control(0).Enabled=   0   'False
+         Tab(0).ControlCount=   1
+         TabCaption(1)   =   "Estimating"
+         TabPicture(1)   =   "Form1.frx":0E04
+         Tab(1).ControlEnabled=   0   'False
+         Tab(1).Control(0)=   "SSTab3"
+         Tab(1).ControlCount=   1
+         TabCaption(2)   =   "Engineering"
+         TabPicture(2)   =   "Form1.frx":0E20
+         Tab(2).ControlEnabled=   0   'False
+         Tab(2).Control(0)=   "Frame4"
+         Tab(2).ControlCount=   1
+         TabCaption(3)   =   "Links"
+         TabPicture(3)   =   "Form1.frx":0E3C
+         Tab(3).ControlEnabled=   0   'False
+         Tab(3).ControlCount=   0
+         Begin VB.Frame Frame4 
+            Caption         =   "Frame4"
+            Height          =   1995
+            Left            =   -74880
+            TabIndex        =   163
+            Top             =   600
+            Width           =   6675
+         End
+         Begin TabDlg.SSTab SSTab3 
+            Height          =   3915
+            Left            =   -74880
+            TabIndex        =   156
+            Top             =   360
+            Width           =   6675
+            _ExtentX        =   11774
+            _ExtentY        =   6906
+            _Version        =   393216
+            Tabs            =   2
+            Tab             =   1
+            TabsPerRow      =   2
+            TabHeight       =   441
+            TabCaption(0)   =   "Assign"
+            TabPicture(0)   =   "Form1.frx":0E58
+            Tab(0).ControlEnabled=   0   'False
+            Tab(0).Control(0)=   "Frame3"
+            Tab(0).ControlCount=   1
+            TabCaption(1)   =   "Complete"
+            TabPicture(1)   =   "Form1.frx":0E74
+            Tab(1).ControlEnabled=   -1  'True
+            Tab(1).Control(0)=   "Frame5"
+            Tab(1).Control(0).Enabled=   0   'False
+            Tab(1).ControlCount=   1
+            Begin VB.Frame Frame5 
+               Height          =   1995
+               Left            =   120
+               TabIndex        =   172
+               Top             =   420
+               Width           =   6195
+               Begin VB.ComboBox cmbMfgFac 
+                  Height          =   315
+                  Left            =   240
+                  Style           =   2  'Dropdown List
+                  TabIndex        =   175
+                  Top             =   540
+                  Width           =   2235
+               End
+               Begin VB.TextBox txtQuoteValue 
+                  Height          =   315
+                  Left            =   2880
+                  TabIndex        =   174
+                  Text            =   "Text2"
+                  Top             =   540
+                  Width           =   1575
+               End
+               Begin VB.TextBox txtEpicorRFQ 
+                  Height          =   315
+                  Left            =   240
+                  TabIndex        =   173
+                  Text            =   "%Epicor RFQ#%"
+                  Top             =   1260
+                  Width           =   2055
+               End
+               Begin VB.Label Label28 
+                  AutoSize        =   -1  'True
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Mfg Facility"
+                  Height          =   195
+                  Left            =   240
+                  TabIndex        =   178
+                  Top             =   300
+                  Width           =   810
+               End
+               Begin VB.Label Label30 
+                  AutoSize        =   -1  'True
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Quote Value"
+                  Height          =   195
+                  Left            =   2880
+                  TabIndex        =   177
+                  Top             =   300
+                  Width           =   885
+               End
+               Begin VB.Label Label31 
+                  AutoSize        =   -1  'True
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Epicor RFQ #"
+                  Height          =   195
+                  Left            =   240
+                  TabIndex        =   176
+                  Top             =   1020
+                  Width           =   960
+               End
+            End
+            Begin VB.Frame Frame3 
+               Height          =   1875
+               Left            =   -74880
+               TabIndex        =   157
+               Top             =   480
+               Width           =   6375
+               Begin VB.ComboBox cmdEstSendToDepartment 
+                  Height          =   315
+                  Left            =   540
+                  Style           =   2  'Dropdown List
+                  TabIndex        =   167
+                  Top             =   600
+                  Width           =   2055
+               End
+               Begin VB.ComboBox cmdEstSendTo 
+                  Height          =   315
+                  Left            =   3240
+                  Style           =   2  'Dropdown List
+                  TabIndex        =   162
+                  Top             =   600
+                  Width           =   2535
+               End
+               Begin VB.Label Label33 
+                  AutoSize        =   -1  'True
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "User"
+                  Height          =   195
+                  Left            =   3240
+                  TabIndex        =   171
+                  Top             =   360
+                  Width           =   855
+               End
+               Begin VB.Label Label29 
+                  AutoSize        =   -1  'True
+                  BackStyle       =   0  'Transparent
+                  Caption         =   "Department"
+                  Height          =   195
+                  Left            =   540
+                  TabIndex        =   170
+                  Top             =   360
+                  Width           =   855
+               End
+            End
+         End
+         Begin VB.Frame Frame1 
+            Height          =   2415
+            Left            =   120
+            TabIndex        =   137
+            Top             =   360
+            Width           =   6495
+            Begin VB.CommandButton Command1 
+               Caption         =   "Command1"
+               Height          =   360
+               Left            =   5220
+               TabIndex        =   161
+               Top             =   1800
+               Width           =   990
+            End
+            Begin VB.ComboBox cmdPriority 
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   405
+               Left            =   2580
+               Style           =   2  'Dropdown List
+               TabIndex        =   143
+               Top             =   1860
+               Width           =   2355
+            End
+            Begin VB.TextBox txtQuantity 
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   375
+               Left            =   5100
+               TabIndex        =   142
+               Top             =   1140
+               Width           =   1215
+            End
+            Begin VB.ComboBox cmdMFGFacility 
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   405
+               Left            =   2580
+               Style           =   2  'Dropdown List
+               TabIndex        =   141
+               Top             =   1140
+               Width           =   2355
+            End
+            Begin VB.ComboBox cmdProductType 
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   405
+               Left            =   120
+               Style           =   2  'Dropdown List
+               TabIndex        =   140
+               Top             =   1140
+               Width           =   2295
+            End
+            Begin VB.TextBox txtRFQDescription 
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   375
+               Left            =   2580
+               TabIndex        =   139
+               Top             =   480
+               Width           =   3735
+            End
+            Begin VB.TextBox txtRFQCustomer 
+               Appearance      =   0  'Flat
+               BeginProperty Font 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Height          =   375
+               Left            =   120
+               TabIndex        =   138
+               Top             =   480
+               Width           =   2295
+            End
+            Begin MSComCtl2.DTPicker DTNeedBy 
+               Height          =   375
+               Left            =   120
+               TabIndex        =   144
+               Top             =   1860
+               Width           =   2295
+               _ExtentX        =   4048
+               _ExtentY        =   661
+               _Version        =   393216
+               BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
+                  Name            =   "Tahoma"
+                  Size            =   12
+                  Charset         =   0
+                  Weight          =   400
+                  Underline       =   0   'False
+                  Italic          =   0   'False
+                  Strikethrough   =   0   'False
+               EndProperty
+               Format          =   264962049
+               CurrentDate     =   41656
+            End
+            Begin VB.Label Label27 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Priority"
+               Height          =   195
+               Left            =   2640
+               TabIndex        =   151
+               Top             =   1620
+               Width           =   510
+            End
+            Begin VB.Label Label26 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Need By"
+               Height          =   195
+               Left            =   120
+               TabIndex        =   150
+               Top             =   1620
+               Width           =   600
+            End
+            Begin VB.Label Label23 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Quantity"
+               Height          =   195
+               Left            =   5100
+               TabIndex        =   149
+               Top             =   900
+               Width           =   630
+            End
+            Begin VB.Label Label22 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Mfg. Facility"
+               Height          =   195
+               Left            =   2640
+               TabIndex        =   148
+               Top             =   900
+               Width           =   870
+            End
+            Begin VB.Label Label21 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Product Type"
+               Height          =   195
+               Left            =   120
+               TabIndex        =   147
+               Top             =   900
+               Width           =   960
+            End
+            Begin VB.Label Label20 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Description"
+               Height          =   195
+               Left            =   2640
+               TabIndex        =   146
+               Top             =   240
+               Width           =   795
+            End
+            Begin VB.Label Label19 
+               AutoSize        =   -1  'True
+               BackStyle       =   0  'Transparent
+               Caption         =   "Customer"
+               Height          =   195
+               Left            =   120
+               TabIndex        =   145
+               Top             =   240
+               Width           =   690
+            End
+         End
+      End
       Begin VB.CommandButton cmdEdit 
          Height          =   375
          Left            =   -67920
          MaskColor       =   &H00FFFFFF&
          Style           =   1  'Graphical
-         TabIndex        =   6
+         TabIndex        =   3
          TabStop         =   0   'False
          ToolTipText     =   "Edit Field"
          Top             =   1080
@@ -263,61 +840,19 @@ Begin VB.Form Form1
             _Version        =   393216
          End
       End
-      Begin VB.Frame frmpBar 
-         BackColor       =   &H00C0C0C0&
-         BorderStyle     =   0  'None
-         Height          =   1575
-         Left            =   -71160
-         TabIndex        =   3
-         Top             =   6000
-         Visible         =   0   'False
-         Width           =   5355
-         Begin ComctlLib.ProgressBar pBar 
-            Height          =   405
-            Left            =   120
-            TabIndex        =   4
-            Top             =   840
-            Width           =   5115
-            _ExtentX        =   9022
-            _ExtentY        =   714
-            _Version        =   327682
-            BorderStyle     =   1
-            Appearance      =   0
-         End
-         Begin VB.Label Label46 
-            Alignment       =   2  'Center
-            AutoSize        =   -1  'True
-            BackStyle       =   0  'Transparent
-            Caption         =   "Progress..."
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   9
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   330
-            Left            =   120
-            TabIndex        =   5
-            Top             =   360
-            Width           =   5190
-         End
-      End
       Begin TabDlg.SSTab SSTab1 
          CausesValidation=   0   'False
          Height          =   5175
          Left            =   -74880
-         TabIndex        =   7
+         TabIndex        =   4
          ToolTipText     =   "Click to expand"
-         Top             =   4620
+         Top             =   4560
          Width           =   12015
          _ExtentX        =   21193
          _ExtentY        =   9128
          _Version        =   393216
          Tabs            =   5
-         Tab             =   3
+         Tab             =   1
          TabsPerRow      =   5
          TabHeight       =   706
          WordWrap        =   0   'False
@@ -332,42 +867,124 @@ Begin VB.Form Form1
             Strikethrough   =   0   'False
          EndProperty
          TabCaption(0)   =   "History"
-         TabPicture(0)   =   "Form1.frx":0D94
+         TabPicture(0)   =   "Form1.frx":0E90
          Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "FrameHistory"
          Tab(0).ControlCount=   1
          TabCaption(1)   =   "Attachments"
-         TabPicture(1)   =   "Form1.frx":12C4
-         Tab(1).ControlEnabled=   0   'False
+         TabPicture(1)   =   "Form1.frx":13C0
+         Tab(1).ControlEnabled=   -1  'True
          Tab(1).Control(0)=   "FrameAttachments"
+         Tab(1).Control(0).Enabled=   0   'False
          Tab(1).ControlCount=   1
          TabCaption(2)   =   "Search"
-         TabPicture(2)   =   "Form1.frx":1485
+         TabPicture(2)   =   "Form1.frx":1581
          Tab(2).ControlEnabled=   0   'False
          Tab(2).Control(0)=   "FrameSearch"
          Tab(2).ControlCount=   1
          TabCaption(3)   =   "Incoming"
-         TabPicture(3)   =   "Form1.frx":1957
-         Tab(3).ControlEnabled=   -1  'True
+         TabPicture(3)   =   "Form1.frx":1A53
+         Tab(3).ControlEnabled=   0   'False
          Tab(3).Control(0)=   "FrameIncoming"
-         Tab(3).Control(0).Enabled=   0   'False
          Tab(3).ControlCount=   1
          TabCaption(4)   =   "On-Hand"
-         TabPicture(4)   =   "Form1.frx":1AF1
+         TabPicture(4)   =   "Form1.frx":1BED
          Tab(4).ControlEnabled=   0   'False
          Tab(4).Control(0)=   "FrameOnHand"
          Tab(4).ControlCount=   1
          Begin VB.Frame FrameOnHand 
             Height          =   4575
             Left            =   -74880
-            TabIndex        =   123
+            TabIndex        =   120
             Top             =   480
             Width           =   11775
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   3
+               Left            =   10920
+               TabIndex        =   121
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   127
+                  Top             =   1200
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   126
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   125
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   124
+                  Top             =   0
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   123
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   3
+                  Left            =   0
+                  TabIndex        =   122
+                  Top             =   480
+                  Width           =   765
+               End
+            End
             Begin VB.CommandButton cmdGetOutBox 
                Caption         =   "Refresh Packets"
                Height          =   360
                Left            =   120
-               TabIndex        =   132
+               TabIndex        =   129
                TabStop         =   0   'False
                ToolTipText     =   "Maually refresh my packets"
                Top             =   420
@@ -378,107 +995,19 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":21E3
+               Picture         =   "Form1.frx":22DF
                Style           =   1  'Graphical
-               TabIndex        =   131
+               TabIndex        =   128
                TabStop         =   0   'False
                ToolTipText     =   "Print Report"
                Top             =   3600
                UseMaskColor    =   -1  'True
                Width           =   855
             End
-            Begin VB.Frame frmKey 
-               BorderStyle     =   0  'None
-               Height          =   1455
-               Index           =   3
-               Left            =   10920
-               TabIndex        =   124
-               Top             =   3000
-               Visible         =   0   'False
-               Width           =   768
-               Begin VB.Label lblReopened 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF80FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Reopened"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   130
-                  Top             =   1200
-                  Width           =   765
-               End
-               Begin VB.Label lblFiled 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF8080&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Filed"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   129
-                  Top             =   960
-                  Width           =   765
-               End
-               Begin VB.Label lblClosed 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H008080FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Closed"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   128
-                  Top             =   720
-                  Width           =   765
-               End
-               Begin VB.Label lblCreated 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080C0FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Created"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   127
-                  Top             =   0
-                  Width           =   765
-               End
-               Begin VB.Label lblInTransit 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FF80&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "In-Transit"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   126
-                  Top             =   240
-                  Width           =   765
-               End
-               Begin VB.Label lblReceived 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FFFF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Received"
-                  Height          =   195
-                  Index           =   3
-                  Left            =   0
-                  TabIndex        =   125
-                  Top             =   480
-                  Width           =   765
-               End
-            End
             Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridOUT 
                Height          =   4215
                Left            =   1560
-               TabIndex        =   133
+               TabIndex        =   130
                TabStop         =   0   'False
                Top             =   240
                Width           =   10095
@@ -517,7 +1046,7 @@ Begin VB.Form Form1
                Caption         =   "On-hand Packets"
                Height          =   195
                Left            =   6120
-               TabIndex        =   135
+               TabIndex        =   132
                Top             =   2160
                Width           =   1230
             End
@@ -533,7 +1062,7 @@ Begin VB.Form Form1
                Height          =   255
                Index           =   3
                Left            =   120
-               TabIndex        =   134
+               TabIndex        =   131
                Top             =   2880
                Width           =   1335
             End
@@ -541,7 +1070,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":3D77
+               Picture         =   "Form1.frx":3E73
                ToolTipText     =   "Open grid in a new window"
                Top             =   1080
                Width           =   450
@@ -549,15 +1078,97 @@ Begin VB.Form Form1
          End
          Begin VB.Frame FrameIncoming 
             Height          =   4575
-            Left            =   120
-            TabIndex        =   110
+            Left            =   -74880
+            TabIndex        =   107
             Top             =   480
             Width           =   11775
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   2
+               Left            =   10920
+               TabIndex        =   108
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   114
+                  Top             =   1200
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   113
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   112
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   111
+                  Top             =   480
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   110
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   2
+                  Left            =   0
+                  TabIndex        =   109
+                  Top             =   0
+                  Width           =   765
+               End
+            End
             Begin VB.CommandButton cmdGetInBox 
                Caption         =   "Refresh Packets"
                Height          =   360
                Left            =   120
-               TabIndex        =   119
+               TabIndex        =   116
                TabStop         =   0   'False
                ToolTipText     =   "Maually refresh my packets"
                Top             =   420
@@ -568,107 +1179,19 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":3E6C
+               Picture         =   "Form1.frx":3F68
                Style           =   1  'Graphical
-               TabIndex        =   118
+               TabIndex        =   115
                TabStop         =   0   'False
                ToolTipText     =   "Print Report"
                Top             =   3600
                UseMaskColor    =   -1  'True
                Width           =   855
             End
-            Begin VB.Frame frmKey 
-               BorderStyle     =   0  'None
-               Height          =   1455
-               Index           =   2
-               Left            =   10920
-               TabIndex        =   111
-               Top             =   3000
-               Visible         =   0   'False
-               Width           =   768
-               Begin VB.Label lblReopened 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF80FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Reopened"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   117
-                  Top             =   1200
-                  Width           =   765
-               End
-               Begin VB.Label lblFiled 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF8080&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Filed"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   116
-                  Top             =   960
-                  Width           =   765
-               End
-               Begin VB.Label lblClosed 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H008080FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Closed"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   115
-                  Top             =   720
-                  Width           =   765
-               End
-               Begin VB.Label lblReceived 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FFFF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Received"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   114
-                  Top             =   480
-                  Width           =   765
-               End
-               Begin VB.Label lblInTransit 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FF80&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "In-Transit"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   113
-                  Top             =   240
-                  Width           =   765
-               End
-               Begin VB.Label lblCreated 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080C0FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Created"
-                  Height          =   195
-                  Index           =   2
-                  Left            =   0
-                  TabIndex        =   112
-                  Top             =   0
-                  Width           =   765
-               End
-            End
             Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridIN 
                Height          =   4215
                Left            =   1560
-               TabIndex        =   120
+               TabIndex        =   117
                TabStop         =   0   'False
                Top             =   240
                Width           =   10095
@@ -702,7 +1225,7 @@ Begin VB.Form Form1
                Caption         =   "Incoming Packets"
                Height          =   195
                Left            =   6120
-               TabIndex        =   122
+               TabIndex        =   119
                Top             =   2160
                Width           =   1245
             End
@@ -724,7 +1247,7 @@ Begin VB.Form Form1
                Height          =   255
                Index           =   2
                Left            =   120
-               TabIndex        =   121
+               TabIndex        =   118
                Top             =   2880
                Width           =   1335
             End
@@ -732,7 +1255,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":5A00
+               Picture         =   "Form1.frx":5AFC
                ToolTipText     =   "Open grid in a new window"
                Top             =   1080
                Width           =   450
@@ -742,13 +1265,95 @@ Begin VB.Form Form1
             ClipControls    =   0   'False
             Height          =   4575
             Left            =   -74880
-            TabIndex        =   30
+            TabIndex        =   27
             Top             =   480
             Width           =   11775
+            Begin VB.Frame frmKey 
+               BorderStyle     =   0  'None
+               Height          =   1455
+               Index           =   0
+               Left            =   10920
+               TabIndex        =   28
+               Top             =   3000
+               Visible         =   0   'False
+               Width           =   768
+               Begin VB.Label lblCreated 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080C0FF&
+                  Caption         =   "Created"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   34
+                  Top             =   0
+                  Width           =   765
+               End
+               Begin VB.Label lblInTransit 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FF80&
+                  Caption         =   "In-Transit"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   33
+                  Top             =   240
+                  Width           =   765
+               End
+               Begin VB.Label lblReceived 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H0080FFFF&
+                  Caption         =   "Received"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   32
+                  Top             =   480
+                  Width           =   765
+               End
+               Begin VB.Label lblClosed 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H008080FF&
+                  Caption         =   "Closed"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   31
+                  Top             =   720
+                  Width           =   765
+               End
+               Begin VB.Label lblFiled 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF8080&
+                  Caption         =   "Filed"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   30
+                  Top             =   960
+                  Width           =   765
+               End
+               Begin VB.Label lblReopened 
+                  Alignment       =   2  'Center
+                  AutoSize        =   -1  'True
+                  BackColor       =   &H00FF80FF&
+                  Caption         =   "Reopened"
+                  Height          =   195
+                  Index           =   0
+                  Left            =   0
+                  TabIndex        =   29
+                  Top             =   1200
+                  Width           =   765
+               End
+            End
             Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexGridHist 
                Height          =   4215
                Left            =   1560
-               TabIndex        =   42
+               TabIndex        =   39
                TabStop         =   0   'False
                Top             =   240
                Visible         =   0   'False
@@ -787,7 +1392,7 @@ Begin VB.Form Form1
                Caption         =   "Refresh History"
                Height          =   360
                Left            =   120
-               TabIndex        =   41
+               TabIndex        =   38
                TabStop         =   0   'False
                ToolTipText     =   "Manually refresh history data"
                Top             =   360
@@ -798,9 +1403,9 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":5AF5
+               Picture         =   "Form1.frx":5BF1
                Style           =   1  'Graphical
-               TabIndex        =   40
+               TabIndex        =   37
                TabStop         =   0   'False
                ToolTipText     =   "Print History"
                Top             =   3600
@@ -811,7 +1416,7 @@ Begin VB.Form Form1
                Caption         =   "View Timeline"
                Height          =   480
                Left            =   120
-               TabIndex        =   39
+               TabIndex        =   36
                TabStop         =   0   'False
                ToolTipText     =   "Displays a visual representation of packet activity"
                Top             =   960
@@ -828,99 +1433,11 @@ Begin VB.Form Form1
                Left            =   1560
                ScaleHeight     =   300
                ScaleWidth      =   9810
-               TabIndex        =   38
+               TabIndex        =   35
                TabStop         =   0   'False
                Top             =   4140
                Visible         =   0   'False
                Width           =   9810
-            End
-            Begin VB.Frame frmKey 
-               BorderStyle     =   0  'None
-               Height          =   1455
-               Index           =   0
-               Left            =   10920
-               TabIndex        =   31
-               Top             =   3000
-               Visible         =   0   'False
-               Width           =   768
-               Begin VB.Label lblCreated 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080C0FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Created"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   37
-                  Top             =   0
-                  Width           =   765
-               End
-               Begin VB.Label lblInTransit 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FF80&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "In-Transit"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   36
-                  Top             =   240
-                  Width           =   765
-               End
-               Begin VB.Label lblReceived 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H0080FFFF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Received"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   35
-                  Top             =   480
-                  Width           =   765
-               End
-               Begin VB.Label lblClosed 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H008080FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Closed"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   34
-                  Top             =   720
-                  Width           =   765
-               End
-               Begin VB.Label lblFiled 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF8080&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Filed"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   33
-                  Top             =   960
-                  Width           =   765
-               End
-               Begin VB.Label lblReopened 
-                  Alignment       =   2  'Center
-                  AutoSize        =   -1  'True
-                  BackColor       =   &H00FF80FF&
-                  BackStyle       =   0  'Transparent
-                  Caption         =   "Reopened"
-                  Height          =   195
-                  Index           =   0
-                  Left            =   0
-                  TabIndex        =   32
-                  Top             =   1200
-                  Width           =   765
-               End
             End
             Begin VB.TextBox Text1 
                Alignment       =   2  'Center
@@ -937,7 +1454,7 @@ Begin VB.Form Form1
                Height          =   360
                Left            =   1320
                MultiLine       =   -1  'True
-               TabIndex        =   43
+               TabIndex        =   40
                TabStop         =   0   'False
                Top             =   240
                Visible         =   0   'False
@@ -950,7 +1467,7 @@ Begin VB.Form Form1
                Caption         =   "History Viewer"
                Height          =   195
                Left            =   6120
-               TabIndex        =   45
+               TabIndex        =   42
                Top             =   2160
                Width           =   1035
             End
@@ -964,7 +1481,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":7689
+               Picture         =   "Form1.frx":7785
                ToolTipText     =   "Open grid in a new window"
                Top             =   1560
                Width           =   450
@@ -981,7 +1498,7 @@ Begin VB.Form Form1
                Height          =   255
                Index           =   0
                Left            =   120
-               TabIndex        =   44
+               TabIndex        =   41
                Top             =   2880
                Width           =   1335
             End
@@ -989,25 +1506,15 @@ Begin VB.Form Form1
          Begin VB.Frame FrameSearch 
             Height          =   4575
             Left            =   -74880
-            TabIndex        =   14
+            TabIndex        =   11
             Top             =   480
             Width           =   11775
-            Begin VB.CommandButton cmdAllClosedReport 
-               Caption         =   "All Closed"
-               Height          =   360
-               Left            =   120
-               TabIndex        =   27
-               TabStop         =   0   'False
-               ToolTipText     =   "Display all currently closed packets"
-               Top             =   1200
-               Width           =   1335
-            End
             Begin VB.Frame frmKey 
                BorderStyle     =   0  'None
                Height          =   1455
                Index           =   1
                Left            =   10920
-               TabIndex        =   19
+               TabIndex        =   16
                Top             =   3000
                Visible         =   0   'False
                Width           =   768
@@ -1015,12 +1522,11 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H0080C0FF&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "Created"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   25
+                  TabIndex        =   22
                   Top             =   0
                   Width           =   765
                End
@@ -1028,12 +1534,11 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H0080FF80&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "In-Transit"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   24
+                  TabIndex        =   21
                   Top             =   240
                   Width           =   765
                End
@@ -1041,12 +1546,11 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H0080FFFF&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "Received"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   23
+                  TabIndex        =   20
                   Top             =   480
                   Width           =   765
                End
@@ -1054,12 +1558,11 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H008080FF&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "Closed"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   22
+                  TabIndex        =   19
                   Top             =   720
                   Width           =   765
                End
@@ -1067,12 +1570,11 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H00FF8080&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "Filed"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   21
+                  TabIndex        =   18
                   Top             =   960
                   Width           =   765
                End
@@ -1080,21 +1582,30 @@ Begin VB.Form Form1
                   Alignment       =   2  'Center
                   AutoSize        =   -1  'True
                   BackColor       =   &H00FF80FF&
-                  BackStyle       =   0  'Transparent
                   Caption         =   "Reopened"
                   Height          =   195
                   Index           =   1
                   Left            =   0
-                  TabIndex        =   20
+                  TabIndex        =   17
                   Top             =   1200
                   Width           =   765
                End
+            End
+            Begin VB.CommandButton cmdAllClosedReport 
+               Caption         =   "All Closed"
+               Height          =   360
+               Left            =   120
+               TabIndex        =   24
+               TabStop         =   0   'False
+               ToolTipText     =   "Display all currently closed packets"
+               Top             =   1200
+               Width           =   1335
             End
             Begin VB.CommandButton cmdAllOpenReport 
                Caption         =   "All Opened"
                Height          =   360
                Left            =   120
-               TabIndex        =   18
+               TabIndex        =   15
                TabStop         =   0   'False
                ToolTipText     =   "Display all currently open packets"
                Top             =   795
@@ -1113,7 +1624,7 @@ Begin VB.Form Form1
                EndProperty
                Height          =   480
                Left            =   120
-               TabIndex        =   17
+               TabIndex        =   14
                TabStop         =   0   'False
                ToolTipText     =   "Run a custom filtered search"
                Top             =   240
@@ -1124,9 +1635,9 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":777E
+               Picture         =   "Form1.frx":787A
                Style           =   1  'Graphical
-               TabIndex        =   16
+               TabIndex        =   13
                TabStop         =   0   'False
                ToolTipText     =   "Print Report"
                Top             =   3600
@@ -1137,7 +1648,7 @@ Begin VB.Form Form1
                Caption         =   "Entry Heat Map"
                Height          =   360
                Left            =   0
-               TabIndex        =   15
+               TabIndex        =   12
                ToolTipText     =   "Shows heat map of packet entries. (More entries = hotter)"
                Top             =   4200
                Visible         =   0   'False
@@ -1146,7 +1657,7 @@ Begin VB.Form Form1
             Begin MSHierarchicalFlexGridLib.MSHFlexGrid Flexgrid1 
                Height          =   4215
                Left            =   1560
-               TabIndex        =   26
+               TabIndex        =   23
                TabStop         =   0   'False
                Top             =   240
                Visible         =   0   'False
@@ -1188,7 +1699,7 @@ Begin VB.Form Form1
                Height          =   255
                Index           =   1
                Left            =   120
-               TabIndex        =   29
+               TabIndex        =   26
                Top             =   2880
                Width           =   1335
             End
@@ -1196,7 +1707,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":9312
+               Picture         =   "Form1.frx":940E
                ToolTipText     =   "Open grid in a new window"
                Top             =   1680
                Width           =   450
@@ -1207,7 +1718,7 @@ Begin VB.Form Form1
                Caption         =   "Packet Search"
                Height          =   195
                Left            =   6120
-               TabIndex        =   28
+               TabIndex        =   25
                Top             =   2160
                Width           =   555
             End
@@ -1220,8 +1731,8 @@ Begin VB.Form Form1
          End
          Begin VB.Frame FrameAttachments 
             Height          =   4575
-            Left            =   -74880
-            TabIndex        =   8
+            Left            =   120
+            TabIndex        =   5
             Top             =   480
             Width           =   11775
             Begin VB.CommandButton cmdNew 
@@ -1237,7 +1748,7 @@ Begin VB.Form Form1
                EndProperty
                Height          =   360
                Left            =   120
-               TabIndex        =   11
+               TabIndex        =   8
                Top             =   420
                Width           =   1335
             End
@@ -1245,7 +1756,7 @@ Begin VB.Form Form1
                Caption         =   "Save to"
                Height          =   360
                Left            =   120
-               TabIndex        =   10
+               TabIndex        =   7
                Top             =   1020
                Width           =   1335
             End
@@ -1253,14 +1764,14 @@ Begin VB.Form Form1
                Caption         =   "Delete"
                Height          =   240
                Left            =   120
-               TabIndex        =   9
+               TabIndex        =   6
                Top             =   4140
                Width           =   1335
             End
             Begin MSHierarchicalFlexGridLib.MSHFlexGrid FlexAttach 
                Height          =   4215
                Left            =   1560
-               TabIndex        =   12
+               TabIndex        =   9
                Top             =   240
                Visible         =   0   'False
                Width           =   10095
@@ -1290,7 +1801,7 @@ Begin VB.Form Form1
                Caption         =   "No Attachments"
                Height          =   195
                Left            =   1620
-               TabIndex        =   13
+               TabIndex        =   10
                Top             =   2100
                Width           =   9915
             End
@@ -1306,13 +1817,33 @@ Begin VB.Form Form1
          Caption         =   "Packet Info."
          Height          =   3975
          Left            =   -74880
-         TabIndex        =   73
+         TabIndex        =   70
          Top             =   480
          Width           =   7215
+         Begin VB.ListBox List1 
+            Appearance      =   0  'Flat
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   12
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            Height          =   1455
+            Left            =   240
+            Sorted          =   -1  'True
+            TabIndex        =   74
+            TabStop         =   0   'False
+            Top             =   960
+            Visible         =   0   'False
+            Width           =   2055
+         End
          Begin MSComctlLib.ImageCombo cmbUsers 
             Height          =   330
             Left            =   1680
-            TabIndex        =   76
+            TabIndex        =   73
             Top             =   2220
             Visible         =   0   'False
             Width           =   2235
@@ -1331,37 +1862,18 @@ Begin VB.Form Form1
                Strikethrough   =   0   'False
             EndProperty
          End
-         Begin VB.ListBox List1 
-            Appearance      =   0  'Flat
-            BeginProperty Font 
-               Name            =   "Tahoma"
-               Size            =   12
-               Charset         =   0
-               Weight          =   400
-               Underline       =   0   'False
-               Italic          =   0   'False
-               Strikethrough   =   0   'False
-            EndProperty
-            Height          =   1455
-            Left            =   240
-            Sorted          =   -1  'True
-            TabIndex        =   77
-            TabStop         =   0   'False
-            Top             =   960
-            Visible         =   0   'False
-            Width           =   2055
-         End
          Begin VB.Frame Frame8 
             Height          =   735
             Left            =   5010
-            TabIndex        =   93
+            TabIndex        =   90
             Top             =   3205
+            Visible         =   0   'False
             Width           =   2175
             Begin VB.CommandButton cmdShowMore 
                Caption         =   "Show Tabs"
                Height          =   360
                Left            =   480
-               TabIndex        =   94
+               TabIndex        =   91
                TabStop         =   0   'False
                ToolTipText     =   "Show additional features"
                Top             =   240
@@ -1383,7 +1895,7 @@ Begin VB.Form Form1
                EndProperty
                Height          =   345
                Left            =   80
-               TabIndex        =   95
+               TabIndex        =   92
                Top             =   240
                Width           =   405
             End
@@ -1403,7 +1915,7 @@ Begin VB.Form Form1
             Left            =   2520
             Locked          =   -1  'True
             MaxLength       =   40
-            TabIndex        =   92
+            TabIndex        =   89
             Top             =   2040
             Width           =   2055
          End
@@ -1423,7 +1935,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   255
             Left            =   180
-            TabIndex        =   91
+            TabIndex        =   88
             Top             =   3120
             Width           =   1815
          End
@@ -1443,7 +1955,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   330
             Left            =   180
-            TabIndex        =   90
+            TabIndex        =   87
             Top             =   2730
             Width           =   1695
          End
@@ -1462,7 +1974,7 @@ Begin VB.Form Form1
             Left            =   4800
             Locked          =   -1  'True
             MaxLength       =   40
-            TabIndex        =   89
+            TabIndex        =   86
             Top             =   1320
             Width           =   2175
          End
@@ -1481,7 +1993,7 @@ Begin VB.Form Form1
             Left            =   4800
             Locked          =   -1  'True
             MaxLength       =   40
-            TabIndex        =   88
+            TabIndex        =   85
             Top             =   2040
             Width           =   2175
          End
@@ -1500,7 +2012,7 @@ Begin VB.Form Form1
             Left            =   2520
             Locked          =   -1  'True
             MaxLength       =   40
-            TabIndex        =   87
+            TabIndex        =   84
             Top             =   1320
             Width           =   2055
          End
@@ -1517,7 +2029,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   360
             Left            =   240
-            TabIndex        =   86
+            TabIndex        =   83
             Top             =   1080
             Width           =   990
          End
@@ -1537,7 +2049,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   255
             Left            =   180
-            TabIndex        =   85
+            TabIndex        =   82
             Top             =   2400
             Width           =   1935
          End
@@ -1556,7 +2068,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   255
             Left            =   180
-            TabIndex        =   84
+            TabIndex        =   81
             TabStop         =   0   'False
             Top             =   1680
             Width           =   1455
@@ -1575,7 +2087,7 @@ Begin VB.Form Form1
             Height          =   375
             Left            =   240
             MaxLength       =   15
-            TabIndex        =   83
+            TabIndex        =   80
             Top             =   600
             Width           =   2055
          End
@@ -1583,7 +2095,7 @@ Begin VB.Form Form1
             Caption         =   "Clear All"
             Height          =   360
             Left            =   1440
-            TabIndex        =   82
+            TabIndex        =   79
             Top             =   1080
             Width           =   855
          End
@@ -1602,7 +2114,7 @@ Begin VB.Form Form1
             Left            =   2520
             Locked          =   -1  'True
             MaxLength       =   100
-            TabIndex        =   81
+            TabIndex        =   78
             Top             =   600
             Width           =   4455
          End
@@ -1622,7 +2134,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   255
             Left            =   180
-            TabIndex        =   80
+            TabIndex        =   77
             Top             =   2040
             Width           =   2175
          End
@@ -1642,7 +2154,7 @@ Begin VB.Form Form1
             ForeColor       =   &H80000008&
             Height          =   195
             Left            =   180
-            TabIndex        =   79
+            TabIndex        =   76
             Top             =   3510
             Width           =   1455
          End
@@ -1661,7 +2173,7 @@ Begin VB.Form Form1
             Height          =   405
             Left            =   4800
             Style           =   2  'Dropdown List
-            TabIndex        =   78
+            TabIndex        =   75
             Top             =   2760
             Width           =   2175
          End
@@ -1673,7 +2185,7 @@ Begin VB.Form Form1
             Left            =   2040
             ScaleHeight     =   855
             ScaleWidth      =   2295
-            TabIndex        =   74
+            TabIndex        =   71
             TabStop         =   0   'False
             Top             =   3060
             Width           =   2295
@@ -1693,7 +2205,7 @@ Begin VB.Form Form1
                Height          =   465
                Left            =   240
                MaskColor       =   &H000000FF&
-               TabIndex        =   75
+               TabIndex        =   72
                ToolTipText     =   "Submit update"
                Top             =   180
                Width           =   1815
@@ -1714,7 +2226,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   2520
-            TabIndex        =   104
+            TabIndex        =   101
             Top             =   1080
             Width           =   1260
          End
@@ -1733,7 +2245,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   2520
-            TabIndex        =   103
+            TabIndex        =   100
             Top             =   1800
             Width           =   1590
          End
@@ -1752,7 +2264,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   4800
-            TabIndex        =   102
+            TabIndex        =   99
             Top             =   1800
             Width           =   1575
          End
@@ -1771,7 +2283,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   240
-            TabIndex        =   101
+            TabIndex        =   98
             Top             =   360
             Width           =   1005
          End
@@ -1790,7 +2302,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   4800
-            TabIndex        =   100
+            TabIndex        =   97
             Top             =   1080
             Width           =   750
          End
@@ -1809,7 +2321,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   2520
-            TabIndex        =   99
+            TabIndex        =   96
             Top             =   360
             Width           =   960
          End
@@ -1828,7 +2340,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   4800
-            TabIndex        =   98
+            TabIndex        =   95
             Top             =   2520
             Width           =   435
          End
@@ -1837,7 +2349,7 @@ Begin VB.Form Form1
             BackStyle       =   0  'Transparent
             Height          =   195
             Left            =   2160
-            TabIndex        =   97
+            TabIndex        =   94
             Top             =   2940
             Visible         =   0   'False
             Width           =   45
@@ -1859,7 +2371,7 @@ Begin VB.Form Form1
             ForeColor       =   &H00008000&
             Height          =   165
             Left            =   4080
-            TabIndex        =   96
+            TabIndex        =   93
             ToolTipText     =   "Current Chars / Max Chars"
             Top             =   1800
             Visible         =   0   'False
@@ -1869,7 +2381,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   555
             Left            =   4080
-            Picture         =   "Form1.frx":9407
+            Picture         =   "Form1.frx":9503
             ToolTipText     =   "Add Note"
             Top             =   2520
             Width           =   540
@@ -1879,7 +2391,7 @@ Begin VB.Form Form1
          Caption         =   "Tracking Info."
          Height          =   3975
          Left            =   -67620
-         TabIndex        =   46
+         TabIndex        =   43
          Top             =   480
          Width           =   4695
          Begin VB.TextBox txtTicketOwner 
@@ -1888,7 +2400,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   2520
             Locked          =   -1  'True
-            TabIndex        =   60
+            TabIndex        =   57
             TabStop         =   0   'False
             Top             =   1800
             Width           =   1935
@@ -1899,7 +2411,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   240
             Locked          =   -1  'True
-            TabIndex        =   59
+            TabIndex        =   56
             TabStop         =   0   'False
             Top             =   2400
             Width           =   1815
@@ -1910,7 +2422,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   2520
             Locked          =   -1  'True
-            TabIndex        =   58
+            TabIndex        =   55
             TabStop         =   0   'False
             Top             =   2400
             Width           =   1935
@@ -1922,7 +2434,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   240
             Locked          =   -1  'True
-            TabIndex        =   57
+            TabIndex        =   54
             TabStop         =   0   'False
             Top             =   600
             Width           =   2055
@@ -1933,7 +2445,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   240
             Locked          =   -1  'True
-            TabIndex        =   56
+            TabIndex        =   53
             TabStop         =   0   'False
             Top             =   1800
             Width           =   1815
@@ -1946,7 +2458,7 @@ Begin VB.Form Form1
             Enabled         =   0   'False
             Height          =   225
             Left            =   2160
-            TabIndex        =   55
+            TabIndex        =   52
             Text            =   "%DATETIME%"
             Top             =   900
             Visible         =   0   'False
@@ -1958,7 +2470,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   2520
             Locked          =   -1  'True
-            TabIndex        =   54
+            TabIndex        =   51
             TabStop         =   0   'False
             Top             =   600
             Width           =   1935
@@ -1970,7 +2482,7 @@ Begin VB.Form Form1
             Height          =   285
             Left            =   240
             Locked          =   -1  'True
-            TabIndex        =   53
+            TabIndex        =   50
             TabStop         =   0   'False
             Text            =   "%USERNAME%"
             Top             =   2940
@@ -1994,7 +2506,7 @@ Begin VB.Form Form1
             Left            =   240
             ScaleHeight     =   255
             ScaleWidth      =   4185
-            TabIndex        =   52
+            TabIndex        =   49
             TabStop         =   0   'False
             Top             =   1200
             Width           =   4215
@@ -2002,7 +2514,7 @@ Begin VB.Form Form1
          Begin VB.Frame Frame7 
             Height          =   1215
             Left            =   2490
-            TabIndex        =   47
+            TabIndex        =   44
             Top             =   2730
             Width           =   2175
             Begin VB.CheckBox chkAutoRefresh 
@@ -2010,7 +2522,7 @@ Begin VB.Form Form1
                Caption         =   "Auto Refresh"
                Height          =   255
                Left            =   120
-               TabIndex        =   50
+               TabIndex        =   47
                TabStop         =   0   'False
                Top             =   195
                Value           =   1  'Checked
@@ -2020,7 +2532,7 @@ Begin VB.Form Form1
                Caption         =   "Refresh"
                Height          =   360
                Left            =   120
-               TabIndex        =   49
+               TabIndex        =   46
                TabStop         =   0   'False
                ToolTipText     =   "Manually refresh all data"
                Top             =   510
@@ -2034,10 +2546,10 @@ Begin VB.Form Form1
                ForeColor       =   &H80000008&
                Height          =   750
                Left            =   1320
-               Picture         =   "Form1.frx":9A2D
+               Picture         =   "Form1.frx":9B29
                ScaleHeight     =   750
                ScaleWidth      =   765
-               TabIndex        =   48
+               TabIndex        =   45
                TabStop         =   0   'False
                Top             =   360
                Width           =   765
@@ -2059,7 +2571,7 @@ Begin VB.Form Form1
                ForeColor       =   &H00808080&
                Height          =   195
                Left            =   135
-               TabIndex        =   51
+               TabIndex        =   48
                ToolTipText     =   "Avg. Query Time"
                Top             =   960
                Width           =   1080
@@ -2071,7 +2583,7 @@ Begin VB.Form Form1
             Caption         =   "Current Packet Owner"
             Height          =   195
             Left            =   2520
-            TabIndex        =   72
+            TabIndex        =   69
             Top             =   1560
             Width           =   1605
          End
@@ -2081,7 +2593,7 @@ Begin VB.Form Form1
             Caption         =   "Packet Creator"
             Height          =   195
             Left            =   240
-            TabIndex        =   71
+            TabIndex        =   68
             Top             =   2160
             Width           =   1080
          End
@@ -2091,7 +2603,7 @@ Begin VB.Form Form1
             Caption         =   "Create Date"
             Height          =   195
             Left            =   2520
-            TabIndex        =   70
+            TabIndex        =   67
             Top             =   2160
             Width           =   1605
          End
@@ -2101,7 +2613,7 @@ Begin VB.Form Form1
             Caption         =   "Latest Action"
             Height          =   195
             Left            =   240
-            TabIndex        =   69
+            TabIndex        =   66
             Top             =   360
             Width           =   945
          End
@@ -2111,7 +2623,7 @@ Begin VB.Form Form1
             Caption         =   "Current Status"
             Height          =   195
             Left            =   240
-            TabIndex        =   68
+            TabIndex        =   65
             Top             =   1560
             Width           =   1065
          End
@@ -2121,7 +2633,7 @@ Begin VB.Form Form1
             Caption         =   "Action Date"
             Height          =   195
             Left            =   2520
-            TabIndex        =   67
+            TabIndex        =   64
             Top             =   360
             Width           =   840
          End
@@ -2132,7 +2644,7 @@ Begin VB.Form Form1
             Caption         =   "Local User"
             Height          =   195
             Left            =   240
-            TabIndex        =   66
+            TabIndex        =   63
             Top             =   2700
             Width           =   1695
          End
@@ -2143,7 +2655,7 @@ Begin VB.Form Form1
             Caption         =   "@"
             Height          =   195
             Left            =   2280
-            TabIndex        =   65
+            TabIndex        =   62
             Top             =   630
             Width           =   255
          End
@@ -2153,7 +2665,7 @@ Begin VB.Form Form1
             Caption         =   "Latest Note"
             Height          =   195
             Left            =   240
-            TabIndex        =   64
+            TabIndex        =   61
             Top             =   960
             Width           =   840
          End
@@ -2171,7 +2683,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   195
             Left            =   1320
-            TabIndex        =   63
+            TabIndex        =   60
             Top             =   2760
             Visible         =   0   'False
             Width           =   45
@@ -2192,7 +2704,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   315
             Left            =   360
-            TabIndex        =   62
+            TabIndex        =   59
             ToolTipText     =   "Last Modified Date"
             Top             =   3540
             Width           =   1830
@@ -2213,7 +2725,7 @@ Begin VB.Form Form1
             EndProperty
             Height          =   165
             Left            =   360
-            TabIndex        =   61
+            TabIndex        =   58
             ToolTipText     =   "Last Modified By"
             Top             =   3360
             Width           =   990
@@ -2236,8 +2748,8 @@ Begin VB.Form Form1
       ForeColor       =   &H80000011&
       Height          =   165
       Left            =   10740
-      TabIndex        =   109
-      Top             =   9960
+      TabIndex        =   106
+      Top             =   10380
       Width           =   1470
    End
    Begin VB.Label lblAppVersion 
@@ -2256,8 +2768,8 @@ Begin VB.Form Form1
       ForeColor       =   &H80000011&
       Height          =   165
       Left            =   120
-      TabIndex        =   108
-      Top             =   9960
+      TabIndex        =   105
+      Top             =   10380
       Width           =   1290
    End
    Begin VB.Menu mnuAdmin 
@@ -2321,57 +2833,6 @@ Private bolNoHits      As Boolean
 Private intRowSel      As Integer
 Private strCommentText As String
 Private intMovement    As Integer, intMovementAccel As Integer, intMovementAccelRate As Integer
-Public Sub GetUserIndex()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim i       As Integer
-    On Error GoTo errs
-    strSQL1 = "select * from users"
-    ShowData
-    cn_global.CursorLocation = adUseClient
-    rs.Open strSQL1, cn_global, adOpenKeyset
-    i = 1
-    ReDim strUserIndex(2, rs.RecordCount)
-    Do Until rs.EOF
-        With rs
-            strUserIndex(0, i) = UCase$(!idUsers)
-            strUserIndex(1, i) = !idFullname
-            strUserIndex(2, i) = !idEmail
-            i = i + 1
-            rs.MoveNext
-        End With
-    Loop
-    HideData
-    Exit Sub
-errs:
-    If Err.Number = -2147467259 Then
-        If bolInitialLoad = True Then
-            Dim blah
-            blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
-            Unload Me
-        End If
-    End If
-End Sub
-Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
-    Dim R As Long
-    R = TranslateColor(Color, 0, GetRealColor)
-    If R <> 0 Then 'raise an error
-    End If
-End Function
-Public Sub SetComboBoxHeight(ComboBox As ImageCombo, ByVal NewHeight As Long)
-    Dim lpRect As RECT
-    Dim wi     As Long
-    GetWindowRect ComboBox.hwnd, lpRect
-    wi = lpRect.Right - lpRect.Left
-    ScreenToClientAny ComboBox.Parent.hwnd, lpRect
-    MoveWindow ComboBox.hwnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
-End Sub
-Private Function GetTabState() As Boolean
-    GetTabState = False
-    If GetKeyState(VK_TAB) And -256 Then
-        GetTabState = True
-    End If
-End Function
 Public Sub BannerClick(Optional ClickCase As String)
     On Error Resume Next
     Select Case ClickCase
@@ -2412,6 +2873,251 @@ Public Sub BannerClick(Optional ClickCase As String)
         Case "CLOSE"
             CloseBanner
     End Select
+End Sub
+Public Sub BuildGridPrint(Grid As MSHFlexGrid)
+    Dim intPadding As Integer 'Cell Padding
+    Dim lngCursX As Long, lngCursY As Long
+    Dim intPage As Integer
+    Dim Row       As Long, Col As Long
+    Dim RowHeight As Long, ColWidth() As Long
+    Dim GAP As Integer
+    Dim lngXMin      As Long, lngXMax As Long, lngYMin As Long, lngYMax As Long, lngYMinNoHeader 'Constraints for cursor. Keeps it on da pappahs\
+    Dim lngStartTxtX As Long, lngStartTxtY As Long
+    intPadding = 100
+    GAP = 40
+    lngXMin = 300
+    lngXMax = 15000
+    lngYMin = 1500
+    lngYMinNoHeader = 600 'no header space needed after first page
+    lngYMax = 10800
+    Printer.ScaleMode = 1
+    Printer.Orientation = vbPRORLandscape
+    Printer.DrawWidth = 1
+    Printer.DrawStyle = vbSolid
+    lngCursX = lngXMin
+    lngCursY = lngYMin
+    Printer.FontSize = prntFontSize
+    intPage = 1
+    With Grid
+        .Redraw = False
+        ReDim GridPrint(Grid.Rows - 1, Grid.Cols - 1) 'expand gridarray
+        For Row = 0 To Grid.Rows - 1
+            For Col = 1 To Grid.Cols - 1
+                GridPrint(Row, Col).intPage = intPage 'calc and add print coords and data
+                GridPrint(Row, Col).lngLeft = lngCursX
+                GridPrint(Row, Col).lngTop = lngCursY
+                GridPrint(Row, Col).intTextHeight = Printer.TextHeight(.TextMatrix(Row, Col))
+                GridPrint(Row, Col).intRowHeight = Printer.TextHeight(.TextMatrix(Row, Col)) + intPadding
+                RowHeight = GridPrint(Row, Col).intRowHeight
+                GridPrint(Row, Col).intTextWidth = Printer.TextWidth(.TextMatrix(Row, Col))
+                GridPrint(Row, Col).lngTotalWidth = Printer.TextWidth(.TextMatrix(Row, Col)) + intPadding
+                GridPrint(Row, Col).lngTextLeft = GridPrint(Row, Col).lngLeft + GAP '
+                GridPrint(Row, Col).lngTextTop = GridPrint(Row, Col).lngTop + GAP '
+                GridPrint(Row, Col).intColWidth = .ColWidth(Col)
+                GridPrint(Row, Col).strText = BoundedText(Printer, .TextMatrix(Row, Col), .ColWidth(Col))
+                GridPrint(Row, Col).lngRight = GridPrint(Row, Col).lngLeft + GridPrint(Row, Col).intColWidth + GAP 'GridPrint(Row, Col).lngTotalWidth
+                GridPrint(Row, Col).lngBottom = GridPrint(Row, Col).lngTop + GridPrint(Row, Col).intRowHeight
+                .Row = Row
+                .ColSel = .Cols - 1
+                GridPrint(Row, Col).lngBackColor = .CellBackColor
+                lngCursX = GridPrint(Row, Col).lngRight
+            Next Col
+            lngCursX = lngXMin
+            If lngCursY + RowHeight >= lngYMax Then 'we are running out of space. next page.
+                intPage = intPage + 1
+                lngYMin = lngYMinNoHeader
+                lngCursX = lngXMin
+                lngCursY = lngYMin
+            Else
+                lngCursY = lngCursY + RowHeight
+            End If
+        Next Row
+        GridPrint(UBound(GridPrint, 1), UBound(GridPrint, 2)).intTotPage = intPage
+        .Redraw = True
+    End With
+End Sub
+Public Sub ClearAllButJobN()
+    strLastJobNum = ""
+    cmbPlant.BackColor = vbWindowBackground
+    txtCustPoNo.BackColor = vbWindowBackground
+    txtDrawNoRev.BackColor = vbWindowBackground
+    txtSalesNo.BackColor = vbWindowBackground
+    txtPartNoRev.BackColor = vbWindowBackground
+    txtTicketDescription.BackColor = vbWindowBackground
+    txtJobNo.BackColor = vbWindowBackground
+    cmdSubmit.BackColor = vbButtonFace
+    txtTicketDescription.Text = ""
+    txtPartNoRev.Text = ""
+    txtDrawNoRev.Text = ""
+    txtCustPoNo.Text = ""
+    txtSalesNo.Text = ""
+    txtCreator.Text = ""
+    txtTicketAction.Text = ""
+    txtTicketStatus.Text = ""
+    txtCreateDate.Text = ""
+    txtTicketOwner.Text = ""
+    txtActionDate.Text = ""
+    cmbUsers.Visible = False
+    cmbUsers.ComboItems.Item(1).Selected = True
+    lblUser.Visible = False
+    frmComments.txtComment.Text = ""
+    imgComment.Picture = ButtonPics(4)
+    imgComment.Enabled = False
+    strUserTo = ""
+    strUserFrom = ""
+    strTicketAction = ""
+    strTicketStatus = ""
+    optMove.Value = False
+    optReceive.Value = False
+    optClose.Value = False
+    optFile.Value = False
+    optReOpen.Value = False
+    optMove.Enabled = False
+    cmbUsers.Visible = False
+    lblUser.Visible = False
+    optReceive.Enabled = False
+    optClose.Enabled = False
+    optFile.Enabled = False
+    optReOpen.Enabled = False
+    cmbPlant.ListIndex = 0
+    optCreate.Value = False
+    bolHasTicket = False
+    HideOpts
+    tmrScroll.Enabled = False
+    strCommentText = ""
+    pbScrollBox.Cls
+    SetBoxesForEdit "All"
+    EditMode = False
+    lblChars.Visible = False
+    StatusBar1.Panels.Item(1).Text = ""
+    FlexGridHist.Visible = False
+    bolCanEdit = False
+    FlexHistLastTopRow = 0
+    lblModifyBy.Caption = ""
+    lblModifyDate.Caption = ""
+    strCurJobNum = ""
+    FlexAttach.Visible = False
+    SSTab1.TabCaption(1) = "Attachments"
+End Sub
+Public Sub ClearFields()
+    ClearBanners
+    Screen.MousePointer = vbDefault
+    HideData
+    strLastJobNum = ""
+    cmbPlant.BackColor = vbWindowBackground
+    txtCustPoNo.BackColor = vbWindowBackground
+    txtDrawNoRev.BackColor = vbWindowBackground
+    txtSalesNo.BackColor = vbWindowBackground
+    txtPartNoRev.BackColor = vbWindowBackground
+    txtTicketDescription.BackColor = vbWindowBackground
+    txtJobNo.BackColor = vbWindowBackground
+    cmdSubmit.BackColor = vbButtonFace
+    txtTicketDescription.Text = ""
+    txtJobNo.Text = ""
+    txtPartNoRev.Text = ""
+    txtDrawNoRev.Text = ""
+    txtCustPoNo.Text = ""
+    txtSalesNo.Text = ""
+    txtCreator.Text = ""
+    txtTicketAction.Text = ""
+    txtTicketStatus.Text = ""
+    txtCreateDate.Text = ""
+    txtTicketOwner.Text = ""
+    txtActionDate.Text = ""
+    bolOptionClicked = False
+    cmbUsers.Visible = False
+    cmbUsers.ComboItems.Item(1).Selected = True
+    lblUser.Visible = False
+    frmComments.txtComment.Text = ""
+    imgComment.Picture = ButtonPics(4)
+    imgComment.Enabled = False
+    strUserTo = ""
+    strUserFrom = ""
+    strTicketAction = ""
+    strTicketStatus = ""
+    optMove.Value = False
+    optReceive.Value = False
+    optClose.Value = False
+    optFile.Value = False
+    optReOpen.Value = False
+    optMove.Enabled = False
+    cmbUsers.Visible = False
+    lblUser.Visible = False
+    optReceive.Enabled = False
+    optClose.Enabled = False
+    optFile.Enabled = False
+    optReOpen.Enabled = False
+    cmbPlant.ListIndex = 0
+    optCreate.Value = False
+    bolHasTicket = False
+    HideOpts
+    FlexGridHist.Visible = False
+    FlexGridHist.Clear
+    FlexGridHist.Cols = 0
+    FlexGridHist.Rows = 0
+    lblChars.Visible = False
+    tmrScroll.Enabled = False
+    strCommentText = ""
+    pbScrollBox.Cls
+    cmdEdit.Visible = False
+    cmdEdit.Picture = ButtonPics(1)
+    cmdEdit.ToolTipText = "Edit Field"
+    bolCanEdit = False
+    EditMode = False
+    FlexHistLastTopRow = 0
+    lblModifyBy.Caption = ""
+    lblModifyDate.Caption = ""
+    intFlexGridInLastRow = 1
+    intFlexGridOutLastRow = 1
+    strCurJobNum = ""
+    FlexAttach.Visible = False
+    SSTab1.TabCaption(1) = "Attachments"
+End Sub
+Public Sub ClearOptBoxes()
+    optMove.Value = False
+    optReceive.Value = False
+    optClose.Value = False
+    optFile.Value = False
+    optReOpen.Value = False
+    optCreate.Value = False
+    cmdSubmit.Enabled = False
+    bolOptionClicked = False
+End Sub
+Public Sub DeleteAttachment(strGUID As String)
+    On Error GoTo errs:
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "SELECT idGUID From attachments Where idGUID = '" & strGUID & "'"
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        .Delete
+        .Update
+    End With
+    GetAttachmentList strCurJobNum, FlexAttach
+    ShowBanner colGoodBlue, "Attachment Deleted"
+    Exit Sub
+errs:
+    ErrHandle Err.Number, Err.Description, "DeleteAttachment"
+    
+End Sub
+Public Sub DisableBoxes()
+    txtPartNoRev.Locked = True
+    txtDrawNoRev.Locked = True
+    txtSalesNo.Locked = True
+    txtCustPoNo.Locked = True
+    txtTicketDescription.Locked = True
+    cmbPlant.Enabled = False
+    lblChars.Visible = False
+End Sub
+Public Sub EnableBoxes()
+    txtPartNoRev.Locked = False
+    txtDrawNoRev.Locked = False
+    txtSalesNo.Locked = False
+    txtCustPoNo.Locked = False
+    txtTicketDescription.Locked = False
+    cmbPlant.Enabled = True
+    frmComments.txtComment.Locked = False
 End Sub
 Public Sub FillFlexHist(strAction As String, _
                         strStatus As String, _
@@ -2589,6 +3295,523 @@ Public Sub FillFlexHist(strAction As String, _
         FlexGridHist.RowHeight(FlexGridHist.Rows - 1) = intRowH
     End If
 End Sub
+Sub FlexBoldFirst(FlexGrid As MSHFlexGrid)
+    Dim intCellHeight As Integer
+    On Error Resume Next
+    intCellHeight = 600
+    FlexGrid.Row = 0
+    FlexGrid.Col = 1
+    FlexGrid.CellFontSize = 10
+    FlexGrid.CellFontBold = True
+    If FlexGrid.TextMatrix(1, 4) = "com" Then
+        FlexGrid.Row = 1
+        FlexGrid.Col = 1
+        FlexGrid.CellFontBold = True
+        FlexGrid.CellFontSize = 10.75
+        FlexGrid.RowHeight(1) = intCellHeight - 200
+    End If
+    Exit Sub
+errs:
+    If Err.Number = 381 Then FlexGrid.RowHeight(0) = intCellHeight 'if Subscript out of range, it most likely means the grid only has one row. Therefor, no comment, it should fail and finish setting grid height
+End Sub
+Sub FlexFlipHist(Mode As String)
+    If Mode = "A" Then
+        FlexGridHist.Col = 3
+        FlexGridHist.Sort = flexSortGenericAscending
+    Else
+        'do nothing
+    End If
+    If Mode = "D" Then
+        FlexGridHist.Col = 3
+        FlexGridHist.Sort = flexSortGenericDescending
+    Else
+        'do nothing
+    End If
+End Sub
+Public Sub FlexGridRedrawHeight()
+    Dim ColLoop As Long
+    Dim RowLoop As Long
+    'Turn off redrawing to avoid flickering
+    FlexGridHist.Redraw = False
+    'For ColLoop = 0 To FlexGridHist.Cols - 1
+    'FlexGridHist.ColWidth(ColLoop) = 2500
+    For RowLoop = 0 To FlexGridHist.Rows - 1
+        ReSizeCellHeight RowLoop, 1
+    Next RowLoop
+    'Next ColLoop
+    'Turn redrawing back on
+    FlexGridHist.Redraw = True
+End Sub
+Public Sub FlexGridRowColor(FlexGrid As MSHFlexGrid, _
+                            ByVal lngRow As Long, _
+                            ByVal lngColor As Long)
+    Dim lngPrevCol       As Long
+    Dim lngPrevColSel    As Long
+    Dim lngPrevRow       As Long
+    Dim lngPrevRowSel    As Long
+    Dim lngPrevFillStyle As Long
+    If lngRow > FlexGrid.Rows - 1 Then
+        Exit Sub
+    End If
+    lngPrevCol = FlexGrid.Col
+    lngPrevRow = FlexGrid.Row
+    lngPrevColSel = FlexGrid.ColSel
+    lngPrevRowSel = FlexGrid.RowSel
+    lngPrevFillStyle = FlexGrid.FillStyle
+    FlexGrid.Col = FlexGrid.FixedCols
+    FlexGrid.Row = lngRow
+    FlexGrid.ColSel = FlexGrid.Cols - 1
+    FlexGrid.RowSel = lngRow
+    FlexGrid.FillStyle = flexFillRepeat
+    FlexGrid.CellBackColor = lngColor
+    FlexGrid.Col = lngPrevCol
+    FlexGrid.Row = lngPrevRow
+    FlexGrid.ColSel = lngPrevColSel
+    FlexGrid.RowSel = lngPrevRowSel
+    FlexGrid.FillStyle = lngPrevFillStyle
+End Sub
+Sub FlexSort(Grid As MSHFlexGrid, Mode As String)
+    If Grid.MouseRow = 0 And Mode = "A" Then
+        Grid.Col = Grid.MouseCol
+        If Grid.Col = 10 Then
+            Grid.Sort = flexSortGenericAscending
+        Else
+            Grid.Sort = flexSortStringAscending
+        End If
+    Else
+        'do nothing
+    End If
+    If Grid.MouseRow = 0 And Mode = "D" Then
+        Grid.Col = Grid.MouseCol
+        If Grid.Col = 10 Then
+            Grid.Sort = flexSortGenericDescending
+        Else
+            Grid.Sort = flexSortStringDescending
+        End If
+    Else
+        'do nothing
+    End If
+End Sub
+Public Sub GetAttachmentList(strJobNum As String, Grid As MSHFlexGrid)
+    Dim rs As New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    Dim strSQL1 As String
+    strSQL1 = "SELECT idFilename, idFileType, idFileSize, idDateStamp,idGUID FROM attachments WHERE idJobNum = '" & strJobNum & "' order by idDateStamp DESC"
+    Set rs = cn_global.Execute(strSQL1)
+    If rs.RecordCount = 0 Then
+    Grid.Clear
+    Grid.Visible = False
+    SSTab1.TabCaption(1) = "Attachments"
+    Exit Sub
+    End If
+    
+    Grid.Cols = 6
+    Grid.Rows = rs.RecordCount + 1
+    
+    Grid.TextMatrix(0, 1) = "Filename"
+     Grid.TextMatrix(0, 2) = "Size"
+     Grid.TextMatrix(0, 3) = "Type"
+      Grid.TextMatrix(0, 4) = "Date/Time"
+     Grid.TextMatrix(0, 5) = "GUID"
+    
+    
+    With rs
+        Do Until .EOF
+            Grid.TextMatrix(.AbsolutePosition, 1) = !idFileName & "." & !idFileType
+            Grid.TextMatrix(.AbsolutePosition, 2) = Round((!idFileSize / 1024), 2) & " KB"
+            Grid.TextMatrix(.AbsolutePosition, 3) = !idFileType
+            Grid.TextMatrix(.AbsolutePosition, 4) = !idDateStamp
+            Grid.TextMatrix(.AbsolutePosition, 5) = !idGUID
+            .MoveNext
+        Loop
+    End With
+    SSTab1.TabCaption(1) = "Attachments (" & rs.RecordCount & ")"
+    SizeTheSheet Grid
+    Grid.Visible = True
+    
+End Sub
+Public Sub GetMyPackets(Optional Verbose As Boolean = True)
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim LineIN, LineOUT, Row As Integer
+    Dim intINPack As Integer, intRECPack As Integer
+    Dim i         As Long
+    On Error GoTo errs
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
+    cn_global.CursorLocation = adUseClient
+    ShowData
+    Set rs = cn_global.Execute(strSQL1)
+    If rs.RecordCount <= 0 Then
+        intPrevInPackets = 0
+        SSTab1.TabCaption(4) = "On-hand (0)"
+        SSTab1.TabCaption(3) = "Incoming (0)"
+        FlexGridOUT.Visible = False
+        FlexGridOUT.Redraw = True
+        FlexGridIN.Visible = False
+        FlexGridIN.Redraw = True
+        HideData
+        Exit Sub
+    End If
+    'count packets for change detection
+    Do Until rs.EOF
+        With rs
+            If !idAction = "INTRANSIT" Then intINPack = intINPack + 1
+            If !idAction = "RECEIVED" Or !idAction = "CREATED" Or !idAction = "REOPENED" Then intRECPack = intRECPack + 1
+            .MoveNext
+        End With
+    Loop
+    rs.MoveFirst
+    If rs.RecordCount > 0 Then 'only refresh if something has changed
+        If intINPack = intTotINPack And intRECPack = intTotRECPack Then
+            HideData
+            rs.Close
+            Exit Sub
+        End If
+        If intINPack <> intTotINPack Or intRECPack <> intTotRECPack Then
+            intTotINPack = intINPack
+            intTotRECPack = intRECPack
+            FlexGridOUT.Redraw = False
+            FlexGridOUT.Rows = 2
+            FlexGridIN.Redraw = False
+            FlexGridIN.Rows = 2
+        End If
+    End If
+    LineIN = 1
+    LineOUT = 1
+    Row = 0
+    FlexGridOUT.Rows = rs.RecordCount + 1
+    FlexGridIN.Rows = rs.RecordCount + 1
+    ' Create header row
+    FlexGridOUT.Cols = 10
+    FlexGridIN.Cols = 10
+    FlexGridOUT.FixedCols = 1
+    FlexGridOUT.FixedRows = 1
+    FlexGridIN.FixedCols = 1
+    FlexGridIN.FixedRows = 1
+    Do Until rs.EOF
+        With rs
+            If !idAction = "CREATED" And !idUser = strLocalUser Or !idAction = "RECEIVED" And !idUser = strLocalUser Or !idAction = "REOPENED" And !idUser = strLocalUser Then
+                Row = Row + 1
+                FlexGridOUT.TextMatrix(LineOUT, 0) = LineOUT
+                FlexGridOUT.TextMatrix(LineOUT, 1) = !idJobNum
+                FlexGridOUT.TextMatrix(LineOUT, 2) = !idPartNum
+                FlexGridOUT.TextMatrix(LineOUT, 3) = !idDescription
+                FlexGridOUT.TextMatrix(LineOUT, 4) = !idSalesNum
+                FlexGridOUT.TextMatrix(LineOUT, 5) = !idCustPoNum
+                FlexGridOUT.TextMatrix(LineOUT, 6) = !idCreator
+                FlexGridOUT.TextMatrix(LineOUT, 7) = !idCreateDate
+                FlexGridOUT.TextMatrix(LineOUT, 8) = !idDate
+                If !idAction = "CREATED" Then
+                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80C0FF)
+                    FlexGridOUT.TextMatrix(LineOUT, 9) = "Job packet was CREATED by " & !idCreator
+                ElseIf !idAction = "RECEIVED" Then
+                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80FFFF)
+                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idUser & " RECEIVED the job packet from " & !idUserFrom
+                ElseIf !idAction = "REOPENED" Then
+                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &HFF80FF)
+                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idUser & " REOPENED the job packet."
+                End If
+                LineOUT = LineOUT + 1
+            ElseIf !idAction = "INTRANSIT" And !idUserTo = strLocalUser Then '**************************************
+                Row = Row + 1
+                FlexGridIN.TextMatrix(LineIN, 0) = LineIN
+                FlexGridIN.TextMatrix(LineIN, 1) = !idJobNum
+                FlexGridIN.TextMatrix(LineIN, 2) = !idPartNum
+                FlexGridIN.TextMatrix(LineIN, 3) = !idDescription
+                FlexGridIN.TextMatrix(LineIN, 4) = !idSalesNum
+                FlexGridIN.TextMatrix(LineIN, 5) = !idCustPoNum
+                FlexGridIN.TextMatrix(LineIN, 6) = !idCreator
+                FlexGridIN.TextMatrix(LineIN, 7) = !idCreateDate
+                FlexGridIN.TextMatrix(LineIN, 8) = !idDate
+                Call FlexGridRowColor(FlexGridIN, LineIN, &H80FF80)
+                FlexGridIN.TextMatrix(LineIN, 9) = !idUserFrom & " SENT the job packet to " & !idUserTo
+                LineIN = LineIN + 1
+            ElseIf !idStatus = "CLOSED" Then
+NextLoop:
+            End If
+            Row = Row + 1
+            rs.MoveNext
+        End With
+    Loop
+    FlexGridOUT.Rows = LineOUT
+    FlexGridIN.Rows = LineIN
+    HideData
+    SizeTheSheet FlexGridOUT
+    SizeTheSheet FlexGridIN
+    FlexGridOUT.Redraw = True
+    FlexGridIN.Redraw = True
+    FlexGridIN.Visible = True
+    FlexGridOUT.Visible = True
+    If LineIN <= 1 Then
+        FlexGridIN.Visible = False
+    Else
+        FlexGridIN.TopRow = intFlexGridInLastRow
+    End If
+    If LineOUT <= 1 Then
+        FlexGridOUT.Visible = False
+    Else
+        FlexGridOUT.TopRow = intFlexGridOutLastRow
+    End If
+    SSTab1.TabCaption(4) = "On-hand (" & FlexGridOUT.Rows - 1 & ")"
+    SSTab1.TabCaption(3) = "Incoming (" & FlexGridIN.Rows - 1 & ")"
+    If FlexGridIN.Rows - 1 > intPrevInPackets And Verbose Then
+        ShowBanner vbCyan, "You have incoming Job Packets. Click to view.", 500, "VIEWPACK" '&HC0C0C0
+        intPrevInPackets = FlexGridIN.Rows - 1
+    Else
+        intPrevInPackets = FlexGridIN.Rows - 1
+    End If
+    If SSTab1.Tab = 2 And ProgHasFocus = True Then
+        If Me.ActiveControl.Name <> "SSTab1" Then
+            Exit Sub
+        ElseIf Me.ActiveControl.Name <> "FlexGridIN" Then
+            Exit Sub
+        End If
+        FlexGridIN.Col = FlexINLastSel(1)
+        FlexGridIN.Row = FlexINLastSel(0)
+        FlexGridIN.ColSel = FlexINLastSel(1)
+        FlexGridIN.RowSel = FlexINLastSel(0)
+        FlexGridIN.SetFocus
+    ElseIf SSTab1.Tab = 3 And ProgHasFocus = True Then ' And Me.ActiveControl.Name = "SSTab2" Or Me.ActiveControl.Name = "FlexGridOUT"
+        If Me.ActiveControl.Name <> "SSTab2" Then
+            Exit Sub
+        ElseIf Me.ActiveControl.Name <> "FlexGridOUT" Then
+            Exit Sub
+        End If
+        FlexGridOUT.Col = FlexOUTLastSel(1)
+        FlexGridOUT.Row = FlexOUTLastSel(0)
+        FlexGridOUT.ColSel = FlexOUTLastSel(1)
+        FlexGridOUT.RowSel = FlexOUTLastSel(0)
+        FlexGridOUT.SetFocus
+    End If
+    Exit Sub
+errs:
+    Resume Next
+End Sub
+Public Sub GetTimeLineData()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim dtTicketDate1, dtTicketDate2 As Date
+    On Error Resume Next
+    ShowData
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & txtJobNo.Text & "' ORDER BY packetentrydb.idDate"
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+    Entry = 0
+    With rs
+        ReDim strTimelineComments(.RecordCount)
+        dtTicketDate1 = !idDate
+        .MoveLast
+        dtTicketDate2 = !idDate
+        TotalTime = DateDiff("n", dtTicketDate1, dtTicketDate2)
+        .MoveFirst
+    End With
+    Do Until rs.EOF
+        With rs
+            If !idComment <> "" Then strTimelineComments(Entry) = Chr$(34) & !idComment & Chr$(34)
+            dtTicketDate1 = !idDate
+            .MoveNext
+            If .EOF Then
+                .MovePrevious
+                dtTicketDate1 = !idDate
+                dtTicketDate2 = Date & " " & Time
+                TicketHours(Entry) = DateDiff("n", dtTicketDate1, dtTicketDate2)
+                .MoveNext
+            Else
+                dtTicketDate2 = !idDate
+                TicketHours(Entry) = DateDiff("n", dtTicketDate1, dtTicketDate2)
+            End If
+            .MovePrevious
+            If !idAction = "CREATED" Then
+                TicketActionText(Entry) = " Job packet was CREATED by " & !idCreator & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            ElseIf !idAction = "INTRANSIT" Then
+                TicketActionText(Entry) = " " & !idUserFrom & " SENT the job packet to " & !idUserTo & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            ElseIf !idAction = "RECEIVED" Then
+                TicketActionText(Entry) = " " & !idUser & " RECEIVED the job packet from " & !idUserFrom & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            ElseIf !idAction = "NULL" Then
+                TicketActionText(Entry) = " " & !idUser & " CLOSED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            ElseIf !idAction = "FILED" Then
+                TicketActionText(Entry) = " " & !idUser & " FILED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            ElseIf !idAction = "REOPENED" Then
+                TicketActionText(Entry) = " " & !idUser & " REOPENED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
+            End If
+            TicketDate(Entry) = !idDate
+            TicketAction(Entry) = !idAction
+            .MoveNext
+            Entry = Entry + 1
+        End With
+    Loop
+    If TotalTime / 1440 > 60 Then
+        DrawDayLines = False
+        frmTimeLine.chkDayLines.Value = 0
+    End If
+    TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
+    HideData
+End Sub
+Public Sub GetTopHits()
+    Dim sGet          As String
+    Dim sSections()   As String
+    Dim iSectionCount As Long
+    Dim sKeys()       As String
+    Dim iKeycount     As Long
+    Dim iSection      As Long
+    Dim iKey          As Long
+    Dim lSect         As Long
+    Dim MaxKeys       As Long
+    Dim i             As Integer
+    Dim SortHits()    As Variant
+    ReDim SortHits(1, 0)
+    bolNoHits = True
+    With m_cIni
+        .EnumerateAllSections sSections(), iSectionCount
+        If iSectionCount > 1 Then
+            bolNoHits = False
+            cmbUsers.ComboItems.Clear
+            cmbUsers.ComboItems.Add , , ""
+            For iSection = 2 To iSectionCount
+                .Section = sSections(iSection)
+                .EnumerateCurrentSection sKeys(), iKeycount
+                For iKey = 1 To iKeycount
+                    ReDim Preserve SortHits(1, UBound(SortHits, 2) + 1)
+                    .Key = sKeys(iKey)
+                    SortHits(1, UBound(SortHits, 2)) = .Key
+                    SortHits(0, UBound(SortHits, 2)) = Int(.Value)
+                Next iKey
+            Next iSection
+            Call MySort(SortHits)
+            If UBound(SortHits, 2) - 1 < 4 Then
+                MaxKeys = UBound(SortHits, 2) - 1
+            ElseIf UBound(SortHits, 2) - 1 >= 4 Then
+                MaxKeys = 3
+            End If
+            For i = 0 To MaxKeys
+                cmbUsers.ComboItems.Add , SortHits(1, i), ReturnEmpInfo(SortHits(1, i)).FullName, 1
+            Next i
+            cmbUsers.ComboItems.Add , , "____________________________"
+        End If
+    End With
+End Sub
+Public Sub GetUserIndex()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim i       As Integer
+    On Error GoTo errs
+    strSQL1 = "select * from users"
+    ShowData
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset
+    i = 1
+    ReDim strUserIndex(2, rs.RecordCount)
+    Do Until rs.EOF
+        With rs
+            strUserIndex(0, i) = UCase$(!idUsers)
+            strUserIndex(1, i) = !idFullname
+            strUserIndex(2, i) = !idEmail
+            i = i + 1
+            rs.MoveNext
+        End With
+    Loop
+    HideData
+    Exit Sub
+errs:
+    If Err.Number = -2147467259 Then
+        If bolInitialLoad = True Then
+            Dim blah
+            blah = MsgBox("Could not connect to the server!", vbCritical + vbOKOnly, "No Data")
+            Unload Me
+        End If
+    End If
+End Sub
+Public Sub HideData()
+    Dim lngCurQry As Double, lngAddQry As Double, lngAvgQry As Double
+    Dim i         As Integer
+    lngCurQry = StopTimer
+    If intQryIndex >= 20 Then
+        intQryIndex = 0
+        lngQryTimes(intQryIndex) = lngCurQry
+    Else
+        intQryIndex = intQryIndex + 1
+        lngQryTimes(intQryIndex) = lngCurQry
+    End If
+    For i = 0 To UBound(lngQryTimes)
+        lngAddQry = lngAddQry + lngQryTimes(i)
+    Next i
+    lngAvgQry = lngAddQry / UBound(lngQryTimes)
+    lblQryTime.Caption = Round(lngAvgQry, 2) & " ms"
+    Set pbData.Picture = picDataPics(0)
+End Sub
+Public Sub HideOpts()
+    optMove.Enabled = False
+    cmbUsers.Visible = False
+    lblUser.Visible = False
+    optReceive.Enabled = False
+    optClose.Enabled = False
+End Sub
+Public Sub LiveSearch(ByVal strSearchString As String) '
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    On Error GoTo LeaveSub
+    List1.Clear
+    ShowData
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "SELECT idJobNum FROM packetlist Where idJobNum Like '" & strSearchString & "%' ORDER BY idJobNum"
+    Set rs = cn_global.Execute(strSQL1)
+    Do Until rs.EOF
+        With rs
+            List1.AddItem !idJobNum, .AbsolutePosition - 1
+            rs.MoveNext
+        End With
+    Loop
+    If rs.RecordCount >= 1 Then
+        List1.Visible = True
+    ElseIf rs.RecordCount <= 0 Then
+        List1.Visible = False
+    End If
+LeaveSub:
+    HideData
+End Sub
+Public Sub LoadAttachment(strGUID As String)
+    On Error GoTo errs
+    Dim strFullFileName As String
+    Dim strSQL1         As String
+    Dim rs              As New ADODB.Recordset
+    ShowData
+    frmWait.Show
+    DoEvents
+    If Dir$(strTempFileLoc, vbDirectory) = "" Then MkDir strTempFileLoc
+    Set rs = New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "Select * from attachments where idGUID = '" & strGUID & "'"
+    Set rs = cn_global.Execute(strSQL1)
+    ' On Error GoTo procNoPicture
+    'If Recordset is Empty, Then Exit
+    '    If RS Is Nothing Then
+    '        GoTo procNoPicture
+    '    End If
+    Set strStream = New ADODB.Stream
+    With rs
+        strStream.Type = adTypeBinary
+        strStream.Open
+        strStream.Write rs.Fields("idFile").Value
+        strFullFileName = strTempFileLoc & !idFileName & "." & !idFileType
+        strStream.SaveToFile strFullFileName, adSaveCreateOverWrite
+        HideData
+        frmWait.Hide
+        DoEvents
+        Debug.Print ShellExecute(Me.hwnd, "open", strFullFileName, vbNullString, vbNullString, 4) 'SW_SHOWNORMAL
+    
+        'strStream.Close
+        
+    End With
+    Set rs = Nothing
+    Set strStream = Nothing
+    'LoadAttachment = True
+    Exit Sub
+errs:
+ HideData
+        frmWait.Hide
+        DoEvents
+    ErrHandle Err.Number, Err.Description, "LoadAttachment"
+End Sub
 Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills Fields, Does not refresh MyPackets
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -2750,273 +3973,9 @@ Public Sub PositionMaxChar(ActiveBox As Control)
         lblChars.Visible = False
     End If
 End Sub
-Public Sub GetTimeLineData()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim dtTicketDate1, dtTicketDate2 As Date
-    On Error Resume Next
-    ShowData
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & txtJobNo.Text & "' ORDER BY packetentrydb.idDate"
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL1)
-    Entry = 0
-    With rs
-        ReDim strTimelineComments(.RecordCount)
-        dtTicketDate1 = !idDate
-        .MoveLast
-        dtTicketDate2 = !idDate
-        TotalTime = DateDiff("n", dtTicketDate1, dtTicketDate2)
-        .MoveFirst
-    End With
-    Do Until rs.EOF
-        With rs
-            If !idComment <> "" Then strTimelineComments(Entry) = Chr$(34) & !idComment & Chr$(34)
-            dtTicketDate1 = !idDate
-            .MoveNext
-            If .EOF Then
-                .MovePrevious
-                dtTicketDate1 = !idDate
-                dtTicketDate2 = Date & " " & Time
-                TicketHours(Entry) = DateDiff("n", dtTicketDate1, dtTicketDate2)
-                .MoveNext
-            Else
-                dtTicketDate2 = !idDate
-                TicketHours(Entry) = DateDiff("n", dtTicketDate1, dtTicketDate2)
-            End If
-            .MovePrevious
-            If !idAction = "CREATED" Then
-                TicketActionText(Entry) = " Job packet was CREATED by " & !idCreator & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idAction = "INTRANSIT" Then
-                TicketActionText(Entry) = " " & !idUserFrom & " SENT the job packet to " & !idUserTo & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idAction = "RECEIVED" Then
-                TicketActionText(Entry) = " " & !idUser & " RECEIVED the job packet from " & !idUserFrom & " | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days ", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idAction = "NULL" Then
-                TicketActionText(Entry) = " " & !idUser & " CLOSED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idAction = "FILED" Then
-                TicketActionText(Entry) = " " & !idUser & " FILED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            ElseIf !idAction = "REOPENED" Then
-                TicketActionText(Entry) = " " & !idUser & " REOPENED the job packet. | " & (IIf(TicketHours(Entry) > 1440, Round(TicketHours(Entry) / 1440, 1) & " days", Round(TicketHours(Entry) / 60, 1) & " hrs "))
-            End If
-            TicketDate(Entry) = !idDate
-            TicketAction(Entry) = !idAction
-            .MoveNext
-            Entry = Entry + 1
-        End With
-    Loop
-    If TotalTime / 1440 > 60 Then
-        DrawDayLines = False
-        frmTimeLine.chkDayLines.Value = 0
-    End If
-    TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
-    HideData
-End Sub
-Public Sub SetupGrids()
-    FlexGridOUT.Rows = 2
-    FlexGridIN.Rows = 2
-    FlexGridOUT.Cols = 10
-    FlexGridIN.Cols = 10
-    FlexGridOUT.FixedCols = 1
-    FlexGridOUT.FixedRows = 1
-    FlexGridIN.FixedCols = 1
-    FlexGridIN.FixedRows = 1
-    FlexGridOUT.TextMatrix(0, 1) = "Job Number"
-    FlexGridOUT.TextMatrix(0, 2) = "Part Number"
-    FlexGridOUT.TextMatrix(0, 3) = "Description"
-    FlexGridOUT.TextMatrix(0, 4) = "Sales Number"
-    FlexGridOUT.TextMatrix(0, 5) = "Customer/PO Number"
-    FlexGridOUT.TextMatrix(0, 6) = "Created By"
-    FlexGridOUT.TextMatrix(0, 7) = "Create Date"
-    FlexGridOUT.TextMatrix(0, 8) = "Last Activity Date"
-    FlexGridOUT.TextMatrix(0, 9) = "Last Activity"
-    FlexGridIN.TextMatrix(0, 1) = "Job Number"
-    FlexGridIN.TextMatrix(0, 2) = "Part Number"
-    FlexGridIN.TextMatrix(0, 3) = "Description"
-    FlexGridIN.TextMatrix(0, 4) = "Sales Number"
-    FlexGridIN.TextMatrix(0, 5) = "Customer/PO Number"
-    FlexGridIN.TextMatrix(0, 6) = "Created By"
-    FlexGridIN.TextMatrix(0, 7) = "Create Date"
-    FlexGridIN.TextMatrix(0, 8) = "Last Activity Date"
-    FlexGridIN.TextMatrix(0, 9) = "Last Activity"
-End Sub
-Public Sub GetMyPackets(Optional Verbose As Boolean = True)
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim LineIN, LineOUT, Row As Integer
-    Dim intINPack As Integer, intRECPack As Integer
-    Dim i         As Long
-    On Error GoTo errs
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
-    cn_global.CursorLocation = adUseClient
-    ShowData
-    Set rs = cn_global.Execute(strSQL1)
-    If rs.RecordCount <= 0 Then
-        intPrevInPackets = 0
-        SSTab1.TabCaption(4) = "On-hand (0)"
-        SSTab1.TabCaption(3) = "Incoming (0)"
-        FlexGridOUT.Visible = False
-        FlexGridOUT.Redraw = True
-        FlexGridIN.Visible = False
-        FlexGridIN.Redraw = True
-        HideData
-        Exit Sub
-    End If
-    'count packets for change detection
-    Do Until rs.EOF
-        With rs
-            If !idAction = "INTRANSIT" Then intINPack = intINPack + 1
-            If !idAction = "RECEIVED" Or !idAction = "CREATED" Or !idAction = "REOPENED" Then intRECPack = intRECPack + 1
-            .MoveNext
-        End With
-    Loop
-    rs.MoveFirst
-    If rs.RecordCount > 0 Then 'only refresh if something has changed
-        If intINPack = intTotINPack And intRECPack = intTotRECPack Then
-            HideData
-            rs.Close
-            Exit Sub
-        End If
-        If intINPack <> intTotINPack Or intRECPack <> intTotRECPack Then
-            intTotINPack = intINPack
-            intTotRECPack = intRECPack
-            FlexGridOUT.Redraw = False
-            FlexGridOUT.Rows = 2
-            FlexGridIN.Redraw = False
-            FlexGridIN.Rows = 2
-        End If
-    End If
-    LineIN = 1
-    LineOUT = 1
-    Row = 0
-    FlexGridOUT.Rows = rs.RecordCount + 1
-    FlexGridIN.Rows = rs.RecordCount + 1
-    ' Create header row
-    FlexGridOUT.Cols = 10
-    FlexGridIN.Cols = 10
-    FlexGridOUT.FixedCols = 1
-    FlexGridOUT.FixedRows = 1
-    FlexGridIN.FixedCols = 1
-    FlexGridIN.FixedRows = 1
-    Do Until rs.EOF
-        With rs
-            If !idAction = "CREATED" And !idUser = strLocalUser Or !idAction = "RECEIVED" And !idUser = strLocalUser Or !idAction = "REOPENED" And !idUser = strLocalUser Then
-                Row = Row + 1
-                FlexGridOUT.TextMatrix(LineOUT, 0) = LineOUT
-                FlexGridOUT.TextMatrix(LineOUT, 1) = !idJobNum
-                FlexGridOUT.TextMatrix(LineOUT, 2) = !idPartNum
-                FlexGridOUT.TextMatrix(LineOUT, 3) = !idDescription
-                FlexGridOUT.TextMatrix(LineOUT, 4) = !idSalesNum
-                FlexGridOUT.TextMatrix(LineOUT, 5) = !idCustPoNum
-                FlexGridOUT.TextMatrix(LineOUT, 6) = !idCreator
-                FlexGridOUT.TextMatrix(LineOUT, 7) = !idCreateDate
-                FlexGridOUT.TextMatrix(LineOUT, 8) = !idDate
-                If !idAction = "CREATED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80C0FF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = "Job packet was CREATED by " & !idCreator
-                ElseIf !idAction = "RECEIVED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &H80FFFF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idUser & " RECEIVED the job packet from " & !idUserFrom
-                ElseIf !idAction = "REOPENED" Then
-                    Call FlexGridRowColor(FlexGridOUT, LineOUT, &HFF80FF)
-                    FlexGridOUT.TextMatrix(LineOUT, 9) = !idUser & " REOPENED the job packet."
-                End If
-                LineOUT = LineOUT + 1
-            ElseIf !idAction = "INTRANSIT" And !idUserTo = strLocalUser Then '**************************************
-                Row = Row + 1
-                FlexGridIN.TextMatrix(LineIN, 0) = LineIN
-                FlexGridIN.TextMatrix(LineIN, 1) = !idJobNum
-                FlexGridIN.TextMatrix(LineIN, 2) = !idPartNum
-                FlexGridIN.TextMatrix(LineIN, 3) = !idDescription
-                FlexGridIN.TextMatrix(LineIN, 4) = !idSalesNum
-                FlexGridIN.TextMatrix(LineIN, 5) = !idCustPoNum
-                FlexGridIN.TextMatrix(LineIN, 6) = !idCreator
-                FlexGridIN.TextMatrix(LineIN, 7) = !idCreateDate
-                FlexGridIN.TextMatrix(LineIN, 8) = !idDate
-                Call FlexGridRowColor(FlexGridIN, LineIN, &H80FF80)
-                FlexGridIN.TextMatrix(LineIN, 9) = !idUserFrom & " SENT the job packet to " & !idUserTo
-                LineIN = LineIN + 1
-            ElseIf !idStatus = "CLOSED" Then
-NextLoop:
-            End If
-            Row = Row + 1
-            rs.MoveNext
-        End With
-    Loop
-    FlexGridOUT.Rows = LineOUT
-    FlexGridIN.Rows = LineIN
-    HideData
-    SizeTheSheet FlexGridOUT
-    SizeTheSheet FlexGridIN
-    FlexGridOUT.Redraw = True
-    FlexGridIN.Redraw = True
-    FlexGridIN.Visible = True
-    FlexGridOUT.Visible = True
-    If LineIN <= 1 Then
-        FlexGridIN.Visible = False
-    Else
-        FlexGridIN.TopRow = intFlexGridInLastRow
-    End If
-    If LineOUT <= 1 Then
-        FlexGridOUT.Visible = False
-    Else
-        FlexGridOUT.TopRow = intFlexGridOutLastRow
-    End If
-    SSTab1.TabCaption(4) = "On-hand (" & FlexGridOUT.Rows - 1 & ")"
-    SSTab1.TabCaption(3) = "Incoming (" & FlexGridIN.Rows - 1 & ")"
-    If FlexGridIN.Rows - 1 > intPrevInPackets And Verbose Then
-        ShowBanner vbCyan, "You have incoming Job Packets. Click to view.", 500, "VIEWPACK" '&HC0C0C0
-        intPrevInPackets = FlexGridIN.Rows - 1
-    Else
-        intPrevInPackets = FlexGridIN.Rows - 1
-    End If
-    If SSTab1.Tab = 2 And ProgHasFocus = True Then
-        If Me.ActiveControl.Name <> "SSTab1" Then
-            Exit Sub
-        ElseIf Me.ActiveControl.Name <> "FlexGridIN" Then
-            Exit Sub
-        End If
-        FlexGridIN.Col = FlexINLastSel(1)
-        FlexGridIN.Row = FlexINLastSel(0)
-        FlexGridIN.ColSel = FlexINLastSel(1)
-        FlexGridIN.RowSel = FlexINLastSel(0)
-        FlexGridIN.SetFocus
-    ElseIf SSTab1.Tab = 3 And ProgHasFocus = True Then ' And Me.ActiveControl.Name = "SSTab2" Or Me.ActiveControl.Name = "FlexGridOUT"
-        If Me.ActiveControl.Name <> "SSTab2" Then
-            Exit Sub
-        ElseIf Me.ActiveControl.Name <> "FlexGridOUT" Then
-            Exit Sub
-        End If
-        FlexGridOUT.Col = FlexOUTLastSel(1)
-        FlexGridOUT.Row = FlexOUTLastSel(0)
-        FlexGridOUT.ColSel = FlexOUTLastSel(1)
-        FlexGridOUT.RowSel = FlexOUTLastSel(0)
-        FlexGridOUT.SetFocus
-    End If
-    Exit Sub
-errs:
-    Resume Next
-End Sub
-Public Sub ShowData()
-    Set pbData.Picture = picDataPics(2)
-    DoEvents
-    StartTimer
-End Sub
-Public Sub HideData()
-    Dim lngCurQry As Double, lngAddQry As Double, lngAvgQry As Double
-    Dim i         As Integer
-    lngCurQry = StopTimer
-    If intQryIndex >= 20 Then
-        intQryIndex = 0
-        lngQryTimes(intQryIndex) = lngCurQry
-    Else
-        intQryIndex = intQryIndex + 1
-        lngQryTimes(intQryIndex) = lngCurQry
-    End If
-    For i = 0 To UBound(lngQryTimes)
-        lngAddQry = lngAddQry + lngQryTimes(i)
-    Next i
-    lngAvgQry = lngAddQry / UBound(lngQryTimes)
-    lblQryTime.Caption = Round(lngAvgQry, 2) & " ms"
-    Set pbData.Picture = picDataPics(0)
+Public Sub RefreshAfterEdit()
+    RefreshFields
+    GetMyPackets
 End Sub
 Public Sub RefreshAll()
     Dim ConcurrentStatus As Integer
@@ -3042,19 +4001,115 @@ Public Sub RefreshAll()
     End If
     GetMyPackets
 End Sub
-Public Sub FlexGridRedrawHeight()
-    Dim ColLoop As Long
-    Dim RowLoop As Long
-    'Turn off redrawing to avoid flickering
+Public Sub RefreshFields() 'Fills fields, does not refresh History Grid.
+    Dim rs As New ADODB.Recordset
+    Dim strSQL1, strSQL2 As String
+    On Error GoTo errs
+    If txtJobNo.Text = "" Or optCreate.Value = True Or bolHasTicket = False Then Exit Sub
+    SetBoxesForEdit "All"
+    ShowData
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
+    Set rs = cn_global.Execute(strSQL1)
+    With rs
+        txtPartNoRev.Text = !idPartNum
+        txtDrawNoRev.Text = !idDrawingNum
+        txtCustPoNo.Text = !idCustPoNum
+        txtSalesNo.Text = !idSalesNum
+        txtCreator.Text = GetFullName(!idCreator)
+        txtCreateDate.Text = !idCreateDate
+        txtActionDate.Text = !idDate
+        strTicketAction = !idAction
+        strUserFrom = !idUserFrom
+        strUserTo = !idUserTo
+        strCurUser = !idUser
+        strTicketStatus = !idStatus
+        txtTicketAction.Text = !idAction
+        txtTicketOwner.Text = GetFullName(!idUser)
+        txtTicketDescription.Text = !idDescription
+        txtTicketStatus.Text = !idStatus
+        strPlant = !idPlant
+        cmbPlant.Text = strPlant
+        If !idLastModifiedBy <> "NOONE" Then
+            lblModifyBy.Caption = "Modified By: " & !idLastModifiedBy
+            lblModifyDate.Caption = "Modified Date: " & vbCrLf & !idLastModified
+        Else
+            lblModifyBy.Caption = ""
+            lblModifyDate.Caption = ""
+        End If
+        If txtJobNo.Text = "" Then
+            DisableBoxes
+            tmrRefresher.Enabled = False
+        Else
+            bolHasTicket = True
+            tmrRefresher.Enabled = True
+        End If
+        If !idComment <> "" Then
+            TheX = pbScrollBox.ScaleWidth
+            strCommentText = !idComment
+            tmrScroll.Enabled = True
+        Else
+            pbScrollBox.Cls
+            strCommentText = ""
+            tmrScroll.Enabled = False
+        End If
+    End With
+    'GetMyPackets
+    HideData
+    Exit Sub
+errs:
+    'If Err.Number = -2147467259 Then
+    ErrHandle Err.Number, Err.Description, "RefreshFields"
+End Sub
+Public Sub RefreshHistory() 'Redraws History Grid
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim b       As Integer
+    On Error GoTo errs
+    If Me.ActiveControl.Name = "FlexGridHist" Then Exit Sub
+    If txtJobNo.Text = "" Then Exit Sub
+    If bolHasTicket = False Then Exit Sub
+    ShowData
+    strSQL1 = "SELECT * FROM packetentrydb e LEFT JOIN packetlist l ON l.idJobNum=e.idJobNum WHERE l.idJobNum = '" & txtJobNo.Text & "' ORDER BY idDate DESC"
+    Set rs = New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
     FlexGridHist.Redraw = False
-    'For ColLoop = 0 To FlexGridHist.Cols - 1
-    'FlexGridHist.ColWidth(ColLoop) = 2500
-    For RowLoop = 0 To FlexGridHist.Rows - 1
-        ReSizeCellHeight RowLoop, 1
-    Next RowLoop
-    'Next ColLoop
-    'Turn redrawing back on
+    FlexGridHist.Visible = False
+    FlexGridHist.ScrollBars = flexScrollBarNone
+    FlexGridHist.Clear
+    FlexGridHist.Cols = 6
+    FlexGridHist.Rows = 0
+    With rs
+        dtLatestHistDate = Format$(!idDate, strDBDateTimeFormat)
+    End With
+    rs.MoveLast
+    Do Until rs.BOF
+        With rs
+            Call FillFlexHist(!idAction, !idStatus, !idComment, !idDate, GetFullName(!idCreator), GetFullName(!idUserFrom), GetFullName(!idUserTo), GetFullName(!idUser), !idGUIDEntry)
+            rs.MovePrevious
+        End With
+    Loop
+    For b = 0 To FlexGridHist.Cols - 1
+        FlexGridHist.ColAlignment(b) = flexAlignLeftCenter
+    Next b
+    FlexGridHist.ColWidth(0) = 1000
+    FlexGridHist.ColWidth(1) = 8500
+    FlexGridHist.ColWidth(3) = 0
+    FlexGridHist.ColWidth(4) = 0
+    FlexGridHist.RowHeight(0) = 0
+    Call FlexFlipHist("D")
+    FlexBoldFirst FlexGridHist
+    FlexGridRedrawHeight
+    FlexGridHist.ScrollBars = flexScrollBarVertical
+    FlexGridHist.Visible = True
     FlexGridHist.Redraw = True
+    FlexGridHist.TopRow = FlexHistLastTopRow
+    FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
+    HideData
+    Exit Sub
+errs:
+    ErrHandle Err.Number, Err.Description, "RefreshHistory"
 End Sub
 Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
     Dim LinesOfText  As Long
@@ -3078,163 +4133,6 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
         'Adjust the RowHeight based on the number of lines in textbox
         FlexGridHist.RowHeight(MyRow) = LinesOfText * HeightOfLine + 200
     End If
-End Sub
-Private Sub SetBoxesForEdit(EnabledControl As String)
-    If EnabledControl <> "All" Then
-        If EnabledControl = "txtTicketDescription" Then
-            txtTicketDescription.Enabled = True
-        Else
-            txtTicketDescription.Enabled = False
-        End If
-        If EnabledControl = "txtPartNoRev" Then
-            txtPartNoRev.Enabled = True
-        Else
-            txtPartNoRev.Enabled = False
-        End If
-        If EnabledControl = "txtSalesNo" Then
-            txtSalesNo.Enabled = True
-        Else
-            txtSalesNo.Enabled = False
-        End If
-        If EnabledControl = "txtDrawNoRev" Then
-            txtDrawNoRev.Enabled = True
-        Else
-            txtDrawNoRev.Enabled = False
-        End If
-        If EnabledControl = "txtCustPoNo" Then
-            txtCustPoNo.Enabled = True
-        Else
-            txtCustPoNo.Enabled = False
-        End If
-    ElseIf EnabledControl = "All" Then
-        txtTicketDescription.Enabled = True
-        txtPartNoRev.Enabled = True
-        txtSalesNo.Enabled = True
-        txtDrawNoRev.Enabled = True
-        txtCustPoNo.Enabled = True
-        cmdEdit.Visible = False
-        cmdEdit.Picture = ButtonPics(1)
-        cmdEdit.ToolTipText = "Edit Field"
-        DisableBoxes
-        EditMode = False
-    End If
-End Sub
-
-Private Sub cmdDelete_Click()
-Dim blah
-Dim intMaxFileNameLen As Integer
-intMaxFileNameLen = 30
-
-blah = MsgBox("Are you sure you want to delete (" & IIf(Len(FlexAttach.TextMatrix(FlexAttach.RowSel, 1)) > intMaxFileNameLen, Left(FlexAttach.TextMatrix(FlexAttach.RowSel, 1), intMaxFileNameLen) & "...", FlexAttach.TextMatrix(FlexAttach.RowSel, 1)) & ")?", vbQuestion + vbOKCancel, "Delete Attachment")
-If blah = vbOK Then
-
-DeleteAttachment FlexAttach.TextMatrix(FlexAttach.RowSel, 5)
-Else
-End If
-
-End Sub
-
-Private Sub cmdNew_Click()
- On Error GoTo errs
- With dlgDialog
-        .DialogTitle = "Add Attachment...."
-        .Filter = "All Files | *.*" '"Files (*.gif; *.bmp; *.jpg; *.pdf)| *.gif;*.bmp;*.jpg;*.pdf"
-        .CancelError = True
-        
-procReOpen:
-        .ShowOpen
-        If .FileName = "" Then
-            MsgBox "Invalid filename or file not found.", vbOKOnly + vbExclamation, "Oops!"
-            GoTo procReOpen
-        Else
-            If Not SaveAttachment(.FileName, .FileTitle, strCurJobNum) Then
-                MsgBox "Save was unsuccessful :(", vbOKOnly + vbExclamation, "Oops!"
-                Exit Sub
-            End If
-        End If
-    End With
-errs:
-End Sub
-Public Sub LoadAttachment(strGUID As String)
-    On Error GoTo errs
-    Dim strFullFileName As String
-    Dim strSQL1         As String
-    Dim rs              As New ADODB.Recordset
-    ShowData
-    frmWait.Show
-    DoEvents
-    If Dir$(strTempFileLoc, vbDirectory) = "" Then MkDir strTempFileLoc
-    Set rs = New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "Select * from attachments where idGUID = '" & strGUID & "'"
-    Set rs = cn_global.Execute(strSQL1)
-    ' On Error GoTo procNoPicture
-    'If Recordset is Empty, Then Exit
-    '    If RS Is Nothing Then
-    '        GoTo procNoPicture
-    '    End If
-    Set strStream = New ADODB.Stream
-    With rs
-        strStream.Type = adTypeBinary
-        strStream.Open
-        strStream.Write rs.Fields("idFile").Value
-        strFullFileName = strTempFileLoc & !idFileName & "." & !idFileType
-        strStream.SaveToFile strFullFileName, adSaveCreateOverWrite
-        HideData
-        frmWait.Hide
-        DoEvents
-        Debug.Print ShellExecute(Me.hwnd, "open", strFullFileName, vbNullString, vbNullString, 4) 'SW_SHOWNORMAL
-    
-        'strStream.Close
-        
-    End With
-    Set rs = Nothing
-    Set strStream = Nothing
-    'LoadAttachment = True
-    Exit Sub
-errs:
- HideData
-        frmWait.Hide
-        DoEvents
-    ErrHandle Err.Number, Err.Description, "LoadAttachment"
-End Sub
-Public Sub GetAttachmentList(strJobNum As String, Grid As MSHFlexGrid)
-    Dim rs As New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    Dim strSQL1 As String
-    strSQL1 = "SELECT idFilename, idFileType, idFileSize, idDateStamp,idGUID FROM attachments WHERE idJobNum = '" & strJobNum & "' order by idDateStamp DESC"
-    Set rs = cn_global.Execute(strSQL1)
-    If rs.RecordCount = 0 Then
-    Grid.Clear
-    Grid.Visible = False
-    SSTab1.TabCaption(1) = "Attachments"
-    Exit Sub
-    End If
-    
-    Grid.Cols = 6
-    Grid.Rows = rs.RecordCount + 1
-    
-    Grid.TextMatrix(0, 1) = "Filename"
-     Grid.TextMatrix(0, 2) = "Size"
-     Grid.TextMatrix(0, 3) = "Type"
-      Grid.TextMatrix(0, 4) = "Date/Time"
-     Grid.TextMatrix(0, 5) = "GUID"
-    
-    
-    With rs
-        Do Until .EOF
-            Grid.TextMatrix(.AbsolutePosition, 1) = !idFileName & "." & !idFileType
-            Grid.TextMatrix(.AbsolutePosition, 2) = Round((!idFileSize / 1024), 2) & " KB"
-            Grid.TextMatrix(.AbsolutePosition, 3) = !idFileType
-            Grid.TextMatrix(.AbsolutePosition, 4) = !idDateStamp
-            Grid.TextMatrix(.AbsolutePosition, 5) = !idGUID
-            .MoveNext
-        Loop
-    End With
-    SSTab1.TabCaption(1) = "Attachments (" & rs.RecordCount & ")"
-    SizeTheSheet Grid
-    Grid.Visible = True
-    
 End Sub
 Public Function SaveAttachment(sFileName As String, strFileTitle As String, strJobNum As String)
     On Error GoTo procNoPicture
@@ -3296,454 +4194,13 @@ procNoPicture:
     SaveAttachment = False
     GoTo procExitSub
 End Function
-Public Sub DeleteAttachment(strGUID As String)
-    On Error GoTo errs:
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT idGUID From attachments Where idGUID = '" & strGUID & "'"
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        .Delete
-        .Update
-    End With
-    GetAttachmentList strCurJobNum, FlexAttach
-    ShowBanner colGoodBlue, "Attachment Deleted"
-    Exit Sub
-errs:
-    ErrHandle Err.Number, Err.Description, "DeleteAttachment"
-    
-End Sub
-Private Sub cmdEdit_Click()
-    On Error GoTo errs
-    Dim blah
-    If EditMode = False Then
-        PrevPartNum = UCase$(txtPartNoRev)
-        PrevDrawNoRev = UCase$(txtDrawNoRev)
-        PrevCustPoNo = UCase$(txtCustPoNo)
-        PrevSalesNo = UCase$(txtSalesNo)
-        PrevDescription = UCase$(txtTicketDescription)
-        Me.Controls(ActiveText).Locked = False
-        cmdEdit.Picture = ButtonPics(2)
-        cmdEdit.ToolTipText = "Confirm Changes"
-        EditMode = True
-        SetControls
-        PositionMaxChar Me.Controls(ActiveText)
-        With Me.Controls(ActiveText)
-            .SetFocus
-            .SelStart = 0
-            .SelLength = Len(.Text)
-        End With
-        SetBoxesForEdit ActiveText
-    Else
-        '**** Do stuff that updates the database
-        If CheckForBlanks(ActiveText) = True Then
-            ShowBanner &H8080FF, "This field cannot be left blank! Please fill the field and try again.", 300
-            Me.Controls(ActiveText).BackColor = &H8080FF
-            Exit Sub
-        End If
-        If ChangesMade = False Then
-            ShowBanner &H8080FF, "No changes detected! Job Packet was not updated.", 250
-            Form1.cmdSubmit.Enabled = False
-            Form1.optMove.Value = False
-            Form1.optReceive.Value = False
-            Form1.optMove.Value = False
-            Form1.optClose.Value = False
-            Form1.optCreate.Value = False
-            Form1.optReOpen.Value = False
-            Form1.optFile.Value = False
-            bolOptionClicked = False
-            imgComment.Picture = ButtonPics(4)
-            imgComment.Enabled = False
-            'RefreshAfterEdit
-            cmdEdit.Visible = False
-            cmdEdit.Picture = ButtonPics(1)
-            cmdEdit.ToolTipText = "Edit Field"
-            EditMode = False
-            PositionMaxChar Me.Controls(ActiveText)
-            SetBoxesForEdit "All"
-            DisableBoxes
-            SetControls
-            Exit Sub
-        End If
-        Dim rs      As New ADODB.Recordset
-        Dim strSQL1 As String
-        strSQL1 = "SELECT * From packetlist Where idJobNum = '" & txtJobNo.Text & "'"
-        cn_global.CursorLocation = adUseClient
-        rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-        Do Until rs.EOF
-            With rs
-                If ActiveText = "txtPartNoRev" And txtPartNoRev <> PrevPartNum Then !idPartNum = UCase$(txtPartNoRev.Text)
-                If ActiveText = "txtDrawNoRev" And txtDrawNoRev <> PrevDrawNoRev Then !idDrawingNum = UCase$(txtDrawNoRev.Text)
-                If ActiveText = "txtCustPoNo" And txtCustPoNo <> PrevCustPoNo Then !idCustPoNum = UCase$(txtCustPoNo.Text)
-                If ActiveText = "txtSalesNo" And txtSalesNo <> PrevSalesNo Then !idSalesNum = UCase$(txtSalesNo.Text)
-                If ActiveText = "txtTicketDescription" And txtTicketDescription <> PrevDescription Then !idDescription = txtTicketDescription.Text
-                !idCreateDate = !idCreateDate
-                !idLastModified = Now()
-                !idLastModifiedBy = strLocalUser
-                rs.Update
-                rs.MoveNext
-            End With
-        Loop
-        Form1.cmdSubmit.Enabled = False
-        Form1.optMove.Value = False
-        Form1.optReceive.Value = False
-        Form1.optMove.Value = False
-        Form1.optClose.Value = False
-        Form1.optCreate.Value = False
-        Form1.optReOpen.Value = False
-        Form1.optFile.Value = False
-        bolOptionClicked = False
-        imgComment.Picture = ButtonPics(4)
-        imgComment.Enabled = False
-        'RefreshAll
-        OpenPacket txtJobNo.Text
-        cmdEdit.Visible = False
-        cmdEdit.Picture = ButtonPics(1)
-        cmdEdit.ToolTipText = "Edit Field"
-        EditMode = False
-        SetBoxesForEdit "All"
-        DisableBoxes
-        SetControls
-        ShowBanner &HC0FFC0, "Job Packet was updated successfully!", 200
-    End If
-    Exit Sub
-errs:
-    EditMode = False
-    SetBoxesForEdit "All"
-    DisableBoxes
-    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
-    Err.Clear
-End Sub
-Private Sub cmdPrintInPack_Click()
-    If FlexGridIN.Rows < 2 Then
-        MsgBox ("Nothing to print!")
-        Exit Sub
-    End If
-    frmPrinters.Show 1
-    If bolCancelPrint = True Then
-        bolCancelPrint = False
-        Exit Sub
-    End If
-    FlexGridIN.ColWidth(1) = 1005
-    FlexGridIN.ColWidth(2) = 1005
-    FlexGridIN.ColWidth(3) = 2715
-    FlexGridIN.ColWidth(4) = 930
-    FlexGridIN.ColWidth(5) = 1170
-    FlexGridIN.ColWidth(6) = 885
-    FlexGridIN.ColWidth(7) = 1335
-    FlexGridIN.ColWidth(8) = 1290
-    FlexGridIN.ColWidth(9) = 3525
-    strReportType = "Incoming Packets"
-    'PrintFlexGrid FlexGridIN
-    BuildGridPrint FlexGridIN
-    PrintHeaders strReportType, sAddlMsg
-    PrintGridArray GridPrint()
-    SizeTheSheet FlexGridIN
-End Sub
-Private Sub cmdPrintOnPack_Click()
-    If FlexGridOUT.Rows < 2 Then
-        MsgBox ("Nothing to print!")
-        Exit Sub
-    End If
-    frmPrinters.Show 1
-    If bolCancelPrint = True Then
-        bolCancelPrint = False
-        Exit Sub
-    End If
-    FlexGridOUT.ColWidth(1) = 1005
-    FlexGridOUT.ColWidth(2) = 1005
-    FlexGridOUT.ColWidth(3) = 2715
-    FlexGridOUT.ColWidth(4) = 930
-    FlexGridOUT.ColWidth(5) = 1170
-    FlexGridOUT.ColWidth(6) = 885
-    FlexGridOUT.ColWidth(7) = 1335
-    FlexGridOUT.ColWidth(8) = 1290
-    FlexGridOUT.ColWidth(9) = 3525
-    strReportType = "On-hand Packets"
-    'PrintFlexGrid FlexGridOUT
-    BuildGridPrint FlexGridOUT
-    PrintHeaders strReportType, sAddlMsg
-    PrintGridArray GridPrint()
-    SizeTheSheet FlexGridOUT
-End Sub
-Private Sub cmdTimeLine_Click()
-    On Error Resume Next
-    If bolHasTicket = False Then Exit Sub
-    Load frmTip
-    frmTip.Show
-    Do While HelpClosed = False
-        Sleep 10
-        DoEvents
-    Loop
-    GetTimeLineData
-    DrawDayLines = True
-    frmTimeLine.chkDayLines.Value = 1
-    frmTimeLine.DrawTimeLine
-    frmTimeLine.Show
-End Sub
-Private Sub GetFadeColor()
-    Dim FadeColor As Long
-    Dim Color1, Color2
-    FadeColor = GetRealColor(FramePacketInfo.BackColor)
-    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
-    Color1 = RGB(iRed, iGreen, iBlue)
-    r1 = Color1 And (Not &HFFFFFF00)
-    g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
-    b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
-    FadeColor = GetRealColor(&HFF00&)
-    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
-    Color2 = RGB(iRed, iGreen, iBlue)
-    r2 = Color2 And (Not &HFFFFFF00)
-    g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
-    b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
-End Sub
-
-Private Sub FlexAttach_Click()
- On Error Resume Next
-    Set WhichGrid = FlexAttach
-    If strSortMode = "A" Then
-        Call FlexSort(FlexAttach, "D")
-        strSortMode = "D"
-    ElseIf strSortMode = "D" Then
-        Call FlexSort(FlexAttach, "A")
-        strSortMode = "A"
-    End If
-End Sub
-
-Private Sub FlexAttach_DblClick()
-LoadAttachment FlexAttach.TextMatrix(FlexAttach.RowSel, 5)
-End Sub
-
-Private Sub FlexGrid1_Click()
-    On Error Resume Next
-    Set WhichGrid = Flexgrid1
-    If strSortMode = "A" Then
-        Call FlexSort(Flexgrid1, "D")
-        strSortMode = "D"
-    ElseIf strSortMode = "D" Then
-        Call FlexSort(Flexgrid1, "A")
-        strSortMode = "A"
-    End If
-End Sub
-Sub FlexBoldFirst(FlexGrid As MSHFlexGrid)
-    Dim intCellHeight As Integer
-    On Error Resume Next
-    intCellHeight = 600
-    FlexGrid.Row = 0
-    FlexGrid.Col = 1
-    FlexGrid.CellFontSize = 10
-    FlexGrid.CellFontBold = True
-    If FlexGrid.TextMatrix(1, 4) = "com" Then
-        FlexGrid.Row = 1
-        FlexGrid.Col = 1
-        FlexGrid.CellFontBold = True
-        FlexGrid.CellFontSize = 10.75
-        FlexGrid.RowHeight(1) = intCellHeight - 200
-    End If
-    Exit Sub
-errs:
-    If Err.Number = 381 Then FlexGrid.RowHeight(0) = intCellHeight 'if Subscript out of range, it most likely means the grid only has one row. Therefor, no comment, it should fail and finish setting grid height
-End Sub
-Sub FlexFlipHist(Mode As String)
-    If Mode = "A" Then
-        FlexGridHist.Col = 3
-        FlexGridHist.Sort = flexSortGenericAscending
-    Else
-        'do nothing
-    End If
-    If Mode = "D" Then
-        FlexGridHist.Col = 3
-        FlexGridHist.Sort = flexSortGenericDescending
-    Else
-        'do nothing
-    End If
-End Sub
-Sub FlexSort(Grid As MSHFlexGrid, Mode As String)
-    If Grid.MouseRow = 0 And Mode = "A" Then
-        Grid.Col = Grid.MouseCol
-        If Grid.Col = 10 Then
-            Grid.Sort = flexSortGenericAscending
-        Else
-            Grid.Sort = flexSortStringAscending
-        End If
-    Else
-        'do nothing
-    End If
-    If Grid.MouseRow = 0 And Mode = "D" Then
-        Grid.Col = Grid.MouseCol
-        If Grid.Col = 10 Then
-            Grid.Sort = flexSortGenericDescending
-        Else
-            Grid.Sort = flexSortStringDescending
-        End If
-    Else
-        'do nothing
-    End If
-End Sub
-Public Sub FlexGridRowColor(FlexGrid As MSHFlexGrid, _
-                            ByVal lngRow As Long, _
-                            ByVal lngColor As Long)
-    Dim lngPrevCol       As Long
-    Dim lngPrevColSel    As Long
-    Dim lngPrevRow       As Long
-    Dim lngPrevRowSel    As Long
-    Dim lngPrevFillStyle As Long
-    If lngRow > FlexGrid.Rows - 1 Then
-        Exit Sub
-    End If
-    lngPrevCol = FlexGrid.Col
-    lngPrevRow = FlexGrid.Row
-    lngPrevColSel = FlexGrid.ColSel
-    lngPrevRowSel = FlexGrid.RowSel
-    lngPrevFillStyle = FlexGrid.FillStyle
-    FlexGrid.Col = FlexGrid.FixedCols
-    FlexGrid.Row = lngRow
-    FlexGrid.ColSel = FlexGrid.Cols - 1
-    FlexGrid.RowSel = lngRow
-    FlexGrid.FillStyle = flexFillRepeat
-    FlexGrid.CellBackColor = lngColor
-    FlexGrid.Col = lngPrevCol
-    FlexGrid.Row = lngPrevRow
-    FlexGrid.ColSel = lngPrevColSel
-    FlexGrid.RowSel = lngPrevRowSel
-    FlexGrid.FillStyle = lngPrevFillStyle
-End Sub
-Public Sub BuildGridPrint(Grid As MSHFlexGrid)
-    Dim intPadding As Integer 'Cell Padding
-    Dim lngCursX As Long, lngCursY As Long
-    Dim intPage As Integer
-    Dim Row       As Long, Col As Long
-    Dim RowHeight As Long, ColWidth() As Long
-    Dim GAP As Integer
-    Dim lngXMin      As Long, lngXMax As Long, lngYMin As Long, lngYMax As Long, lngYMinNoHeader 'Constraints for cursor. Keeps it on da pappahs\
-    Dim lngStartTxtX As Long, lngStartTxtY As Long
-    intPadding = 100
-    GAP = 40
-    lngXMin = 300
-    lngXMax = 15000
-    lngYMin = 1500
-    lngYMinNoHeader = 600 'no header space needed after first page
-    lngYMax = 10800
-    Printer.ScaleMode = 1
-    Printer.Orientation = vbPRORLandscape
-    Printer.DrawWidth = 1
-    Printer.DrawStyle = vbSolid
-    lngCursX = lngXMin
-    lngCursY = lngYMin
-    Printer.FontSize = prntFontSize
-    intPage = 1
-    With Grid
-        .Redraw = False
-        ReDim GridPrint(Grid.Rows - 1, Grid.Cols - 1) 'expand gridarray
-        For Row = 0 To Grid.Rows - 1
-            For Col = 1 To Grid.Cols - 1
-                GridPrint(Row, Col).intPage = intPage 'calc and add print coords and data
-                GridPrint(Row, Col).lngLeft = lngCursX
-                GridPrint(Row, Col).lngTop = lngCursY
-                GridPrint(Row, Col).intTextHeight = Printer.TextHeight(.TextMatrix(Row, Col))
-                GridPrint(Row, Col).intRowHeight = Printer.TextHeight(.TextMatrix(Row, Col)) + intPadding
-                RowHeight = GridPrint(Row, Col).intRowHeight
-                GridPrint(Row, Col).intTextWidth = Printer.TextWidth(.TextMatrix(Row, Col))
-                GridPrint(Row, Col).lngTotalWidth = Printer.TextWidth(.TextMatrix(Row, Col)) + intPadding
-                GridPrint(Row, Col).lngTextLeft = GridPrint(Row, Col).lngLeft + GAP '
-                GridPrint(Row, Col).lngTextTop = GridPrint(Row, Col).lngTop + GAP '
-                GridPrint(Row, Col).intColWidth = .ColWidth(Col)
-                GridPrint(Row, Col).strText = BoundedText(Printer, .TextMatrix(Row, Col), .ColWidth(Col))
-                GridPrint(Row, Col).lngRight = GridPrint(Row, Col).lngLeft + GridPrint(Row, Col).intColWidth + GAP 'GridPrint(Row, Col).lngTotalWidth
-                GridPrint(Row, Col).lngBottom = GridPrint(Row, Col).lngTop + GridPrint(Row, Col).intRowHeight
-                .Row = Row
-                .ColSel = .Cols - 1
-                GridPrint(Row, Col).lngBackColor = .CellBackColor
-                lngCursX = GridPrint(Row, Col).lngRight
-            Next Col
-            lngCursX = lngXMin
-            If lngCursY + RowHeight >= lngYMax Then 'we are running out of space. next page.
-                intPage = intPage + 1
-                lngYMin = lngYMinNoHeader
-                lngCursX = lngXMin
-                lngCursY = lngYMin
-            Else
-                lngCursY = lngCursY + RowHeight
-            End If
-        Next Row
-        GridPrint(UBound(GridPrint, 1), UBound(GridPrint, 2)).intTotPage = intPage
-        .Redraw = True
-    End With
-End Sub
-Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
-    On Error Resume Next
-    Dim z, Y As Integer
-    z = 1
-    Y = 600
-    TargetGrid.ScrollBars = flexScrollBarNone
-    Dim Col(), i, b As Integer
-    ReDim Col(TargetGrid.Cols)
-    For i = 0 To TargetGrid.Rows - 1
-        For b = 0 To TargetGrid.Cols - 1
-            If TextWidth(TargetGrid.TextMatrix(i, b)) > Col(b) Then Col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
-        Next b
-    Next i
-    For b = 0 To TargetGrid.Cols - 1
-        If b = 4 Then
-            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
-        Else
-            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
-        End If
-        TargetGrid.ColAlignment(b) = flexAlignLeftCenter
-    Next b
-    TargetGrid.ScrollBars = flexScrollBarBoth
-    TargetGrid.ColWidth(0) = 0
-End Sub
-Public Sub RefreshHistory() 'Redraws History Grid
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim b       As Integer
-    On Error GoTo errs
-    If Me.ActiveControl.Name = "FlexGridHist" Then Exit Sub
-    If txtJobNo.Text = "" Then Exit Sub
-    If bolHasTicket = False Then Exit Sub
-    ShowData
-    strSQL1 = "SELECT * FROM packetentrydb e LEFT JOIN packetlist l ON l.idJobNum=e.idJobNum WHERE l.idJobNum = '" & txtJobNo.Text & "' ORDER BY idDate DESC"
-    Set rs = New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL1)
-    FlexGridHist.Redraw = False
-    FlexGridHist.Visible = False
-    FlexGridHist.ScrollBars = flexScrollBarNone
-    FlexGridHist.Clear
-    FlexGridHist.Cols = 6
-    FlexGridHist.Rows = 0
-    With rs
-        dtLatestHistDate = Format$(!idDate, strDBDateTimeFormat)
-    End With
-    rs.MoveLast
-    Do Until rs.BOF
-        With rs
-            Call FillFlexHist(!idAction, !idStatus, !idComment, !idDate, GetFullName(!idCreator), GetFullName(!idUserFrom), GetFullName(!idUserTo), GetFullName(!idUser), !idGUIDEntry)
-            rs.MovePrevious
-        End With
-    Loop
-    For b = 0 To FlexGridHist.Cols - 1
-        FlexGridHist.ColAlignment(b) = flexAlignLeftCenter
-    Next b
-    FlexGridHist.ColWidth(0) = 1000
-    FlexGridHist.ColWidth(1) = 8500
-    FlexGridHist.ColWidth(3) = 0
-    FlexGridHist.ColWidth(4) = 0
-    FlexGridHist.RowHeight(0) = 0
-    Call FlexFlipHist("D")
-    FlexBoldFirst FlexGridHist
-    FlexGridRedrawHeight
-    FlexGridHist.ScrollBars = flexScrollBarVertical
-    FlexGridHist.Visible = True
-    FlexGridHist.Redraw = True
-    FlexGridHist.TopRow = FlexHistLastTopRow
-    FlexGridHist.CellPictureAlignment = flexAlignCenterCenter
-    HideData
-    Exit Sub
-errs:
-    ErrHandle Err.Number, Err.Description, "RefreshHistory"
+Public Sub SetComboBoxHeight(ComboBox As ImageCombo, ByVal NewHeight As Long)
+    Dim lpRect As RECT
+    Dim wi     As Long
+    GetWindowRect ComboBox.hwnd, lpRect
+    wi = lpRect.Right - lpRect.Left
+    ScreenToClientAny ComboBox.Parent.hwnd, lpRect
+    MoveWindow ComboBox.hwnd, lpRect.Left, lpRect.Top, wi, NewHeight, True
 End Sub
 Public Sub SetControls()
     If strTicketAction = "FILED" And strCurUser <> strLocalUser Then
@@ -3893,145 +4350,62 @@ Public Sub SetControls()
         bolCanEdit = bolIsAdmin
     End If
 End Sub
-Public Sub LiveSearch(ByVal strSearchString As String) '
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    On Error GoTo LeaveSub
-    List1.Clear
-    ShowData
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT idJobNum FROM packetlist Where idJobNum Like '" & strSearchString & "%' ORDER BY idJobNum"
-    Set rs = cn_global.Execute(strSQL1)
-    Do Until rs.EOF
-        With rs
-            List1.AddItem !idJobNum, .AbsolutePosition - 1
-            rs.MoveNext
-        End With
-    Loop
-    If rs.RecordCount >= 1 Then
-        List1.Visible = True
-    ElseIf rs.RecordCount <= 0 Then
-        List1.Visible = False
-    End If
-LeaveSub:
-    HideData
+Public Sub SetupGrids()
+    FlexGridOUT.Rows = 2
+    FlexGridIN.Rows = 2
+    FlexGridOUT.Cols = 10
+    FlexGridIN.Cols = 10
+    FlexGridOUT.FixedCols = 1
+    FlexGridOUT.FixedRows = 1
+    FlexGridIN.FixedCols = 1
+    FlexGridIN.FixedRows = 1
+    FlexGridOUT.TextMatrix(0, 1) = "Job Number"
+    FlexGridOUT.TextMatrix(0, 2) = "Part Number"
+    FlexGridOUT.TextMatrix(0, 3) = "Description"
+    FlexGridOUT.TextMatrix(0, 4) = "Sales Number"
+    FlexGridOUT.TextMatrix(0, 5) = "Customer/PO Number"
+    FlexGridOUT.TextMatrix(0, 6) = "Created By"
+    FlexGridOUT.TextMatrix(0, 7) = "Create Date"
+    FlexGridOUT.TextMatrix(0, 8) = "Last Activity Date"
+    FlexGridOUT.TextMatrix(0, 9) = "Last Activity"
+    FlexGridIN.TextMatrix(0, 1) = "Job Number"
+    FlexGridIN.TextMatrix(0, 2) = "Part Number"
+    FlexGridIN.TextMatrix(0, 3) = "Description"
+    FlexGridIN.TextMatrix(0, 4) = "Sales Number"
+    FlexGridIN.TextMatrix(0, 5) = "Customer/PO Number"
+    FlexGridIN.TextMatrix(0, 6) = "Created By"
+    FlexGridIN.TextMatrix(0, 7) = "Create Date"
+    FlexGridIN.TextMatrix(0, 8) = "Last Activity Date"
+    FlexGridIN.TextMatrix(0, 9) = "Last Activity"
 End Sub
-Public Sub SubmitFile()
-    On Error GoTo errs
-    If Not DBConcurrent = 1 Then
-        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
-        ClearOptBoxes
-        RefreshAll
-        SetControls
-        Exit Sub
-    End If
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim intBlah As Integer
-    If Trim$(strTicketComment) = "" Then
-        Dim Msg
-        Msg = MsgBox("Please enter a comment describing the filing location.", vbOKOnly + vbExclamation, "Note Required")
-        optFile.Value = True
-        frmComments.Show (vbModal)
-        Exit Sub
-    End If
-    ShowData
-    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
-    cn_global.CursorLocation = adUseClient
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        rs.AddNew
-        !idAction = "FILED"
-        !idUser = strLocalUser
-        !idUserFrom = "NULL"
-        !idUserTo = "NULL"
-        !idComment = strTicketComment
-        !idJobNum = txtJobNo.Text
-        .Update
-        .Close
-        HideData
-    End With
-    DisableBoxes
-    cmdSubmit.Enabled = False
-    optReceive.Value = False
-    optMove.Value = False
-    optClose.Value = False
-    optCreate.Value = False
-    optReOpen.Value = False
-    optFile.Value = False
-    bolOptionClicked = False
-    imgComment.Picture = ButtonPics(4)
-    imgComment.Enabled = False
-    RefreshAfterEdit
-    If DBConcurrent = 1 And Err.Number = 0 Then
-        ShowBanner colFiled, "Job Packet Filed Successfully."
-    Else
-    End If
-    Exit Sub
-errs:
-    Dim blah
-    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
-    ClearFields
-    Err.Clear
+Public Sub ShowData()
+    Set pbData.Picture = picDataPics(2)
+    DoEvents
+    StartTimer
 End Sub
-Public Sub SubmitReOpen()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String, strSQL2 As String
-    Dim intBlah As Integer
-    On Error GoTo errs
-    If Not DBConcurrent = 1 Then
-        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
-        ClearOptBoxes
-        RefreshAll
-        SetControls
-        Exit Sub
-    End If
-    ShowData
-    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
-    strSQL2 = "select * from packetlist WHERE idJobNum = '" & txtJobNo.Text & "'"
-    cn_global.CursorLocation = adUseClient
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        .AddNew
-        !idAction = "REOPENED"
-        !idUser = strLocalUser
-        !idUserFrom = "NULL"
-        !idUserTo = "NULL"
-        !idComment = strTicketComment
-        !idJobNum = txtJobNo.Text
-        .Update
-        .Close
-        rs.Open strSQL2, cn_global, adOpenKeyset, adLockOptimistic
-        If !idStatus = "CLOSED" Then
-            !idStatus = "OPEN"
-            !idCreateDate = !idCreateDate
-            .Update
-            .Close
+Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
+    On Error Resume Next
+    Dim z, Y As Integer
+    z = 1
+    Y = 600
+    TargetGrid.ScrollBars = flexScrollBarNone
+    Dim Col(), i, b As Integer
+    ReDim Col(TargetGrid.Cols)
+    For i = 0 To TargetGrid.Rows - 1
+        For b = 0 To TargetGrid.Cols - 1
+            If TextWidth(TargetGrid.TextMatrix(i, b)) > Col(b) Then Col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
+        Next b
+    Next i
+    For b = 0 To TargetGrid.Cols - 1
+        If b = 4 Then
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
         Else
-            .Close
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
         End If
-        HideData
-    End With
-    RefreshAfterEdit
-    If Err.Number = 0 Then
-        ShowBanner colReopened, "Job Packet Reopened Successfully."
-    Else
-    End If
-    cmdSubmit.Enabled = False
-    optReceive.Value = False
-    optMove.Value = False
-    optClose.Value = False
-    optCreate.Value = False
-    optReOpen.Value = False
-    bolOptionClicked = False
-    imgComment.Picture = ButtonPics(4)
-    imgComment.Enabled = False
-    Exit Sub
-errs:
-    Dim blah
-    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
-    ClearFields
-    Err.Clear
+        TargetGrid.ColAlignment(b) = flexAlignLeftCenter
+    Next b
+    TargetGrid.ScrollBars = flexScrollBarBoth
+    TargetGrid.ColWidth(0) = 0
 End Sub
 Public Sub SubmitClose()
     Dim rs      As New ADODB.Recordset
@@ -4097,38 +4471,39 @@ errs:
     ClearFields
     Err.Clear
 End Sub
-Public Sub SubmitReceive()
-    Dim rs          As New ADODB.Recordset
-    Dim strSQL1     As String
-    Dim ConfirmText As String
+Public Sub SubmitCreate()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String, strSQL2 As String, strJobNum As String, strSQL3 As String
+    Dim FormatDate, FormatTime As String
+    strJobNum = txtJobNo.Text
     On Error GoTo errs
-    If Not DBConcurrent = 1 Then
-        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
-        ClearOptBoxes
-        RefreshAll
-        SetControls
-        Exit Sub
-    End If
     ShowData
-    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
+    FormatDate = Format$(Date, strDBDateFormat)
+    FormatTime = Format$(Time, "hh:mm:ss")
+    strSQL2 = "SELECT idJobNum From packetlist Where idJobNum = '" & strJobNum & "'"
+    strSQL1 = "INSERT INTO packetlist (idJobNum,idPartNum,idDrawingNum,idCustPONum,idSalesNum,idStatus,idCreator,idDescription,idPlant,idMailbox)" & " VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','" & Replace$(txtPartNoRev.Text, "'", "''") & "','" & Replace$(txtDrawNoRev.Text, "'", "''") & "','" & Replace$(txtCustPoNo.Text, "'", "''") & "','" & Replace$(txtSalesNo.Text, "'", "''") & "','" & "OPEN','" & strLocalUser & "','" & Replace$(txtTicketDescription.Text, "'", "''") & "','" & cmbPlant.Text & "','" & strLocalUser & "')"
+    strSQL3 = "INSERT INTO packetentrydb (idJobNum,idAction,idUser,idUserFrom,idUserTo,idComment) VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','CREATED','" & strLocalUser & "','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "')"
+    Set rs = New ADODB.Recordset
     cn_global.CursorLocation = adUseClient
-    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
-    With rs
-        .AddNew
-        !idAction = "RECEIVED"
-        !idUser = strLocalUser
-        !idUserFrom = strUserFrom
-        ConfirmText = "Job Packet Received From " & !idUserFrom
-        !idUserTo = "NULL"
-        !idComment = strTicketComment
-        !idJobNum = txtJobNo.Text
-        .Update
-        .Close
-    End With
+    Set rs = cn_global.Execute(strSQL2)
+    If rs.RecordCount > 0 Then
+        ShowBanner &HC0C0FF, "A Job Packet with that Job Number already exists!", 500
+        optCreate.Value = 1
+        cmdSubmit.Enabled = False
+        txtJobNo.SetFocus
+        HideData
+        Exit Sub
+    Else
+        With rs
+            Set rs = cn_global.Execute(strSQL1)
+            Set rs = cn_global.Execute(strSQL3)
+        End With
+    End If
     HideData
-    'cmdSubmit.Enabled = False
+    bolHasTicket = True
     DisableBoxes
     RefreshAfterEdit
+    RefreshHistory
     cmdSubmit.Enabled = False
     optReceive.Value = False
     optMove.Value = False
@@ -4139,9 +4514,73 @@ Public Sub SubmitReceive()
     bolOptionClicked = False
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
-    SendEmailToQueue "REC", strLocalUser, strUserFrom, txtJobNo.Text, strTicketComment
+    strCurJobNum = txtJobNo.Text
+    
+errs:
     If Err.Number = 0 Then
-        ShowBanner colReceived, ConfirmText
+        cmbPlant.BackColor = vbWindowBackground
+        txtCustPoNo.BackColor = vbWindowBackground
+        txtDrawNoRev.BackColor = vbWindowBackground
+        txtSalesNo.BackColor = vbWindowBackground
+        txtPartNoRev.BackColor = vbWindowBackground
+        txtTicketDescription.BackColor = vbWindowBackground
+        txtJobNo.BackColor = vbWindowBackground
+        ShowBanner colCreate, "Job Packet Created Successfully."
+    Else
+        Dim blah
+        blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
+        Err.Clear
+    End If
+End Sub
+Public Sub SubmitFile()
+    On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim intBlah As Integer
+    If Trim$(strTicketComment) = "" Then
+        Dim Msg
+        Msg = MsgBox("Please enter a comment describing the filing location.", vbOKOnly + vbExclamation, "Note Required")
+        optFile.Value = True
+        frmComments.Show (vbModal)
+        Exit Sub
+    End If
+    ShowData
+    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        rs.AddNew
+        !idAction = "FILED"
+        !idUser = strLocalUser
+        !idUserFrom = "NULL"
+        !idUserTo = "NULL"
+        !idComment = strTicketComment
+        !idJobNum = txtJobNo.Text
+        .Update
+        .Close
+        HideData
+    End With
+    DisableBoxes
+    cmdSubmit.Enabled = False
+    optReceive.Value = False
+    optMove.Value = False
+    optClose.Value = False
+    optCreate.Value = False
+    optReOpen.Value = False
+    optFile.Value = False
+    bolOptionClicked = False
+    imgComment.Picture = ButtonPics(4)
+    imgComment.Enabled = False
+    RefreshAfterEdit
+    If DBConcurrent = 1 And Err.Number = 0 Then
+        ShowBanner colFiled, "Job Packet Filed Successfully."
     Else
     End If
     Exit Sub
@@ -4217,39 +4656,38 @@ errs:
         Err.Clear
     End If
 End Sub
-Public Sub SubmitCreate()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String, strSQL2 As String, strJobNum As String, strSQL3 As String
-    Dim FormatDate, FormatTime As String
-    strJobNum = txtJobNo.Text
+Public Sub SubmitReceive()
+    Dim rs          As New ADODB.Recordset
+    Dim strSQL1     As String
+    Dim ConfirmText As String
     On Error GoTo errs
-    ShowData
-    FormatDate = Format$(Date, strDBDateFormat)
-    FormatTime = Format$(Time, "hh:mm:ss")
-    strSQL2 = "SELECT idJobNum From packetlist Where idJobNum = '" & strJobNum & "'"
-    strSQL1 = "INSERT INTO packetlist (idJobNum,idPartNum,idDrawingNum,idCustPONum,idSalesNum,idStatus,idCreator,idDescription,idPlant,idMailbox)" & " VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','" & Replace$(txtPartNoRev.Text, "'", "''") & "','" & Replace$(txtDrawNoRev.Text, "'", "''") & "','" & Replace$(txtCustPoNo.Text, "'", "''") & "','" & Replace$(txtSalesNo.Text, "'", "''") & "','" & "OPEN','" & strLocalUser & "','" & Replace$(txtTicketDescription.Text, "'", "''") & "','" & cmbPlant.Text & "','" & strLocalUser & "')"
-    strSQL3 = "INSERT INTO packetentrydb (idJobNum,idAction,idUser,idUserFrom,idUserTo,idComment) VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','CREATED','" & strLocalUser & "','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "')"
-    Set rs = New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL2)
-    If rs.RecordCount > 0 Then
-        ShowBanner &HC0C0FF, "A Job Packet with that Job Number already exists!", 500
-        optCreate.Value = 1
-        cmdSubmit.Enabled = False
-        txtJobNo.SetFocus
-        HideData
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
         Exit Sub
-    Else
-        With rs
-            Set rs = cn_global.Execute(strSQL1)
-            Set rs = cn_global.Execute(strSQL3)
-        End With
     End If
+    ShowData
+    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        .AddNew
+        !idAction = "RECEIVED"
+        !idUser = strLocalUser
+        !idUserFrom = strUserFrom
+        ConfirmText = "Job Packet Received From " & !idUserFrom
+        !idUserTo = "NULL"
+        !idComment = strTicketComment
+        !idJobNum = txtJobNo.Text
+        .Update
+        .Close
+    End With
     HideData
-    bolHasTicket = True
+    'cmdSubmit.Enabled = False
     DisableBoxes
     RefreshAfterEdit
-    RefreshHistory
     cmdSubmit.Enabled = False
     optReceive.Value = False
     optMove.Value = False
@@ -4260,292 +4698,76 @@ Public Sub SubmitCreate()
     bolOptionClicked = False
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
-    strCurJobNum = txtJobNo.Text
-    
-errs:
+    SendEmailToQueue "REC", strLocalUser, strUserFrom, txtJobNo.Text, strTicketComment
     If Err.Number = 0 Then
-        cmbPlant.BackColor = vbWindowBackground
-        txtCustPoNo.BackColor = vbWindowBackground
-        txtDrawNoRev.BackColor = vbWindowBackground
-        txtSalesNo.BackColor = vbWindowBackground
-        txtPartNoRev.BackColor = vbWindowBackground
-        txtTicketDescription.BackColor = vbWindowBackground
-        txtJobNo.BackColor = vbWindowBackground
-        ShowBanner colCreate, "Job Packet Created Successfully."
+        ShowBanner colReceived, ConfirmText
     Else
-        Dim blah
-        blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
-        Err.Clear
     End If
-End Sub
-Public Sub HideOpts()
-    optMove.Enabled = False
-    cmbUsers.Visible = False
-    lblUser.Visible = False
-    optReceive.Enabled = False
-    optClose.Enabled = False
-End Sub
-Public Sub EnableBoxes()
-    txtPartNoRev.Locked = False
-    txtDrawNoRev.Locked = False
-    txtSalesNo.Locked = False
-    txtCustPoNo.Locked = False
-    txtTicketDescription.Locked = False
-    cmbPlant.Enabled = True
-    frmComments.txtComment.Locked = False
-End Sub
-Public Sub DisableBoxes()
-    txtPartNoRev.Locked = True
-    txtDrawNoRev.Locked = True
-    txtSalesNo.Locked = True
-    txtCustPoNo.Locked = True
-    txtTicketDescription.Locked = True
-    cmbPlant.Enabled = False
-    lblChars.Visible = False
-End Sub
-Public Sub RefreshFields() 'Fills fields, does not refresh History Grid.
-    Dim rs As New ADODB.Recordset
-    Dim strSQL1, strSQL2 As String
-    On Error GoTo errs
-    If txtJobNo.Text = "" Or optCreate.Value = True Or bolHasTicket = False Then Exit Sub
-    SetBoxesForEdit "All"
-    ShowData
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
-    Set rs = cn_global.Execute(strSQL1)
-    With rs
-        txtPartNoRev.Text = !idPartNum
-        txtDrawNoRev.Text = !idDrawingNum
-        txtCustPoNo.Text = !idCustPoNum
-        txtSalesNo.Text = !idSalesNum
-        txtCreator.Text = GetFullName(!idCreator)
-        txtCreateDate.Text = !idCreateDate
-        txtActionDate.Text = !idDate
-        strTicketAction = !idAction
-        strUserFrom = !idUserFrom
-        strUserTo = !idUserTo
-        strCurUser = !idUser
-        strTicketStatus = !idStatus
-        txtTicketAction.Text = !idAction
-        txtTicketOwner.Text = GetFullName(!idUser)
-        txtTicketDescription.Text = !idDescription
-        txtTicketStatus.Text = !idStatus
-        strPlant = !idPlant
-        cmbPlant.Text = strPlant
-        If !idLastModifiedBy <> "NOONE" Then
-            lblModifyBy.Caption = "Modified By: " & !idLastModifiedBy
-            lblModifyDate.Caption = "Modified Date: " & vbCrLf & !idLastModified
-        Else
-            lblModifyBy.Caption = ""
-            lblModifyDate.Caption = ""
-        End If
-        If txtJobNo.Text = "" Then
-            DisableBoxes
-            tmrRefresher.Enabled = False
-        Else
-            bolHasTicket = True
-            tmrRefresher.Enabled = True
-        End If
-        If !idComment <> "" Then
-            TheX = pbScrollBox.ScaleWidth
-            strCommentText = !idComment
-            tmrScroll.Enabled = True
-        Else
-            pbScrollBox.Cls
-            strCommentText = ""
-            tmrScroll.Enabled = False
-        End If
-    End With
-    'GetMyPackets
-    HideData
     Exit Sub
 errs:
-    'If Err.Number = -2147467259 Then
-    ErrHandle Err.Number, Err.Description, "RefreshFields"
+    Dim blah
+    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
+    ClearFields
+    Err.Clear
 End Sub
-Public Sub RefreshAfterEdit()
-    RefreshFields
-    GetMyPackets
-End Sub
-Public Sub ClearAllButJobN()
-    strLastJobNum = ""
-    cmbPlant.BackColor = vbWindowBackground
-    txtCustPoNo.BackColor = vbWindowBackground
-    txtDrawNoRev.BackColor = vbWindowBackground
-    txtSalesNo.BackColor = vbWindowBackground
-    txtPartNoRev.BackColor = vbWindowBackground
-    txtTicketDescription.BackColor = vbWindowBackground
-    txtJobNo.BackColor = vbWindowBackground
-    cmdSubmit.BackColor = vbButtonFace
-    txtTicketDescription.Text = ""
-    txtPartNoRev.Text = ""
-    txtDrawNoRev.Text = ""
-    txtCustPoNo.Text = ""
-    txtSalesNo.Text = ""
-    txtCreator.Text = ""
-    txtTicketAction.Text = ""
-    txtTicketStatus.Text = ""
-    txtCreateDate.Text = ""
-    txtTicketOwner.Text = ""
-    txtActionDate.Text = ""
-    cmbUsers.Visible = False
-    cmbUsers.ComboItems.Item(1).Selected = True
-    lblUser.Visible = False
-    frmComments.txtComment.Text = ""
-    imgComment.Picture = ButtonPics(4)
-    imgComment.Enabled = False
-    strUserTo = ""
-    strUserFrom = ""
-    strTicketAction = ""
-    strTicketStatus = ""
-    optMove.Value = False
-    optReceive.Value = False
-    optClose.Value = False
-    optFile.Value = False
-    optReOpen.Value = False
-    optMove.Enabled = False
-    cmbUsers.Visible = False
-    lblUser.Visible = False
-    optReceive.Enabled = False
-    optClose.Enabled = False
-    optFile.Enabled = False
-    optReOpen.Enabled = False
-    cmbPlant.ListIndex = 0
-    optCreate.Value = False
-    bolHasTicket = False
-    HideOpts
-    tmrScroll.Enabled = False
-    strCommentText = ""
-    pbScrollBox.Cls
-    SetBoxesForEdit "All"
-    EditMode = False
-    lblChars.Visible = False
-    StatusBar1.Panels.Item(1).Text = ""
-    FlexGridHist.Visible = False
-    bolCanEdit = False
-    FlexHistLastTopRow = 0
-    lblModifyBy.Caption = ""
-    lblModifyDate.Caption = ""
-    strCurJobNum = ""
-    FlexAttach.Visible = False
-    SSTab1.TabCaption(1) = "Attachments"
-End Sub
-Public Sub ClearFields()
-    ClearBanners
-    Screen.MousePointer = vbDefault
-    HideData
-    strLastJobNum = ""
-    cmbPlant.BackColor = vbWindowBackground
-    txtCustPoNo.BackColor = vbWindowBackground
-    txtDrawNoRev.BackColor = vbWindowBackground
-    txtSalesNo.BackColor = vbWindowBackground
-    txtPartNoRev.BackColor = vbWindowBackground
-    txtTicketDescription.BackColor = vbWindowBackground
-    txtJobNo.BackColor = vbWindowBackground
-    cmdSubmit.BackColor = vbButtonFace
-    txtTicketDescription.Text = ""
-    txtJobNo.Text = ""
-    txtPartNoRev.Text = ""
-    txtDrawNoRev.Text = ""
-    txtCustPoNo.Text = ""
-    txtSalesNo.Text = ""
-    txtCreator.Text = ""
-    txtTicketAction.Text = ""
-    txtTicketStatus.Text = ""
-    txtCreateDate.Text = ""
-    txtTicketOwner.Text = ""
-    txtActionDate.Text = ""
-    bolOptionClicked = False
-    cmbUsers.Visible = False
-    cmbUsers.ComboItems.Item(1).Selected = True
-    lblUser.Visible = False
-    frmComments.txtComment.Text = ""
-    imgComment.Picture = ButtonPics(4)
-    imgComment.Enabled = False
-    strUserTo = ""
-    strUserFrom = ""
-    strTicketAction = ""
-    strTicketStatus = ""
-    optMove.Value = False
-    optReceive.Value = False
-    optClose.Value = False
-    optFile.Value = False
-    optReOpen.Value = False
-    optMove.Enabled = False
-    cmbUsers.Visible = False
-    lblUser.Visible = False
-    optReceive.Enabled = False
-    optClose.Enabled = False
-    optFile.Enabled = False
-    optReOpen.Enabled = False
-    cmbPlant.ListIndex = 0
-    optCreate.Value = False
-    bolHasTicket = False
-    HideOpts
-    FlexGridHist.Visible = False
-    FlexGridHist.Clear
-    FlexGridHist.Cols = 0
-    FlexGridHist.Rows = 0
-    lblChars.Visible = False
-    tmrScroll.Enabled = False
-    strCommentText = ""
-    pbScrollBox.Cls
-    cmdEdit.Visible = False
-    cmdEdit.Picture = ButtonPics(1)
-    cmdEdit.ToolTipText = "Edit Field"
-    bolCanEdit = False
-    EditMode = False
-    FlexHistLastTopRow = 0
-    lblModifyBy.Caption = ""
-    lblModifyDate.Caption = ""
-    intFlexGridInLastRow = 1
-    intFlexGridOutLastRow = 1
-    strCurJobNum = ""
-    FlexAttach.Visible = False
-    SSTab1.TabCaption(1) = "Attachments"
-End Sub
-Public Sub GetTopHits()
-    Dim sGet          As String
-    Dim sSections()   As String
-    Dim iSectionCount As Long
-    Dim sKeys()       As String
-    Dim iKeycount     As Long
-    Dim iSection      As Long
-    Dim iKey          As Long
-    Dim lSect         As Long
-    Dim MaxKeys       As Long
-    Dim i             As Integer
-    Dim SortHits()    As Variant
-    ReDim SortHits(1, 0)
-    bolNoHits = True
-    With m_cIni
-        .EnumerateAllSections sSections(), iSectionCount
-        If iSectionCount > 1 Then
-            bolNoHits = False
-            cmbUsers.ComboItems.Clear
-            cmbUsers.ComboItems.Add , , ""
-            For iSection = 2 To iSectionCount
-                .Section = sSections(iSection)
-                .EnumerateCurrentSection sKeys(), iKeycount
-                For iKey = 1 To iKeycount
-                    ReDim Preserve SortHits(1, UBound(SortHits, 2) + 1)
-                    .Key = sKeys(iKey)
-                    SortHits(1, UBound(SortHits, 2)) = .Key
-                    SortHits(0, UBound(SortHits, 2)) = Int(.Value)
-                Next iKey
-            Next iSection
-            Call MySort(SortHits)
-            If UBound(SortHits, 2) - 1 < 4 Then
-                MaxKeys = UBound(SortHits, 2) - 1
-            ElseIf UBound(SortHits, 2) - 1 >= 4 Then
-                MaxKeys = 3
-            End If
-            For i = 0 To MaxKeys
-                cmbUsers.ComboItems.Add , SortHits(1, i), ReturnEmpInfo(SortHits(1, i)).FullName, 1
-            Next i
-            cmbUsers.ComboItems.Add , , "____________________________"
+Public Sub SubmitReOpen()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String, strSQL2 As String
+    Dim intBlah As Integer
+    On Error GoTo errs
+    If Not DBConcurrent = 1 Then
+        ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
+        ClearOptBoxes
+        RefreshAll
+        SetControls
+        Exit Sub
+    End If
+    ShowData
+    strSQL1 = "select * from packetentrydb WHERE idJobNum = '" & txtJobNo.Text & "'"
+    strSQL2 = "select * from packetlist WHERE idJobNum = '" & txtJobNo.Text & "'"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        .AddNew
+        !idAction = "REOPENED"
+        !idUser = strLocalUser
+        !idUserFrom = "NULL"
+        !idUserTo = "NULL"
+        !idComment = strTicketComment
+        !idJobNum = txtJobNo.Text
+        .Update
+        .Close
+        rs.Open strSQL2, cn_global, adOpenKeyset, adLockOptimistic
+        If !idStatus = "CLOSED" Then
+            !idStatus = "OPEN"
+            !idCreateDate = !idCreateDate
+            .Update
+            .Close
+        Else
+            .Close
         End If
+        HideData
     End With
+    RefreshAfterEdit
+    If Err.Number = 0 Then
+        ShowBanner colReopened, "Job Packet Reopened Successfully."
+    Else
+    End If
+    cmdSubmit.Enabled = False
+    optReceive.Value = False
+    optMove.Value = False
+    optClose.Value = False
+    optCreate.Value = False
+    optReOpen.Value = False
+    bolOptionClicked = False
+    imgComment.Picture = ButtonPics(4)
+    imgComment.Enabled = False
+    Exit Sub
+errs:
+    Dim blah
+    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
+    ClearFields
+    Err.Clear
 End Sub
 Public Sub UpdateUserList()
     Dim strSQL1 As String
@@ -4588,43 +4810,92 @@ errs:
         End If
     End If
 End Sub
-Private Sub cmbPlant_Click()
-    cmbPlant.BackColor = vbWindowBackground
-    If cmbPlant.Text <> "" And txtJobNo.Text <> "" And txtPartNoRev.Text <> "" And txtSalesNo.Text <> "" And txtDrawNoRev.Text <> "" And txtCustPoNo.Text <> "" And optCreate.Value = True Or bolHasTicket = True And bolOptionClicked = True Then
-        cmdSubmit.Enabled = True
+Private Sub GetFadeColor()
+    Dim FadeColor As Long
+    Dim Color1, Color2
+    FadeColor = GetRealColor(FramePacketInfo.BackColor)
+    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
+    Color1 = RGB(iRed, iGreen, iBlue)
+    r1 = Color1 And (Not &HFFFFFF00)
+    g1 = (Color1 And (Not &HFFFF00FF)) \ &H100&
+    b1 = (Color1 And (Not &HFF00FFFF)) \ &HFFFF&
+    FadeColor = GetRealColor(&HFF00&)
+    ColorCodeToRGB FadeColor, iRed, iGreen, iBlue
+    Color2 = RGB(iRed, iGreen, iBlue)
+    r2 = Color2 And (Not &HFFFFFF00)
+    g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
+    b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
+End Sub
+Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
+    Dim R As Long
+    R = TranslateColor(Color, 0, GetRealColor)
+    If R <> 0 Then 'raise an error
+    End If
+End Function
+Private Function GetTabState() As Boolean
+    GetTabState = False
+    If GetKeyState(VK_TAB) And -256 Then
+        GetTabState = True
+    End If
+End Function
+Private Sub PositionEdit(WhatControl As TextBox)
+    If EditMode = True Then Exit Sub
+    If bolCanEdit = True Then
+        cmdEdit.Visible = False
+        cmdEdit.Left = WhatControl.Left + WhatControl.Width + 125
+        cmdEdit.Top = WhatControl.Top + 480
+        cmdEdit.Visible = True
+        ActiveText = WhatControl.Name
     Else
-        cmdSubmit.Enabled = False
+        cmdEdit.Visible = False
     End If
 End Sub
-Private Sub cmbUsers_Click()
-    strSelectUserTo = UCase$(cmbUsers.SelectedItem.Key)
-    If strSelectUserTo = "" Then
-        bolOptionClicked = False
-        cmdSubmit.Enabled = False
-    Else
-        cmdSubmit.Enabled = True
-        bolOptionClicked = True
-    End If
-End Sub
-Private Sub cmbUsers_KeyPress(KeyAscii As Integer)
-    If KeyAscii = 13 Then
-        If strSelectUserTo = "" Then
-            bolOptionClicked = False
-            cmdSubmit.Enabled = False
+Private Sub SetBoxesForEdit(EnabledControl As String)
+    If EnabledControl <> "All" Then
+        If EnabledControl = "txtTicketDescription" Then
+            txtTicketDescription.Enabled = True
         Else
-            cmdSubmit.Enabled = True
-            bolOptionClicked = True
-            Call cmdSubmit_Click
+            txtTicketDescription.Enabled = False
         End If
+        If EnabledControl = "txtPartNoRev" Then
+            txtPartNoRev.Enabled = True
+        Else
+            txtPartNoRev.Enabled = False
+        End If
+        If EnabledControl = "txtSalesNo" Then
+            txtSalesNo.Enabled = True
+        Else
+            txtSalesNo.Enabled = False
+        End If
+        If EnabledControl = "txtDrawNoRev" Then
+            txtDrawNoRev.Enabled = True
+        Else
+            txtDrawNoRev.Enabled = False
+        End If
+        If EnabledControl = "txtCustPoNo" Then
+            txtCustPoNo.Enabled = True
+        Else
+            txtCustPoNo.Enabled = False
+        End If
+    ElseIf EnabledControl = "All" Then
+        txtTicketDescription.Enabled = True
+        txtPartNoRev.Enabled = True
+        txtSalesNo.Enabled = True
+        txtDrawNoRev.Enabled = True
+        txtCustPoNo.Enabled = True
+        cmdEdit.Visible = False
+        cmdEdit.Picture = ButtonPics(1)
+        cmdEdit.ToolTipText = "Edit Field"
+        DisableBoxes
+        EditMode = False
     End If
 End Sub
-Private Sub cmdAllClosedReport_Click()
-    If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
-        Exit Sub
-    Else
-        ClearBanners
-        ShowAllClosed
-    End If
+Private Sub SetupAdmin()
+    bolIsAdmin = True
+    FlexGridHist.HighLight = flexHighlightAlways
+    mnuAdmin.Visible = True
+   ' intFormHMin = intFormHMin + 300
+    'intFormHMax = intFormHMax + 300
 End Sub
 Private Sub ShowAllClosed()
     bolRunning = True
@@ -4819,6 +5090,44 @@ errs:
     bolRunning = False
     ErrHandle Err.Number, Err.Description, "ShowAllOpen"
 End Sub
+Private Sub cmbPlant_Click()
+    cmbPlant.BackColor = vbWindowBackground
+    If cmbPlant.Text <> "" And txtJobNo.Text <> "" And txtPartNoRev.Text <> "" And txtSalesNo.Text <> "" And txtDrawNoRev.Text <> "" And txtCustPoNo.Text <> "" And optCreate.Value = True Or bolHasTicket = True And bolOptionClicked = True Then
+        cmdSubmit.Enabled = True
+    Else
+        cmdSubmit.Enabled = False
+    End If
+End Sub
+Private Sub cmbUsers_Click()
+    strSelectUserTo = UCase$(cmbUsers.SelectedItem.Key)
+    If strSelectUserTo = "" Then
+        bolOptionClicked = False
+        cmdSubmit.Enabled = False
+    Else
+        cmdSubmit.Enabled = True
+        bolOptionClicked = True
+    End If
+End Sub
+Private Sub cmbUsers_KeyPress(KeyAscii As Integer)
+    If KeyAscii = 13 Then
+        If strSelectUserTo = "" Then
+            bolOptionClicked = False
+            cmdSubmit.Enabled = False
+        Else
+            cmdSubmit.Enabled = True
+            bolOptionClicked = True
+            Call cmdSubmit_Click
+        End If
+    End If
+End Sub
+Private Sub cmdAllClosedReport_Click()
+    If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
+        Exit Sub
+    Else
+        ClearBanners
+        ShowAllClosed
+    End If
+End Sub
 Private Sub cmdAllOpenReport_Click()
     If bolRunning = True Then 'if already running the ary, dont try to start another one. (Prevents server flooding is return key is held down)
         Exit Sub
@@ -4835,6 +5144,122 @@ Private Sub cmdClear_Click()
     StatusBar1.Panels.Item(1).Text = ""
     txtJobNo.SetFocus
 End Sub
+
+Private Sub cmdDelete_Click()
+Dim blah
+Dim intMaxFileNameLen As Integer
+intMaxFileNameLen = 30
+
+blah = MsgBox("Are you sure you want to delete (" & IIf(Len(FlexAttach.TextMatrix(FlexAttach.RowSel, 1)) > intMaxFileNameLen, Left(FlexAttach.TextMatrix(FlexAttach.RowSel, 1), intMaxFileNameLen) & "...", FlexAttach.TextMatrix(FlexAttach.RowSel, 1)) & ")?", vbQuestion + vbOKCancel, "Delete Attachment")
+If blah = vbOK Then
+
+DeleteAttachment FlexAttach.TextMatrix(FlexAttach.RowSel, 5)
+Else
+End If
+
+End Sub
+Private Sub cmdEdit_Click()
+    On Error GoTo errs
+    Dim blah
+    If EditMode = False Then
+        PrevPartNum = UCase$(txtPartNoRev)
+        PrevDrawNoRev = UCase$(txtDrawNoRev)
+        PrevCustPoNo = UCase$(txtCustPoNo)
+        PrevSalesNo = UCase$(txtSalesNo)
+        PrevDescription = UCase$(txtTicketDescription)
+        Me.Controls(ActiveText).Locked = False
+        cmdEdit.Picture = ButtonPics(2)
+        cmdEdit.ToolTipText = "Confirm Changes"
+        EditMode = True
+        SetControls
+        PositionMaxChar Me.Controls(ActiveText)
+        With Me.Controls(ActiveText)
+            .SetFocus
+            .SelStart = 0
+            .SelLength = Len(.Text)
+        End With
+        SetBoxesForEdit ActiveText
+    Else
+        '**** Do stuff that updates the database
+        If CheckForBlanks(ActiveText) = True Then
+            ShowBanner &H8080FF, "This field cannot be left blank! Please fill the field and try again.", 300
+            Me.Controls(ActiveText).BackColor = &H8080FF
+            Exit Sub
+        End If
+        If ChangesMade = False Then
+            ShowBanner &H8080FF, "No changes detected! Job Packet was not updated.", 250
+            Form1.cmdSubmit.Enabled = False
+            Form1.optMove.Value = False
+            Form1.optReceive.Value = False
+            Form1.optMove.Value = False
+            Form1.optClose.Value = False
+            Form1.optCreate.Value = False
+            Form1.optReOpen.Value = False
+            Form1.optFile.Value = False
+            bolOptionClicked = False
+            imgComment.Picture = ButtonPics(4)
+            imgComment.Enabled = False
+            'RefreshAfterEdit
+            cmdEdit.Visible = False
+            cmdEdit.Picture = ButtonPics(1)
+            cmdEdit.ToolTipText = "Edit Field"
+            EditMode = False
+            PositionMaxChar Me.Controls(ActiveText)
+            SetBoxesForEdit "All"
+            DisableBoxes
+            SetControls
+            Exit Sub
+        End If
+        Dim rs      As New ADODB.Recordset
+        Dim strSQL1 As String
+        strSQL1 = "SELECT * From packetlist Where idJobNum = '" & txtJobNo.Text & "'"
+        cn_global.CursorLocation = adUseClient
+        rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+        Do Until rs.EOF
+            With rs
+                If ActiveText = "txtPartNoRev" And txtPartNoRev <> PrevPartNum Then !idPartNum = UCase$(txtPartNoRev.Text)
+                If ActiveText = "txtDrawNoRev" And txtDrawNoRev <> PrevDrawNoRev Then !idDrawingNum = UCase$(txtDrawNoRev.Text)
+                If ActiveText = "txtCustPoNo" And txtCustPoNo <> PrevCustPoNo Then !idCustPoNum = UCase$(txtCustPoNo.Text)
+                If ActiveText = "txtSalesNo" And txtSalesNo <> PrevSalesNo Then !idSalesNum = UCase$(txtSalesNo.Text)
+                If ActiveText = "txtTicketDescription" And txtTicketDescription <> PrevDescription Then !idDescription = txtTicketDescription.Text
+                !idCreateDate = !idCreateDate
+                !idLastModified = Now()
+                !idLastModifiedBy = strLocalUser
+                rs.Update
+                rs.MoveNext
+            End With
+        Loop
+        Form1.cmdSubmit.Enabled = False
+        Form1.optMove.Value = False
+        Form1.optReceive.Value = False
+        Form1.optMove.Value = False
+        Form1.optClose.Value = False
+        Form1.optCreate.Value = False
+        Form1.optReOpen.Value = False
+        Form1.optFile.Value = False
+        bolOptionClicked = False
+        imgComment.Picture = ButtonPics(4)
+        imgComment.Enabled = False
+        'RefreshAll
+        OpenPacket txtJobNo.Text
+        cmdEdit.Visible = False
+        cmdEdit.Picture = ButtonPics(1)
+        cmdEdit.ToolTipText = "Edit Field"
+        EditMode = False
+        SetBoxesForEdit "All"
+        DisableBoxes
+        SetControls
+        ShowBanner &HC0FFC0, "Job Packet was updated successfully!", 200
+    End If
+    Exit Sub
+errs:
+    EditMode = False
+    SetBoxesForEdit "All"
+    DisableBoxes
+    blah = MsgBox("An error was detected!" & vbCrLf & vbCrLf & Err.Number & vbCrLf & Err.Description, vbCritical + vbOKOnly, "Yikes!")
+    Err.Clear
+End Sub
+
 Private Sub cmdFilterReport_Click()
     frmReportFilter.chkAllTickets.Value = 1
     frmReportFilter.cmbPacketType.ListIndex = 0
@@ -4845,6 +5270,32 @@ Private Sub cmdGetInBox_Click()
 End Sub
 Private Sub cmdGetOutBox_Click()
     GetMyPackets
+End Sub
+
+Private Sub cmdNew_Click()
+ On Error GoTo errs
+ With dlgDialog
+        .DialogTitle = "Add Attachment...."
+        .Filter = "All Files | *.*" '"Files (*.gif; *.bmp; *.jpg; *.pdf)| *.gif;*.bmp;*.jpg;*.pdf"
+        .CancelError = True
+        
+procReOpen:
+        .ShowOpen
+        If .FileName = "" Then
+            MsgBox "Invalid filename or file not found.", vbOKOnly + vbExclamation, "Oops!"
+            GoTo procReOpen
+        Else
+            If Not SaveAttachment(.FileName, .FileTitle, strCurJobNum) Then
+                MsgBox "Save was unsuccessful :(", vbOKOnly + vbExclamation, "Oops!"
+                Exit Sub
+            End If
+        End If
+    End With
+errs:
+End Sub
+
+Private Sub cmdOpenRFQ_Click()
+
 End Sub
 Private Sub cmdPrintHistory_Click()
     If FlexGridHist.Rows > 1 Then
@@ -4863,6 +5314,59 @@ Private Sub cmdPrintHistory_Click()
     Else
         MsgBox "Nothing to print!"
     End If
+End Sub
+
+Private Sub cmdPrintInPack_Click()
+    If FlexGridIN.Rows < 2 Then
+        MsgBox ("Nothing to print!")
+        Exit Sub
+    End If
+    frmPrinters.Show 1
+    If bolCancelPrint = True Then
+        bolCancelPrint = False
+        Exit Sub
+    End If
+    FlexGridIN.ColWidth(1) = 1005
+    FlexGridIN.ColWidth(2) = 1005
+    FlexGridIN.ColWidth(3) = 2715
+    FlexGridIN.ColWidth(4) = 930
+    FlexGridIN.ColWidth(5) = 1170
+    FlexGridIN.ColWidth(6) = 885
+    FlexGridIN.ColWidth(7) = 1335
+    FlexGridIN.ColWidth(8) = 1290
+    FlexGridIN.ColWidth(9) = 3525
+    strReportType = "Incoming Packets"
+    'PrintFlexGrid FlexGridIN
+    BuildGridPrint FlexGridIN
+    PrintHeaders strReportType, sAddlMsg
+    PrintGridArray GridPrint()
+    SizeTheSheet FlexGridIN
+End Sub
+Private Sub cmdPrintOnPack_Click()
+    If FlexGridOUT.Rows < 2 Then
+        MsgBox ("Nothing to print!")
+        Exit Sub
+    End If
+    frmPrinters.Show 1
+    If bolCancelPrint = True Then
+        bolCancelPrint = False
+        Exit Sub
+    End If
+    FlexGridOUT.ColWidth(1) = 1005
+    FlexGridOUT.ColWidth(2) = 1005
+    FlexGridOUT.ColWidth(3) = 2715
+    FlexGridOUT.ColWidth(4) = 930
+    FlexGridOUT.ColWidth(5) = 1170
+    FlexGridOUT.ColWidth(6) = 885
+    FlexGridOUT.ColWidth(7) = 1335
+    FlexGridOUT.ColWidth(8) = 1290
+    FlexGridOUT.ColWidth(9) = 3525
+    strReportType = "On-hand Packets"
+    'PrintFlexGrid FlexGridOUT
+    BuildGridPrint FlexGridOUT
+    PrintHeaders strReportType, sAddlMsg
+    PrintGridArray GridPrint()
+    SizeTheSheet FlexGridOUT
 End Sub
 Private Sub cmdPrintReport_Click()
     If Flexgrid1.Rows < 1 Then
@@ -4902,21 +5406,17 @@ Private Sub cmdRefresh_Click()
     bolRefreshRunning = False
     Screen.MousePointer = vbDefault
 End Sub
-Private Sub cmdSearch_Click()
-    OpenPacket txtJobNo.Text
-End Sub
 Private Sub cmdRefreshHist_Click()
     RefreshHistory
 End Sub
-Public Sub ClearOptBoxes()
-    optMove.Value = False
-    optReceive.Value = False
-    optClose.Value = False
-    optFile.Value = False
-    optReOpen.Value = False
-    optCreate.Value = False
-    cmdSubmit.Enabled = False
-    bolOptionClicked = False
+Private Sub cmdSearch_Click()
+    OpenPacket txtJobNo.Text
+End Sub
+Private Sub cmdShowMore_Click()
+    intMovement = 0
+    intMovementAccel = 1
+    intMovementAccelRate = 5
+    tmrReSizer.Enabled = True
 End Sub
 Private Sub cmdSubmit_Click()
     'If Not DBConcurrent Then
@@ -5002,11 +5502,49 @@ Private Sub cmdSubmit_Click()
     imgComment.Picture = ButtonPics(4)
     imgComment.Enabled = False
 End Sub
-Private Sub cmdShowMore_Click()
-    intMovement = 0
-    intMovementAccel = 1
-    intMovementAccelRate = 5
-    tmrReSizer.Enabled = True
+
+Private Sub cmdTimeLine_Click()
+    On Error Resume Next
+    If bolHasTicket = False Then Exit Sub
+    Load frmTip
+    frmTip.Show
+    Do While HelpClosed = False
+        Sleep 10
+        DoEvents
+    Loop
+    GetTimeLineData
+    DrawDayLines = True
+    frmTimeLine.chkDayLines.Value = 1
+    frmTimeLine.DrawTimeLine
+    frmTimeLine.Show
+End Sub
+
+Private Sub FlexAttach_Click()
+ On Error Resume Next
+    Set WhichGrid = FlexAttach
+    If strSortMode = "A" Then
+        Call FlexSort(FlexAttach, "D")
+        strSortMode = "D"
+    ElseIf strSortMode = "D" Then
+        Call FlexSort(FlexAttach, "A")
+        strSortMode = "A"
+    End If
+End Sub
+
+Private Sub FlexAttach_DblClick()
+LoadAttachment FlexAttach.TextMatrix(FlexAttach.RowSel, 5)
+End Sub
+
+Private Sub FlexGrid1_Click()
+    On Error Resume Next
+    Set WhichGrid = Flexgrid1
+    If strSortMode = "A" Then
+        Call FlexSort(Flexgrid1, "D")
+        strSortMode = "D"
+    ElseIf strSortMode = "D" Then
+        Call FlexSort(Flexgrid1, "A")
+        strSortMode = "A"
+    End If
 End Sub
 Private Sub FlexGrid1_DblClick()
     On Error Resume Next
@@ -5143,7 +5681,7 @@ Private Sub Form_Load()
     Dim ErrToss    As Boolean
     ErrToss = False
     On Error GoTo errs
-    
+
     strTempFileLoc = Environ$("APPDATA") & "\JPTTEMP\"
     strINILoc = Environ$("APPDATA") & "\JPT\HITS.INI"
     Call CreateINI
@@ -5196,7 +5734,7 @@ Private Sub Form_Load()
         'do stuff to enable admin things
     End If
     intSearchWait = 2
-    Form1.Height = intFormHMin
+   ' Form1.Height = intFormHMin
     bolOpenForm = True
     bolOpenConfirm = True
     bolPrinting = False
@@ -5262,20 +5800,20 @@ Private Sub Form_Load()
     frmSplash.Hide
     ClearFields
     'Command line arguments
-    Commands() = Split(Command$, " ")
-    For i = 0 To UBound(Commands)
-        If Commands(i) = "-m" Then ' Start expanded
-            Form1.Height = intFormHMax
-            bolOpenForm = False
-            cmdShowMore.Caption = "Show Less"
-            Label17.Caption = "á"
-            SSTab1.ToolTipText = ""
-        End If
-        If Commands(i) = "-autorefreshoff" Then ' start with auto refresh off
-            chkAutoRefresh.Value = 0
-            tmrRefresher.Enabled = False
-        End If
-    Next
+   ' Commands() = Split(Command$, " ")
+   ' For i = 0 To UBound(Commands)
+       ' If Commands(i) = "-m" Then ' Start expanded
+            'Form1.Height = intFormHMax
+           ' bolOpenForm = False
+           'cmdShowMore.Caption = "Show Less"
+            'Label17.Caption = "á"
+            'SSTab1.ToolTipText = ""
+       ' End If
+       ' If Commands(i) = "-autorefreshoff" Then ' start with auto refresh off
+          '  chkAutoRefresh.Value = 0
+          '  tmrRefresher.Enabled = False
+       ' End If
+   ' Next
     TheX = pbScrollBox.ScaleWidth
     bolInitialLoad = False
     lblQryTime.Caption = "0 ms"
@@ -5283,18 +5821,11 @@ Private Sub Form_Load()
     frmpBar.Left = 4440
     Exit Sub
 errs:
-4   ErrToss = True
+    ErrToss = True
     frmSplash.Print Err.Description
     Err.Clear
     DoEvents
     Resume Next
-End Sub
-Private Sub SetupAdmin()
-    bolIsAdmin = True
-    FlexGridHist.HighLight = flexHighlightAlways
-    mnuAdmin.Visible = True
-   ' intFormHMin = intFormHMin + 300
-    'intFormHMax = intFormHMax + 300
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     EndProgram
@@ -5302,19 +5833,8 @@ End Sub
 Private Sub Form_Unload(Cancel As Integer)
     Hook Me.hwnd, False
 End Sub
+
 Private Sub FrameHistory_MouseMove(Button As Integer, _
-                             Shift As Integer, _
-                             X As Single, _
-                             Y As Single)
-    Dim i As Integer
-    For i = 0 To frmKey.UBound
-        frmKey(i).Visible = False
-    Next
-End Sub
-Private Sub FramePacketInfo_Click()
-    List1.Visible = False
-End Sub
-Private Sub FrameSearch_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5333,6 +5853,18 @@ Private Sub FrameIncoming_MouseMove(Button As Integer, _
     Next
 End Sub
 Private Sub FrameOnHand_MouseMove(Button As Integer, _
+                             Shift As Integer, _
+                             X As Single, _
+                             Y As Single)
+    Dim i As Integer
+    For i = 0 To frmKey.UBound
+        frmKey(i).Visible = False
+    Next
+End Sub
+Private Sub FramePacketInfo_Click()
+    List1.Visible = False
+End Sub
+Private Sub FrameSearch_MouseMove(Button As Integer, _
                              Shift As Integer, _
                              X As Single, _
                              Y As Single)
@@ -5586,6 +6118,7 @@ Private Sub SSTab1_MouseDown(Button As Integer, _
         If cmdShowMore.Enabled = True Then Call cmdShowMore_Click
     End If
 End Sub
+
 Private Sub tmrBannerWait_Timer()
     On Error Resume Next
 WaitforBannerClose:
@@ -5890,6 +6423,11 @@ End Sub
 Private Sub txtPartNoRev_LostFocus()
     txtPartNoRev.Text = Trim$(UCase$(txtPartNoRev.Text))
 End Sub
+
+Private Sub txtQuoteNumbber_Change()
+
+End Sub
+
 Private Sub txtSalesNo_Change()
     PositionMaxChar txtSalesNo
     txtSalesNo.BackColor = vbWindowBackground
@@ -5941,18 +6479,6 @@ End Sub
 Private Sub txtTicketAction_GotFocus()
     List1.Visible = False
 End Sub
-Private Sub PositionEdit(WhatControl As TextBox)
-    If EditMode = True Then Exit Sub
-    If bolCanEdit = True Then
-        cmdEdit.Visible = False
-        cmdEdit.Left = WhatControl.Left + WhatControl.Width + 125
-        cmdEdit.Top = WhatControl.Top + 480
-        cmdEdit.Visible = True
-        ActiveText = WhatControl.Name
-    Else
-        cmdEdit.Visible = False
-    End If
-End Sub
 Private Sub txtTicketDescription_Change()
     PositionMaxChar txtTicketDescription
     txtTicketDescription.BackColor = vbWindowBackground
@@ -5977,3 +6503,4 @@ Private Sub txtTicketStatus_Change()
     If txtTicketStatus.Text = "CLOSED" Then txtTicketStatus.ForeColor = &HFF&
     If txtTicketStatus.Text = "OPEN" Then txtTicketStatus.ForeColor = &H8000&
 End Sub
+

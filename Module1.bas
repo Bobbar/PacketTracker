@@ -217,26 +217,194 @@ Public strTempFileLoc As String
 Public strStream As ADODB.Stream
 Public strCurJobNum As String
 Public Const lngMaxFileSize As Long = 60000000
+Public Function ArrayPosition(ByVal FindValue As Variant, arrSearch As Variant) As Long
+    ArrayPosition = -1  'Set default value of "not found"
+    On Error GoTo LocalError
+    If Not IsArray(arrSearch) Then Exit Function
+    FindValue = UCase$(FindValue)  'no need for the If, you can UCase anything (faster this way)
+    Dim lngLoop As Long
+    For lngLoop = LBound(arrSearch) To UBound(arrSearch)
+        If UCase$(arrSearch(lngLoop)) = FindValue Then
+            ArrayPosition = lngLoop
+            Exit Function
+        End If
+    Next lngLoop
+    Exit Function
+LocalError:
+    'Nothing
+End Function
+Public Function ChangesMade() As Boolean
+    ChangesMade = False
+    If UCase$(Form1.txtPartNoRev) <> PrevPartNum Or UCase$(Form1.txtDrawNoRev) <> PrevDrawNoRev Or UCase$(Form1.txtCustPoNo) <> PrevCustPoNo Or UCase$(Form1.txtSalesNo) <> PrevSalesNo Or UCase$(Form1.txtTicketDescription) <> PrevDescription Then
+        ChangesMade = True
+    Else
+        ChangesMade = False
+    End If
+End Function
+Public Function CheckForAdmin(strLocalUser As String) As Boolean
+    CheckForAdmin = False
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim i
+    strSQL1 = "SELECT * FROM users WHERE idUsers = '" & strLocalUser & "'"
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+    With rs
+        If CBool(!idAdmins) Then CheckForAdmin = True
+    End With
+End Function
+'#End Region
 
-
-
-
-Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
-    Dim blah
-    Select Case lngErrNum
-        Case -2147467259, 3704
-            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub & vbCrLf & vbCrLf & "Try to re-connect?", vbExclamation + vbYesNo, "Yikes!")
-            If blah = vbYes Then
-                Set cn_global = Nothing
-                If ConnectToDB Then
-                    MsgBox "Connected!"
-                End If
-            ElseIf blah = vbNo Then
-                EndProgram
-            End If
-        Case Else
-            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub, vbExclamation + vbOKOnly, "Yikes!")
-    End Select
+Public Function CheckForBlanks(CurrentControl As String) As Boolean
+    CheckForBlanks = True
+    With Form1
+        If Trim$(Form1.Controls(CurrentControl).Text) = "" Then
+            CheckForBlanks = True
+        Else
+            CheckForBlanks = False
+        End If
+    End With
+End Function
+Public Sub ClearBanners()
+    bolBannerCleared = True
+    CloseBanner
+    Form1.tmrBannerWait.Enabled = False
+    Erase BannerColor
+    Erase BannerText
+    Erase BannerTicks
+    Erase BannerCase
+    Erase BannerFontColor
+    intCachedBanners = 0
+    intCurrentCache = -1
+End Sub
+Public Sub CloseBanner()
+    bolWaitToClose = False
+    intTicksWaited = intTicksToWait
+End Sub
+Public Function ColorCodeToRGB(lColorCode As Long, _
+                               iRed As Integer, _
+                               iGreen As Integer, _
+                               iBlue As Integer) As Boolean
+    ' 1996/01/16 Return the individual colors for lColorCode.
+    ' 1996/07/15 Use Tip 171: Determining RGB Color Values, MSDN July 1996.
+    ' Enter with:
+    '     lColorCode contains the color to be converted
+    '
+    ' Return:
+    '     iRed    contains the red component
+    '     iGreen  the green component
+    '     iBlue   the blue component
+    '
+    Dim lColor As Long
+    lColor = lColorCode      'work long
+    iRed = lColor Mod &H100  'get red component
+    lColor = lColor \ &H100  'divide
+    iGreen = lColor Mod &H100 'get green component
+    lColor = lColor \ &H100  'divide
+    iBlue = lColor Mod &H100 'get blue component
+    ColorCodeToRGB = True
+End Function
+Public Function ConnectToDB() As Boolean
+    On Error GoTo errs
+    ConnectToDB = False
+    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
+    If cn_global.State = 1 Then
+        ConnectToDB = True
+    Else
+        ConnectToDB = False
+    End If
+    Exit Function
+errs:
+    ErrHandle Err.Number, Err.Description, "ConnectToDB"
+End Function
+Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
+    Dim R, c As Integer
+    Dim GridImg As Image
+    bolNewHistWindow = False
+    dest.Redraw = False
+    Source.Redraw = False
+    dest.Cols = Source.Cols
+    dest.Rows = Source.Rows
+    dest.FixedRows = Source.FixedRows
+    dest.FixedCols = Source.FixedCols
+    'Dest.Font.Size = Source.Font.Size
+    For R = 0 To Source.Rows - 1
+        For c = 0 To Source.Cols - 1
+            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
+        Next c
+        Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
+    Next R
+    Form1.SizeTheSheet dest
+    dest.Redraw = True
+    Source.Redraw = True
+End Sub
+Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
+    Dim R, c As Integer
+    Dim GridImg As Image
+    bolNewHistWindow = True
+    dest.Redraw = False
+    Source.Redraw = False
+    'copy properties
+    dest.FocusRect = Source.FocusRect
+    dest.HighLight = Source.HighLight
+    dest.BandDisplay = Source.BandDisplay
+    dest.FillStyle = Source.FillStyle
+    dest.FocusRect = Source.FocusRect
+    dest.GridLines = Source.GridLines
+    dest.GridLinesFixed = Source.GridLinesFixed
+    dest.GridLinesUnpopulated = Source.GridLinesUnpopulated
+    dest.MergeCells = Source.MergeCells
+    dest.ScrollBars = Source.ScrollBars
+    dest.SelectionMode = Source.SelectionMode
+    dest.WordWrap = Source.WordWrap
+    dest.Font = Source.Font
+    dest.Font.Size = Source.Font.Size
+    dest.Cols = 4
+    dest.Rows = Source.Rows
+    dest.FixedRows = 0
+    dest.FixedCols = 0
+    For R = 0 To Source.Rows - 1
+        For c = 0 To 2
+            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
+            dest.Row = R
+            dest.Col = c
+            Source.Row = R
+            Source.Col = c
+            dest.CellFontBold = Source.CellFontBold
+            dest.CellFontItalic = Source.CellFontItalic
+            dest.CellAlignment = Source.CellAlignment
+            dest.CellFontSize = Source.CellFontSize
+        Next c
+        Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
+        dest.Row = R
+        dest.Col = 0
+        Set dest.CellPicture = Source.CellPicture 'HistoryIcons(1)
+        dest.CellPictureAlignment = flexAlignCenterCenter
+        dest.RowHeight(R) = Source.RowHeight(R)
+    Next R
+    'Dest.RowHeight(0) = 0
+    dest.ColWidth(0) = 1000
+    dest.ColWidth(1) = 8500
+    dest.ColWidth(3) = 0
+    'Dest.Rows = Dest.Rows - 1
+    'Form1.SizeTheSheet Dest
+    dest.Redraw = True
+    Source.Redraw = True
+End Sub
+Public Sub CreateINI()
+    Dim i   As Long
+    Dim iNd As Long
+    ' Create an Ini File to play with:
+    On Error Resume Next
+    If Dir$(strINILoc) = "" Then
+        MkDir Environ$("APPDATA") & "\JPT\"
+        With m_cIni
+            .Path = strINILoc
+            .Section = "INFO"
+            .Key = "VERSION"
+            .Value = App.Major & App.Minor & App.Revision
+        End With
+    End If
 End Sub
 Public Function DBConcurrent() As Integer 'Does the state of the packet stored locally match what's in the DB? NO = 0, YES = 1, NOTFOUND = 2
     Dim strSQL1 As String
@@ -262,122 +430,6 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
 errs:
     ErrHandle Err.Number, Err.Description, "DBConcurrent"
 End Function
-Public Function GetEmail(strUsername As String) As String
-    Dim i As Integer
-    For i = 0 To UBound(strUserIndex, 2)
-        If strUserIndex(0, i) = strUsername Then
-            GetEmail = UCase$(strUserIndex(2, i))
-            Exit Function
-        End If
-    Next i
-End Function
-Public Function GetFullName(strUsername As String) As String
-    Dim i As Integer
-    For i = 0 To UBound(strUserIndex, 2)
-        If strUserIndex(0, i) = strUsername Then
-            GetFullName = UCase$(strUserIndex(1, i))
-            Exit Function
-        End If
-    Next i
-End Function
-Public Sub SendEmailToQueue(SendRec As String, _
-                            MailFrom As String, _
-                            MailTo As String, _
-                            JobNum As String, _
-                            strComment As String)
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    strSQL1 = "INSERT INTO emailqueue (idSendOrRec,idFrom,idTo,idJobNum,idComment)" & " VALUES ('" & SendRec & "','" & MailFrom & "','" & MailTo & "','" & JobNum & "','" & strComment & "')"
-    Set rs = New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL1)
-End Sub
-Public Sub StartTimer()
-    total = 0
-    QueryPerformanceFrequency Freq
-    QueryPerformanceCounter Ctr1
-End Sub
-Public Function StopTimer() As Double
-    StopTimer = 0
-    QueryPerformanceCounter Ctr2
-    total = total + (Ctr2 - Ctr1)
-    StopTimer = Round(CDbl(total / Freq) * 1000, 3)
-End Function
-Public Function ReturnEmpInfo(strUsername As Variant) As UserInfo
-    ReturnEmpInfo.UserName = vbNull
-    ReturnEmpInfo.FullName = vbNull
-    Dim i As Integer
-    For i = 0 To UBound(strUserIndex, 2)
-        If strUserIndex(0, i) = strUsername Then
-            ReturnEmpInfo.UserName = strUserIndex(0, i)
-            ReturnEmpInfo.FullName = strUserIndex(1, i)
-            Exit Function
-        End If
-    Next i
-    MsgBox (strUsername & " not found")
-End Function
-Public Sub MySort(ByRef pvarArray As Variant)
-    Dim i               As Long
-    Dim c               As Integer
-    Dim v               As Integer
-    Dim lngHighValIndex As Long
-    Dim varSwap()       As Variant
-    Dim lngMax          As Long
-    ReDim varSwap(UBound(pvarArray, 1))
-    lngMax = UBound(pvarArray, 2)
-    For c = 0 To lngMax
-        lngHighValIndex = lngMax - c
-        For v = 0 To UBound(varSwap)
-            varSwap(v) = pvarArray(v, lngMax - c)
-        Next v
-        For i = 0 To lngMax - c
-            If pvarArray(0, i) < pvarArray(0, lngHighValIndex) Then lngHighValIndex = i
-        Next
-        For v = 0 To UBound(varSwap)
-            pvarArray(v, lngMax - c) = pvarArray(v, lngHighValIndex)
-            pvarArray(v, lngHighValIndex) = varSwap(v)
-        Next v
-    Next c
-End Sub
-Public Function GetINIValue(sUser As Variant) As Integer
-    With m_cIni
-        .Path = strINILoc
-        .Section = "HITS"
-        .Key = sUser
-        .Default = "0"
-        GetINIValue = .Value
-        ' If Not (.Success) Then
-        '  GetINIValue = "0"
-        'End If
-    End With
-End Function
-Public Sub SetINIValue(sUser As String, iHits As Integer)
-    With m_cIni
-        .Path = strINILoc
-        .Section = "HITS"
-        .Key = sUser
-        .Value = iHits
-        If Not (.Success) Then
-            MsgBox "Failed to set value.", vbInformation
-        End If
-    End With
-    'ShowIniAndParameters
-End Sub
-Public Sub CreateINI()
-    Dim i   As Long
-    Dim iNd As Long
-    ' Create an Ini File to play with:
-    On Error Resume Next
-    If Dir$(strINILoc) = "" Then
-        MkDir Environ$("APPDATA") & "\JPT\"
-        With m_cIni
-            .Path = strINILoc
-            .Section = "INFO"
-            .Key = "VERSION"
-            .Value = App.Major & App.Minor & App.Revision
-        End With
-    End If
-End Sub
 Public Sub DeleteEntry(strGUID As String, strDesc As String)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -435,6 +487,15 @@ Public Sub DeletePacket(JobNum As String)
     Form1.HideData
     Form1.ClearFields
     ShowBanner colInTransit, "Packet Deleted!"
+End Sub
+Public Sub EndProgram()
+  On Error Resume Next
+  
+    Call WheelUnHook
+    If cn_global.State <> 0 Then cn_global.Close
+    Unload Form1
+    Kill strTempFileLoc & "*.*"
+    End
 End Sub
 ' KEY_ENUMERATE_SUB_KEYS Or KEY_NOTIFY) And (Not
 ' SYNCHRONIZE))
@@ -513,29 +574,27 @@ Function EnumRegistryValues(ByVal hKey As Long, ByVal KeyName As String) As Coll
     ' Close the key, if it was actually opened
     If handle Then RegCloseKey handle
 End Function
-' get the list of ODBC drivers through the registry
-'
-' returns a collection of strings, each one holding the
-' name of a driver, e.g. "Microsoft Access Driver (*.mdb)"
-'
-' requires the EnumRegistryValues function
-Function GetODBCDrivers() As Collection
-    Dim res    As Collection
-    Dim values As Variant
-    ' initialize the result
-    Set GetODBCDrivers = New Collection
-    ' the names of all the ODBC drivers are kept as values
-    ' under a registry key
-    ' the EnumRegistryValue returns a collection
-    For Each values In EnumRegistryValues(HKEY_LOCAL_MACHINE, "Software\ODBC\ODBCINST.INI\ODBC Drivers")
-        ' each element is a two-item array:
-        ' values(0) is the name, values(1) is the data
-        If StrComp(values(1), "Installed", 1) = 0 Then
-            ' if installed, add to the result collection
-            GetODBCDrivers.Add values(0), values(0)
-        End If
-    Next
-End Function
+
+
+
+
+Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
+    Dim blah
+    Select Case lngErrNum
+        Case -2147467259, 3704
+            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub & vbCrLf & vbCrLf & "Try to re-connect?", vbExclamation + vbYesNo, "Yikes!")
+            If blah = vbYes Then
+                Set cn_global = Nothing
+                If ConnectToDB Then
+                    MsgBox "Connected!"
+                End If
+            ElseIf blah = vbNo Then
+                EndProgram
+            End If
+        Case Else
+            blah = MsgBox(lngErrNum & " - " & strErrDescription & " | " & strOrigSub, vbExclamation + vbOKOnly, "Yikes!")
+    End Select
+End Sub
 Public Sub FindMySQLDriver()
     GetODBCDrivers
     Dim i           As Integer
@@ -555,92 +614,15 @@ Public Sub FindMySQLDriver()
         strSQLDriver = strPossis(0)
     End If
 End Sub
-Public Function CheckForAdmin(strLocalUser As String) As Boolean
-    CheckForAdmin = False
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim i
-    strSQL1 = "SELECT * FROM users WHERE idUsers = '" & strLocalUser & "'"
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL1)
-    With rs
-        If CBool(!idAdmins) Then CheckForAdmin = True
-    End With
+Public Function GetEmail(strUsername As String) As String
+    Dim i As Integer
+    For i = 0 To UBound(strUserIndex, 2)
+        If strUserIndex(0, i) = strUsername Then
+            GetEmail = UCase$(strUserIndex(2, i))
+            Exit Function
+        End If
+    Next i
 End Function
-Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, c As Integer
-    Dim GridImg As Image
-    bolNewHistWindow = True
-    dest.Redraw = False
-    Source.Redraw = False
-    'copy properties
-    dest.FocusRect = Source.FocusRect
-    dest.HighLight = Source.HighLight
-    dest.BandDisplay = Source.BandDisplay
-    dest.FillStyle = Source.FillStyle
-    dest.FocusRect = Source.FocusRect
-    dest.GridLines = Source.GridLines
-    dest.GridLinesFixed = Source.GridLinesFixed
-    dest.GridLinesUnpopulated = Source.GridLinesUnpopulated
-    dest.MergeCells = Source.MergeCells
-    dest.ScrollBars = Source.ScrollBars
-    dest.SelectionMode = Source.SelectionMode
-    dest.WordWrap = Source.WordWrap
-    dest.Font = Source.Font
-    dest.Font.Size = Source.Font.Size
-    dest.Cols = 4
-    dest.Rows = Source.Rows
-    dest.FixedRows = 0
-    dest.FixedCols = 0
-    For R = 0 To Source.Rows - 1
-        For c = 0 To 2
-            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
-            dest.Row = R
-            dest.Col = c
-            Source.Row = R
-            Source.Col = c
-            dest.CellFontBold = Source.CellFontBold
-            dest.CellFontItalic = Source.CellFontItalic
-            dest.CellAlignment = Source.CellAlignment
-            dest.CellFontSize = Source.CellFontSize
-        Next c
-        Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
-        dest.Row = R
-        dest.Col = 0
-        Set dest.CellPicture = Source.CellPicture 'HistoryIcons(1)
-        dest.CellPictureAlignment = flexAlignCenterCenter
-        dest.RowHeight(R) = Source.RowHeight(R)
-    Next R
-    'Dest.RowHeight(0) = 0
-    dest.ColWidth(0) = 1000
-    dest.ColWidth(1) = 8500
-    dest.ColWidth(3) = 0
-    'Dest.Rows = Dest.Rows - 1
-    'Form1.SizeTheSheet Dest
-    dest.Redraw = True
-    Source.Redraw = True
-End Sub
-Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, c As Integer
-    Dim GridImg As Image
-    bolNewHistWindow = False
-    dest.Redraw = False
-    Source.Redraw = False
-    dest.Cols = Source.Cols
-    dest.Rows = Source.Rows
-    dest.FixedRows = Source.FixedRows
-    dest.FixedCols = Source.FixedCols
-    'Dest.Font.Size = Source.Font.Size
-    For R = 0 To Source.Rows - 1
-        For c = 0 To Source.Cols - 1
-            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
-        Next c
-        Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
-    Next R
-    Form1.SizeTheSheet dest
-    dest.Redraw = True
-    Source.Redraw = True
-End Sub
 Public Function GetFlexGridRowColor(FlexGrid As MSHFlexGrid, ByVal lngRow As Long) As Long
     Dim lngPrevCol       As Long
     Dim lngPrevColSel    As Long
@@ -667,127 +649,118 @@ Public Function GetFlexGridRowColor(FlexGrid As MSHFlexGrid, ByVal lngRow As Lon
     '    FlexGrid.RowSel = lngPrevRowSel
     '    FlexGrid.FillStyle = lngPrevFillStyle
 End Function
-Public Function ColorCodeToRGB(lColorCode As Long, _
-                               iRed As Integer, _
-                               iGreen As Integer, _
-                               iBlue As Integer) As Boolean
-    ' 1996/01/16 Return the individual colors for lColorCode.
-    ' 1996/07/15 Use Tip 171: Determining RGB Color Values, MSDN July 1996.
-    ' Enter with:
-    '     lColorCode contains the color to be converted
-    '
-    ' Return:
-    '     iRed    contains the red component
-    '     iGreen  the green component
-    '     iBlue   the blue component
-    '
-    Dim lColor As Long
-    lColor = lColorCode      'work long
-    iRed = lColor Mod &H100  'get red component
-    lColor = lColor \ &H100  'divide
-    iGreen = lColor Mod &H100 'get green component
-    lColor = lColor \ &H100  'divide
-    iBlue = lColor Mod &H100 'get blue component
-    ColorCodeToRGB = True
-End Function
-Public Function CheckForBlanks(CurrentControl As String) As Boolean
-    CheckForBlanks = True
-    With Form1
-        If Trim$(Form1.Controls(CurrentControl).Text) = "" Then
-            CheckForBlanks = True
-        Else
-            CheckForBlanks = False
+Public Function GetFullName(strUsername As String) As String
+    Dim i As Integer
+    For i = 0 To UBound(strUserIndex, 2)
+        If strUserIndex(0, i) = strUsername Then
+            GetFullName = UCase$(strUserIndex(1, i))
+            Exit Function
         End If
+    Next i
+End Function
+Public Function GetINIValue(sUser As Variant) As Integer
+    With m_cIni
+        .Path = strINILoc
+        .Section = "HITS"
+        .Key = sUser
+        .Default = "0"
+        GetINIValue = .Value
+        ' If Not (.Success) Then
+        '  GetINIValue = "0"
+        'End If
     End With
 End Function
-Public Sub QryEntryNumbers()
-    Dim rs      As New ADODB.Recordset
-    Dim strSQL1 As String
-    Dim i
-    strSQL1 = "SELECT idJobNum, COUNT(*) FROM packetentrydb GROUP BY idJobNum"
-    cn_global.CursorLocation = adUseClient
-    Set rs = cn_global.Execute(strSQL1)
-    For i = 0 To rs.RecordCount
-        ReDim Preserve strEntries(i + 1)
-        ReDim Preserve intNumOfEntries(i + 1)
-        strEntries(i) = rs.Fields(0)
-        intNumOfEntries(i) = rs.Fields(1)
-        rs.MoveNext
-        If rs.EOF Then Exit For
-    Next i
-End Sub
 Public Function GetNumberOfEntries(JobNum As String) As Integer
     Dim iPos As Integer
     GetNumberOfEntries = 0
     iPos = ArrayPosition(JobNum, strEntries)
     GetNumberOfEntries = intNumOfEntries(iPos)
 End Function
-Public Function ArrayPosition(ByVal FindValue As Variant, arrSearch As Variant) As Long
-    ArrayPosition = -1  'Set default value of "not found"
-    On Error GoTo LocalError
-    If Not IsArray(arrSearch) Then Exit Function
-    FindValue = UCase$(FindValue)  'no need for the If, you can UCase anything (faster this way)
-    Dim lngLoop As Long
-    For lngLoop = LBound(arrSearch) To UBound(arrSearch)
-        If UCase$(arrSearch(lngLoop)) = FindValue Then
-            ArrayPosition = lngLoop
-            Exit Function
+' get the list of ODBC drivers through the registry
+'
+' returns a collection of strings, each one holding the
+' name of a driver, e.g. "Microsoft Access Driver (*.mdb)"
+'
+' requires the EnumRegistryValues function
+Function GetODBCDrivers() As Collection
+    Dim res    As Collection
+    Dim values As Variant
+    ' initialize the result
+    Set GetODBCDrivers = New Collection
+    ' the names of all the ODBC drivers are kept as values
+    ' under a registry key
+    ' the EnumRegistryValue returns a collection
+    For Each values In EnumRegistryValues(HKEY_LOCAL_MACHINE, "Software\ODBC\ODBCINST.INI\ODBC Drivers")
+        ' each element is a two-item array:
+        ' values(0) is the name, values(1) is the data
+        If StrComp(values(1), "Installed", 1) = 0 Then
+            ' if installed, add to the result collection
+            GetODBCDrivers.Add values(0), values(0)
         End If
-    Next lngLoop
-    Exit Function
-LocalError:
-    'Nothing
+    Next
 End Function
-Public Function ChangesMade() As Boolean
-    ChangesMade = False
-    If UCase$(Form1.txtPartNoRev) <> PrevPartNum Or UCase$(Form1.txtDrawNoRev) <> PrevDrawNoRev Or UCase$(Form1.txtCustPoNo) <> PrevCustPoNo Or UCase$(Form1.txtSalesNo) <> PrevSalesNo Or UCase$(Form1.txtTicketDescription) <> PrevDescription Then
-        ChangesMade = True
-    Else
-        ChangesMade = False
+Public Sub Hook(ByVal gHW As Long, HKflg As Boolean)
+    Static IsHooked As Boolean
+    If HKflg Xor IsHooked Then
+        If HKflg Then
+            lpPrevWndProc = SetWindowLong(gHW, GWL_WNDPROC, AddressOf WindowProc)
+        Else
+            SetWindowLong gHW, GWL_WNDPROC, lpPrevWndProc
+        End If
+        IsHooked = HKflg
     End If
-End Function
-Public Sub CloseBanner()
-    bolWaitToClose = False
-    intTicksWaited = intTicksToWait
 End Sub
-Public Sub Wait(ByVal DurationMS As Long)
-    Dim EndTime As Long
-    EndTime = GetTickCount + DurationMS
-    Do While EndTime > GetTickCount
-        DoEvents
-        Sleep 1
-    Loop
+Public Sub MouseWheel(ByVal MouseKeys As Long, _
+                      ByVal Rotation As Long, _
+                      ByVal Xpos As Long, _
+                      ByVal Ypos As Long)
+    Dim NewValue As Long
+    Dim LStep    As Single
+    On Error Resume Next
+    With WhichGrid
+        LStep = .Height / .RowHeight(1)
+        LStep = Int(LStep)
+        LStep = LStep - 20
+        If LStep < 20 Then
+            LStep = 1
+        End If
+        If Rotation > 0 Then
+            NewValue = .TopRow - LStep
+            If NewValue < 1 Then
+                NewValue = 0
+            End If
+        Else
+            NewValue = .TopRow + LStep
+            If NewValue > .Rows - 1 Then
+                NewValue = .Rows - 1
+            End If
+        End If
+        .TopRow = NewValue
+        ' FlexHistLastTopRow = NewValue
+    End With
 End Sub
-Public Sub ClearBanners()
-    bolBannerCleared = True
-    CloseBanner
-    Form1.tmrBannerWait.Enabled = False
-    Erase BannerColor
-    Erase BannerText
-    Erase BannerTicks
-    Erase BannerCase
-    Erase BannerFontColor
-    intCachedBanners = 0
-    intCurrentCache = -1
-End Sub
-Public Sub ShowBanner(Color As Long, _
-                      Text As String, _
-                      Optional Ticks As Integer, _
-                      Optional ClickCase As String, _
-                      Optional FontColor As Long)
-    bolBannerCleared = False
-    BannerColor(intCachedBanners) = Color
-    BannerText(intCachedBanners) = Text
-    BannerTicks(intCachedBanners) = Ticks
-    BannerCase(intCachedBanners) = ClickCase
-    BannerFontColor(intCachedBanners) = FontColor
-    intCachedBanners = intCachedBanners + 1
-    If bolBannerOpen = False Then
-        intCurrentCache = intCurrentCache + 1
-        OpenCloseBanner BannerColor(intCurrentCache), BannerText(intCurrentCache), BannerTicks(intCurrentCache), BannerCase(intCurrentCache), BannerFontColor(intCurrentCache)
-    Else
-        Form1.tmrBannerWait.Enabled = True
-    End If
+Public Sub MySort(ByRef pvarArray As Variant)
+    Dim i               As Long
+    Dim c               As Integer
+    Dim v               As Integer
+    Dim lngHighValIndex As Long
+    Dim varSwap()       As Variant
+    Dim lngMax          As Long
+    ReDim varSwap(UBound(pvarArray, 1))
+    lngMax = UBound(pvarArray, 2)
+    For c = 0 To lngMax
+        lngHighValIndex = lngMax - c
+        For v = 0 To UBound(varSwap)
+            varSwap(v) = pvarArray(v, lngMax - c)
+        Next v
+        For i = 0 To lngMax - c
+            If pvarArray(0, i) < pvarArray(0, lngHighValIndex) Then lngHighValIndex = i
+        Next
+        For v = 0 To UBound(varSwap)
+            pvarArray(v, lngMax - c) = pvarArray(v, lngHighValIndex)
+            pvarArray(v, lngHighValIndex) = varSwap(v)
+        Next v
+    Next c
 End Sub
 Public Sub OpenCloseBanner(Color As Long, _
                            Text As String, _
@@ -859,16 +832,108 @@ Public Sub OpenCloseBanner(Color As Long, _
         .lblClose.Left = .Border.Width - 140
     End With
 End Sub
-Public Sub Hook(ByVal gHW As Long, HKflg As Boolean)
-    Static IsHooked As Boolean
-    If HKflg Xor IsHooked Then
-        If HKflg Then
-            lpPrevWndProc = SetWindowLong(gHW, GWL_WNDPROC, AddressOf WindowProc)
-        Else
-            SetWindowLong gHW, GWL_WNDPROC, lpPrevWndProc
+Public Sub QryEntryNumbers()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim i
+    strSQL1 = "SELECT idJobNum, COUNT(*) FROM packetentrydb GROUP BY idJobNum"
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+    For i = 0 To rs.RecordCount
+        ReDim Preserve strEntries(i + 1)
+        ReDim Preserve intNumOfEntries(i + 1)
+        strEntries(i) = rs.Fields(0)
+        intNumOfEntries(i) = rs.Fields(1)
+        rs.MoveNext
+        If rs.EOF Then Exit For
+    Next i
+End Sub
+Public Function ReturnEmpInfo(strUsername As Variant) As UserInfo
+    ReturnEmpInfo.UserName = vbNull
+    ReturnEmpInfo.FullName = vbNull
+    Dim i As Integer
+    For i = 0 To UBound(strUserIndex, 2)
+        If strUserIndex(0, i) = strUsername Then
+            ReturnEmpInfo.UserName = strUserIndex(0, i)
+            ReturnEmpInfo.FullName = strUserIndex(1, i)
+            Exit Function
         End If
-        IsHooked = HKflg
+    Next i
+    MsgBox (strUsername & " not found")
+End Function
+Public Sub SendEmailToQueue(SendRec As String, _
+                            MailFrom As String, _
+                            MailTo As String, _
+                            JobNum As String, _
+                            strComment As String)
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    strSQL1 = "INSERT INTO emailqueue (idSendOrRec,idFrom,idTo,idJobNum,idComment)" & " VALUES ('" & SendRec & "','" & MailFrom & "','" & MailTo & "','" & JobNum & "','" & strComment & "')"
+    Set rs = New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+End Sub
+Public Sub SetINIValue(sUser As String, iHits As Integer)
+    With m_cIni
+        .Path = strINILoc
+        .Section = "HITS"
+        .Key = sUser
+        .Value = iHits
+        If Not (.Success) Then
+            MsgBox "Failed to set value.", vbInformation
+        End If
+    End With
+    'ShowIniAndParameters
+End Sub
+Public Sub ShowBanner(Color As Long, _
+                      Text As String, _
+                      Optional Ticks As Integer, _
+                      Optional ClickCase As String, _
+                      Optional FontColor As Long)
+    bolBannerCleared = False
+    BannerColor(intCachedBanners) = Color
+    BannerText(intCachedBanners) = Text
+    BannerTicks(intCachedBanners) = Ticks
+    BannerCase(intCachedBanners) = ClickCase
+    BannerFontColor(intCachedBanners) = FontColor
+    intCachedBanners = intCachedBanners + 1
+    If bolBannerOpen = False Then
+        intCurrentCache = intCurrentCache + 1
+        OpenCloseBanner BannerColor(intCurrentCache), BannerText(intCurrentCache), BannerTicks(intCurrentCache), BannerCase(intCurrentCache), BannerFontColor(intCurrentCache)
+    Else
+        Form1.tmrBannerWait.Enabled = True
     End If
+End Sub
+Public Sub StartTimer()
+    total = 0
+    QueryPerformanceFrequency Freq
+    QueryPerformanceCounter Ctr1
+End Sub
+Public Function StopTimer() As Double
+    StopTimer = 0
+    QueryPerformanceCounter Ctr2
+    total = total + (Ctr2 - Ctr1)
+    StopTimer = Round(CDbl(total / Freq) * 1000, 3)
+End Function
+Public Sub Wait(ByVal DurationMS As Long)
+    Dim EndTime As Long
+    EndTime = GetTickCount + DurationMS
+    Do While EndTime > GetTickCount
+        DoEvents
+        Sleep 1
+    Loop
+End Sub
+Public Sub WheelHook(PassedForm As Form)
+    On Error Resume Next
+    Set MyForm = PassedForm
+    LocalHwnd = PassedForm.hwnd
+    LocalPrevWndProc = SetWindowLong(LocalHwnd, GWL_WNDPROC, AddressOf WindowProc2)
+End Sub
+Public Sub WheelUnHook()
+    Dim WorkFlag As Long
+    On Error Resume Next
+    WorkFlag = SetWindowLong(LocalHwnd, GWL_WNDPROC, LocalPrevWndProc)
+    Set MyForm = Nothing
 End Sub
 Public Function WindowProc(ByVal hw As Long, _
                            ByVal uMsg As Long, _
@@ -893,35 +958,6 @@ Public Function WindowProc(ByVal hw As Long, _
     End If
     WindowProc = CallWindowProc(lpPrevWndProc, hw, uMsg, wParam, lParam)
 End Function
-Public Sub MouseWheel(ByVal MouseKeys As Long, _
-                      ByVal Rotation As Long, _
-                      ByVal Xpos As Long, _
-                      ByVal Ypos As Long)
-    Dim NewValue As Long
-    Dim LStep    As Single
-    On Error Resume Next
-    With WhichGrid
-        LStep = .Height / .RowHeight(1)
-        LStep = Int(LStep)
-        LStep = LStep - 20
-        If LStep < 20 Then
-            LStep = 1
-        End If
-        If Rotation > 0 Then
-            NewValue = .TopRow - LStep
-            If NewValue < 1 Then
-                NewValue = 0
-            End If
-        Else
-            NewValue = .TopRow + LStep
-            If NewValue > .Rows - 1 Then
-                NewValue = .Rows - 1
-            End If
-        End If
-        .TopRow = NewValue
-        ' FlexHistLastTopRow = NewValue
-    End With
-End Sub
 Private Function WindowProc2(ByVal Lwnd As Long, _
                              ByVal Lmsg As Long, _
                              ByVal wParam As Long, _
@@ -939,37 +975,4 @@ Private Function WindowProc2(ByVal Lwnd As Long, _
     End If
     WindowProc2 = CallWindowProc(LocalPrevWndProc, Lwnd, Lmsg, wParam, lParam)
 End Function
-Public Sub WheelHook(PassedForm As Form)
-    On Error Resume Next
-    Set MyForm = PassedForm
-    LocalHwnd = PassedForm.hwnd
-    LocalPrevWndProc = SetWindowLong(LocalHwnd, GWL_WNDPROC, AddressOf WindowProc2)
-End Sub
-Public Sub WheelUnHook()
-    Dim WorkFlag As Long
-    On Error Resume Next
-    WorkFlag = SetWindowLong(LocalHwnd, GWL_WNDPROC, LocalPrevWndProc)
-    Set MyForm = Nothing
-End Sub
-Public Sub EndProgram()
-  On Error Resume Next
-  
-    Call WheelUnHook
-    If cn_global.State <> 0 Then cn_global.Close
-    Unload Form1
-    Kill strTempFileLoc & "*.*"
-    End
-End Sub
-Public Function ConnectToDB() As Boolean
-    On Error GoTo errs
-    ConnectToDB = False
-    cn_global.Open "uid=" & strUsername & ";pwd=" & strPassword & ";server=" & strServerAddress & ";" & "driver={" & strSQLDriver & "};database=TicketDB;dsn=;"
-    If cn_global.State = 1 Then
-        ConnectToDB = True
-    Else
-        ConnectToDB = False
-    End If
-    Exit Function
-errs:
-    ErrHandle Err.Number, Err.Description, "ConnectToDB"
-End Function
+

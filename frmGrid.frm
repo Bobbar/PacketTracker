@@ -105,6 +105,20 @@ Private Declare Function SendMessage _
                                       ByVal wParam As Long, _
                                       lParam As Any) As Long
 Private LeftOffset, TopOffset As Integer
+Public Sub FlexGridRedrawHeight()
+    Dim ColLoop As Long
+    Dim RowLoop As Long
+    'Turn off redrawing to avoid flickering
+    FlexGrid.Redraw = False
+    'For ColLoop = 0 To FlexGridHist.Cols - 1
+    'FlexGridHist.ColWidth(ColLoop) = 2500
+    For RowLoop = 0 To FlexGrid.Rows - 1
+        ReSizeCellHeight RowLoop, 1
+    Next RowLoop
+    'Next ColLoop
+    'Turn redrawing back on
+    FlexGrid.Redraw = True
+End Sub
 Sub FlexSort(Mode As String)
     If FlexGrid.MouseRow = 0 And Mode = "A" Then
         FlexGrid.Col = FlexGrid.MouseCol
@@ -126,6 +140,29 @@ Sub FlexSort(Mode As String)
     Else
         'do nothing
     End If
+End Sub
+Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
+    Dim LinesOfText  As Long
+    Dim HeightOfLine As Long
+    On Error Resume Next
+    'Set MSFlexGrid to appropriate Cell
+    FlexGrid.Row = MyRow
+    FlexGrid.Col = MyCol
+    'Set textbox width to match current width of selected cell
+    Text1.Width = FlexGrid.ColWidth(MyCol)
+    Text1.FontSize = FlexGrid.CellFontSize
+    Text1.FontBold = FlexGrid.CellFontBold
+    Text1.FontItalic = FlexGrid.CellFontItalic
+    Text1.Text = FlexGrid.Text
+    'Get the height of the text in the textbox
+    HeightOfLine = 285 'Me.TextHeight(Text1.Text) '285
+    'Call API to determine how many lines of text are in text box
+    LinesOfText = SendMessage(Text1.hwnd, EM_GETLINECOUNT, 0&, 0&)
+    'Check to see if row is not tall enough
+    ' If FlexGrid.RowHeight(MyRow) < (LinesOfText * HeightOfLine) Then
+    'Adjust the RowHeight based on the number of lines in textbox
+    FlexGrid.RowHeight(MyRow) = LinesOfText * HeightOfLine + 200
+    ' End If
 End Sub
 Private Sub FlexGrid_Click()
     On Error Resume Next
@@ -162,43 +199,6 @@ Private Sub Form_Load()
     If bolHook Then Call WheelHook(frmGrid)
     LeftOffset = frmGrid.Width - (FlexGrid.Left + FlexGrid.Width)
     TopOffset = frmGrid.Height - (FlexGrid.Top + FlexGrid.Height)
-End Sub
-Public Sub FlexGridRedrawHeight()
-    Dim ColLoop As Long
-    Dim RowLoop As Long
-    'Turn off redrawing to avoid flickering
-    FlexGrid.Redraw = False
-    'For ColLoop = 0 To FlexGridHist.Cols - 1
-    'FlexGridHist.ColWidth(ColLoop) = 2500
-    For RowLoop = 0 To FlexGrid.Rows - 1
-        ReSizeCellHeight RowLoop, 1
-    Next RowLoop
-    'Next ColLoop
-    'Turn redrawing back on
-    FlexGrid.Redraw = True
-End Sub
-Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
-    Dim LinesOfText  As Long
-    Dim HeightOfLine As Long
-    On Error Resume Next
-    'Set MSFlexGrid to appropriate Cell
-    FlexGrid.Row = MyRow
-    FlexGrid.Col = MyCol
-    'Set textbox width to match current width of selected cell
-    Text1.Width = FlexGrid.ColWidth(MyCol)
-    Text1.FontSize = FlexGrid.CellFontSize
-    Text1.FontBold = FlexGrid.CellFontBold
-    Text1.FontItalic = FlexGrid.CellFontItalic
-    Text1.Text = FlexGrid.Text
-    'Get the height of the text in the textbox
-    HeightOfLine = 285 'Me.TextHeight(Text1.Text) '285
-    'Call API to determine how many lines of text are in text box
-    LinesOfText = SendMessage(Text1.hwnd, EM_GETLINECOUNT, 0&, 0&)
-    'Check to see if row is not tall enough
-    ' If FlexGrid.RowHeight(MyRow) < (LinesOfText * HeightOfLine) Then
-    'Adjust the RowHeight based on the number of lines in textbox
-    FlexGrid.RowHeight(MyRow) = LinesOfText * HeightOfLine + 200
-    ' End If
 End Sub
 Private Sub Form_Resize()
     On Error Resume Next
