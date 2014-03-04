@@ -217,6 +217,7 @@ Public strTempFileLoc As String
 Public strStream As ADODB.Stream
 Public strCurJobNum As String
 Public Const lngMaxFileSize As Long = 60000000
+
 Public Function ArrayPosition(ByVal FindValue As Variant, arrSearch As Variant) As Long
     ArrayPosition = -1  'Set default value of "not found"
     On Error GoTo LocalError

@@ -33,14 +33,14 @@ Begin VB.Form Form1
       BorderStyle     =   0  'None
       Height          =   1575
       Left            =   3480
-      TabIndex        =   158
+      TabIndex        =   157
       Top             =   9360
       Visible         =   0   'False
       Width           =   5355
       Begin ComctlLib.ProgressBar pBar 
          Height          =   405
          Left            =   120
-         TabIndex        =   159
+         TabIndex        =   158
          Top             =   840
          Width           =   5115
          _ExtentX        =   9022
@@ -65,7 +65,7 @@ Begin VB.Form Form1
          EndProperty
          Height          =   330
          Left            =   120
-         TabIndex        =   160
+         TabIndex        =   159
          Top             =   360
          Width           =   5190
       End
@@ -194,7 +194,6 @@ Begin VB.Form Form1
       _Version        =   393216
       Style           =   1
       Tabs            =   2
-      Tab             =   1
       TabsPerRow      =   2
       TabHeight       =   441
       ShowFocusRect   =   0   'False
@@ -210,42 +209,55 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "Job Packets"
       TabPicture(0)   =   "Form1.frx":0D5C
-      Tab(0).ControlEnabled=   0   'False
-      Tab(0).Control(0)=   "cmdEdit"
+      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).Control(0)=   "FrameTrackingInfo"
       Tab(0).Control(0).Enabled=   0   'False
-      Tab(0).Control(1)=   "frmTimers"
+      Tab(0).Control(1)=   "FramePacketInfo"
+      Tab(0).Control(1).Enabled=   0   'False
       Tab(0).Control(2)=   "SSTab1"
-      Tab(0).Control(3)=   "FramePacketInfo"
-      Tab(0).Control(4)=   "FrameTrackingInfo"
+      Tab(0).Control(2).Enabled=   0   'False
+      Tab(0).Control(3)=   "frmTimers"
+      Tab(0).Control(3).Enabled=   0   'False
+      Tab(0).Control(4)=   "cmdEdit"
+      Tab(0).Control(4).Enabled=   0   'False
       Tab(0).ControlCount=   5
       TabCaption(1)   =   "RFQs"
       TabPicture(1)   =   "Form1.frx":0D78
-      Tab(1).ControlEnabled=   -1  'True
+      Tab(1).ControlEnabled=   0   'False
       Tab(1).Control(0)=   "SSTabRFQFunc"
-      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "FrameRFQNum"
-      Tab(1).Control(1).Enabled=   0   'False
       Tab(1).Control(2)=   "SSTab2"
-      Tab(1).Control(2).Enabled=   0   'False
       Tab(1).Control(3)=   "cmdRFQSubmit"
-      Tab(1).Control(3).Enabled=   0   'False
       Tab(1).Control(4)=   "frmRFQTrack"
-      Tab(1).Control(4).Enabled=   0   'False
       Tab(1).Control(5)=   "Frame2"
-      Tab(1).Control(5).Enabled=   0   'False
-      Tab(1).ControlCount=   6
+      Tab(1).Control(6)=   "frmRFQTimers"
+      Tab(1).ControlCount=   7
+      Begin VB.Frame frmRFQTimers 
+         Caption         =   "Timers"
+         Height          =   3435
+         Left            =   -65400
+         TabIndex        =   179
+         Top             =   3240
+         Visible         =   0   'False
+         Width           =   2295
+         Begin VB.Timer tmrTabState 
+            Interval        =   250
+            Left            =   300
+            Top             =   480
+         End
+      End
       Begin VB.Frame Frame2 
          Caption         =   "Notes"
          Height          =   1335
-         Left            =   2520
-         TabIndex        =   168
+         Left            =   -72480
+         TabIndex        =   167
          Top             =   3120
          Width           =   6195
          Begin VB.TextBox txtRFQNewNote 
             Appearance      =   0  'Flat
             Height          =   975
             Left            =   180
-            TabIndex        =   169
+            TabIndex        =   168
             Top             =   240
             Width           =   5835
          End
@@ -253,8 +265,8 @@ Begin VB.Form Form1
       Begin VB.Frame frmRFQTrack 
          Caption         =   "Tracking"
          Height          =   4395
-         Left            =   9180
-         TabIndex        =   164
+         Left            =   -65820
+         TabIndex        =   163
          Top             =   240
          Width           =   2955
          Begin VB.TextBox txtRFQAssignedTo 
@@ -262,7 +274,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   285
             Left            =   120
-            TabIndex        =   166
+            TabIndex        =   165
             Text            =   "Text2"
             Top             =   600
             Width           =   1215
@@ -273,13 +285,14 @@ Begin VB.Form Form1
             Caption         =   "Assigned To"
             Height          =   195
             Left            =   300
-            TabIndex        =   165
+            TabIndex        =   164
             Top             =   360
             Width           =   870
          End
       End
       Begin VB.CommandButton cmdRFQSubmit 
          Caption         =   "Submit"
+         Enabled         =   0   'False
          BeginProperty Font 
             Name            =   "Tahoma"
             Size            =   8.25
@@ -290,15 +303,15 @@ Begin VB.Form Form1
             Strikethrough   =   0   'False
          EndProperty
          Height          =   480
-         Left            =   360
-         TabIndex        =   153
+         Left            =   -74640
+         TabIndex        =   152
          Top             =   3600
          Width           =   1530
       End
       Begin TabDlg.SSTab SSTab2 
          Height          =   4875
-         Left            =   0
-         TabIndex        =   152
+         Left            =   -75000
+         TabIndex        =   151
          Top             =   4920
          Width           =   12135
          _ExtentX        =   21405
@@ -320,26 +333,10 @@ Begin VB.Form Form1
       End
       Begin VB.Frame FrameRFQNum 
          Height          =   1455
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   134
          Top             =   600
          Width           =   1995
-         Begin VB.CommandButton cmdRFQClear 
-            Caption         =   "Clear All"
-            Height          =   360
-            Left            =   900
-            TabIndex        =   155
-            Top             =   900
-            Width           =   930
-         End
-         Begin VB.CheckBox chkNew 
-            Caption         =   "New RFQ"
-            Height          =   375
-            Left            =   120
-            TabIndex        =   154
-            Top             =   900
-            Width           =   675
-         End
          Begin VB.TextBox txtRFQNum 
             Appearance      =   0  'Flat
             BeginProperty Font 
@@ -353,9 +350,25 @@ Begin VB.Form Form1
             EndProperty
             Height          =   375
             Left            =   120
-            TabIndex        =   135
+            TabIndex        =   178
             Top             =   420
-            Width           =   1695
+            Width           =   1755
+         End
+         Begin VB.CommandButton cmdRFQClear 
+            Caption         =   "Clear All"
+            Height          =   360
+            Left            =   900
+            TabIndex        =   154
+            Top             =   900
+            Width           =   930
+         End
+         Begin VB.CheckBox chkNew 
+            Caption         =   "New RFQ"
+            Height          =   375
+            Left            =   120
+            TabIndex        =   153
+            Top             =   900
+            Width           =   675
          End
          Begin VB.Label Label18 
             AutoSize        =   -1  'True
@@ -363,14 +376,14 @@ Begin VB.Form Form1
             Caption         =   "RFQ #:"
             Height          =   195
             Left            =   180
-            TabIndex        =   136
+            TabIndex        =   135
             Top             =   180
             Width           =   540
          End
       End
       Begin TabDlg.SSTab SSTabRFQFunc 
          Height          =   4395
-         Left            =   2220
+         Left            =   -72780
          TabIndex        =   133
          Top             =   300
          Width           =   6915
@@ -378,6 +391,7 @@ Begin VB.Form Form1
          _ExtentY        =   7752
          _Version        =   393216
          Tabs            =   4
+         Tab             =   1
          TabsPerRow      =   4
          TabHeight       =   441
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -391,14 +405,14 @@ Begin VB.Form Form1
          EndProperty
          TabCaption(0)   =   "RFQ Info"
          TabPicture(0)   =   "Form1.frx":0DE8
-         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "Frame1"
-         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).ControlCount=   1
          TabCaption(1)   =   "Estimating"
          TabPicture(1)   =   "Form1.frx":0E04
-         Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "SSTab3"
+         Tab(1).ControlEnabled=   -1  'True
+         Tab(1).Control(0)=   "SSTabEstimating"
+         Tab(1).Control(0).Enabled=   0   'False
          Tab(1).ControlCount=   1
          TabCaption(2)   =   "Engineering"
          TabPicture(2)   =   "Form1.frx":0E20
@@ -410,55 +424,53 @@ Begin VB.Form Form1
          Tab(3).ControlEnabled=   0   'False
          Tab(3).ControlCount=   0
          Begin VB.Frame Frame4 
-            Caption         =   "Frame4"
-            Height          =   1995
+            Height          =   2055
             Left            =   -74880
-            TabIndex        =   163
-            Top             =   600
+            TabIndex        =   162
+            Top             =   360
             Width           =   6675
          End
-         Begin TabDlg.SSTab SSTab3 
+         Begin TabDlg.SSTab SSTabEstimating 
             Height          =   3915
-            Left            =   -74880
-            TabIndex        =   156
+            Left            =   120
+            TabIndex        =   155
             Top             =   360
             Width           =   6675
             _ExtentX        =   11774
             _ExtentY        =   6906
             _Version        =   393216
             Tabs            =   2
-            Tab             =   1
             TabsPerRow      =   2
             TabHeight       =   441
             TabCaption(0)   =   "Assign"
             TabPicture(0)   =   "Form1.frx":0E58
-            Tab(0).ControlEnabled=   0   'False
+            Tab(0).ControlEnabled=   -1  'True
             Tab(0).Control(0)=   "Frame3"
+            Tab(0).Control(0).Enabled=   0   'False
             Tab(0).ControlCount=   1
             TabCaption(1)   =   "Complete"
             TabPicture(1)   =   "Form1.frx":0E74
-            Tab(1).ControlEnabled=   -1  'True
+            Tab(1).ControlEnabled=   0   'False
             Tab(1).Control(0)=   "Frame5"
-            Tab(1).Control(0).Enabled=   0   'False
             Tab(1).ControlCount=   1
             Begin VB.Frame Frame5 
                Height          =   1995
-               Left            =   120
-               TabIndex        =   172
+               Left            =   -74880
+               TabIndex        =   171
                Top             =   420
                Width           =   6195
                Begin VB.ComboBox cmbMfgFac 
                   Height          =   315
                   Left            =   240
                   Style           =   2  'Dropdown List
-                  TabIndex        =   175
+                  TabIndex        =   174
                   Top             =   540
                   Width           =   2235
                End
                Begin VB.TextBox txtQuoteValue 
                   Height          =   315
                   Left            =   2880
-                  TabIndex        =   174
+                  TabIndex        =   173
                   Text            =   "Text2"
                   Top             =   540
                   Width           =   1575
@@ -466,7 +478,7 @@ Begin VB.Form Form1
                Begin VB.TextBox txtEpicorRFQ 
                   Height          =   315
                   Left            =   240
-                  TabIndex        =   173
+                  TabIndex        =   172
                   Text            =   "%Epicor RFQ#%"
                   Top             =   1260
                   Width           =   2055
@@ -477,7 +489,7 @@ Begin VB.Form Form1
                   Caption         =   "Mfg Facility"
                   Height          =   195
                   Left            =   240
-                  TabIndex        =   178
+                  TabIndex        =   177
                   Top             =   300
                   Width           =   810
                End
@@ -487,7 +499,7 @@ Begin VB.Form Form1
                   Caption         =   "Quote Value"
                   Height          =   195
                   Left            =   2880
-                  TabIndex        =   177
+                  TabIndex        =   176
                   Top             =   300
                   Width           =   885
                End
@@ -497,22 +509,22 @@ Begin VB.Form Form1
                   Caption         =   "Epicor RFQ #"
                   Height          =   195
                   Left            =   240
-                  TabIndex        =   176
+                  TabIndex        =   175
                   Top             =   1020
                   Width           =   960
                End
             End
             Begin VB.Frame Frame3 
                Height          =   1875
-               Left            =   -74880
-               TabIndex        =   157
+               Left            =   120
+               TabIndex        =   156
                Top             =   480
                Width           =   6375
                Begin VB.ComboBox cmdEstSendToDepartment 
                   Height          =   315
                   Left            =   540
                   Style           =   2  'Dropdown List
-                  TabIndex        =   167
+                  TabIndex        =   166
                   Top             =   600
                   Width           =   2055
                End
@@ -520,7 +532,7 @@ Begin VB.Form Form1
                   Height          =   315
                   Left            =   3240
                   Style           =   2  'Dropdown List
-                  TabIndex        =   162
+                  TabIndex        =   161
                   Top             =   600
                   Width           =   2535
                End
@@ -530,7 +542,7 @@ Begin VB.Form Form1
                   Caption         =   "User"
                   Height          =   195
                   Left            =   3240
-                  TabIndex        =   171
+                  TabIndex        =   170
                   Top             =   360
                   Width           =   855
                End
@@ -540,7 +552,7 @@ Begin VB.Form Form1
                   Caption         =   "Department"
                   Height          =   195
                   Left            =   540
-                  TabIndex        =   170
+                  TabIndex        =   169
                   Top             =   360
                   Width           =   855
                End
@@ -548,15 +560,15 @@ Begin VB.Form Form1
          End
          Begin VB.Frame Frame1 
             Height          =   2415
-            Left            =   120
-            TabIndex        =   137
+            Left            =   -74880
+            TabIndex        =   136
             Top             =   360
             Width           =   6495
             Begin VB.CommandButton Command1 
                Caption         =   "Command1"
                Height          =   360
                Left            =   5220
-               TabIndex        =   161
+               TabIndex        =   160
                Top             =   1800
                Width           =   990
             End
@@ -573,7 +585,7 @@ Begin VB.Form Form1
                Height          =   405
                Left            =   2580
                Style           =   2  'Dropdown List
-               TabIndex        =   143
+               TabIndex        =   142
                Top             =   1860
                Width           =   2355
             End
@@ -590,7 +602,7 @@ Begin VB.Form Form1
                EndProperty
                Height          =   375
                Left            =   5100
-               TabIndex        =   142
+               TabIndex        =   141
                Top             =   1140
                Width           =   1215
             End
@@ -608,7 +620,7 @@ Begin VB.Form Form1
                Height          =   405
                Left            =   2580
                Style           =   2  'Dropdown List
-               TabIndex        =   141
+               TabIndex        =   140
                Top             =   1140
                Width           =   2355
             End
@@ -626,7 +638,7 @@ Begin VB.Form Form1
                Height          =   405
                Left            =   120
                Style           =   2  'Dropdown List
-               TabIndex        =   140
+               TabIndex        =   139
                Top             =   1140
                Width           =   2295
             End
@@ -643,7 +655,7 @@ Begin VB.Form Form1
                EndProperty
                Height          =   375
                Left            =   2580
-               TabIndex        =   139
+               TabIndex        =   138
                Top             =   480
                Width           =   3735
             End
@@ -660,14 +672,14 @@ Begin VB.Form Form1
                EndProperty
                Height          =   375
                Left            =   120
-               TabIndex        =   138
+               TabIndex        =   137
                Top             =   480
                Width           =   2295
             End
             Begin MSComCtl2.DTPicker DTNeedBy 
                Height          =   375
                Left            =   120
-               TabIndex        =   144
+               TabIndex        =   143
                Top             =   1860
                Width           =   2295
                _ExtentX        =   4048
@@ -682,7 +694,7 @@ Begin VB.Form Form1
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
-               Format          =   264962049
+               Format          =   181272577
                CurrentDate     =   41656
             End
             Begin VB.Label Label27 
@@ -691,7 +703,7 @@ Begin VB.Form Form1
                Caption         =   "Priority"
                Height          =   195
                Left            =   2640
-               TabIndex        =   151
+               TabIndex        =   150
                Top             =   1620
                Width           =   510
             End
@@ -701,7 +713,7 @@ Begin VB.Form Form1
                Caption         =   "Need By"
                Height          =   195
                Left            =   120
-               TabIndex        =   150
+               TabIndex        =   149
                Top             =   1620
                Width           =   600
             End
@@ -711,7 +723,7 @@ Begin VB.Form Form1
                Caption         =   "Quantity"
                Height          =   195
                Left            =   5100
-               TabIndex        =   149
+               TabIndex        =   148
                Top             =   900
                Width           =   630
             End
@@ -721,7 +733,7 @@ Begin VB.Form Form1
                Caption         =   "Mfg. Facility"
                Height          =   195
                Left            =   2640
-               TabIndex        =   148
+               TabIndex        =   147
                Top             =   900
                Width           =   870
             End
@@ -731,7 +743,7 @@ Begin VB.Form Form1
                Caption         =   "Product Type"
                Height          =   195
                Left            =   120
-               TabIndex        =   147
+               TabIndex        =   146
                Top             =   900
                Width           =   960
             End
@@ -741,7 +753,7 @@ Begin VB.Form Form1
                Caption         =   "Description"
                Height          =   195
                Left            =   2640
-               TabIndex        =   146
+               TabIndex        =   145
                Top             =   240
                Width           =   795
             End
@@ -751,7 +763,7 @@ Begin VB.Form Form1
                Caption         =   "Customer"
                Height          =   195
                Left            =   120
-               TabIndex        =   145
+               TabIndex        =   144
                Top             =   240
                Width           =   690
             End
@@ -759,7 +771,7 @@ Begin VB.Form Form1
       End
       Begin VB.CommandButton cmdEdit 
          Height          =   375
-         Left            =   -67920
+         Left            =   7080
          MaskColor       =   &H00FFFFFF&
          Style           =   1  'Graphical
          TabIndex        =   3
@@ -773,7 +785,7 @@ Begin VB.Form Form1
       Begin VB.Frame frmTimers 
          Caption         =   "Timers"
          Height          =   5535
-         Left            =   -65340
+         Left            =   9660
          TabIndex        =   2
          Top             =   3060
          Visible         =   0   'False
@@ -843,7 +855,7 @@ Begin VB.Form Form1
       Begin TabDlg.SSTab SSTab1 
          CausesValidation=   0   'False
          Height          =   5175
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   4
          ToolTipText     =   "Click to expand"
          Top             =   4560
@@ -852,7 +864,6 @@ Begin VB.Form Form1
          _ExtentY        =   9128
          _Version        =   393216
          Tabs            =   5
-         Tab             =   1
          TabsPerRow      =   5
          TabHeight       =   706
          WordWrap        =   0   'False
@@ -868,14 +879,14 @@ Begin VB.Form Form1
          EndProperty
          TabCaption(0)   =   "History"
          TabPicture(0)   =   "Form1.frx":0E90
-         Tab(0).ControlEnabled=   0   'False
+         Tab(0).ControlEnabled=   -1  'True
          Tab(0).Control(0)=   "FrameHistory"
+         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).ControlCount=   1
          TabCaption(1)   =   "Attachments"
          TabPicture(1)   =   "Form1.frx":13C0
-         Tab(1).ControlEnabled=   -1  'True
+         Tab(1).ControlEnabled=   0   'False
          Tab(1).Control(0)=   "FrameAttachments"
-         Tab(1).Control(0).Enabled=   0   'False
          Tab(1).ControlCount=   1
          TabCaption(2)   =   "Search"
          TabPicture(2)   =   "Form1.frx":1581
@@ -1264,10 +1275,18 @@ Begin VB.Form Form1
          Begin VB.Frame FrameHistory 
             ClipControls    =   0   'False
             Height          =   4575
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   27
             Top             =   480
             Width           =   11775
+            Begin VB.CommandButton Command2 
+               Caption         =   "Command2"
+               Height          =   360
+               Left            =   240
+               TabIndex        =   180
+               Top             =   2340
+               Width           =   990
+            End
             Begin VB.Frame frmKey 
                BorderStyle     =   0  'None
                Height          =   1455
@@ -1731,7 +1750,7 @@ Begin VB.Form Form1
          End
          Begin VB.Frame FrameAttachments 
             Height          =   4575
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   5
             Top             =   480
             Width           =   11775
@@ -1816,7 +1835,7 @@ Begin VB.Form Form1
       Begin VB.Frame FramePacketInfo 
          Caption         =   "Packet Info."
          Height          =   3975
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   70
          Top             =   480
          Width           =   7215
@@ -2390,7 +2409,7 @@ Begin VB.Form Form1
       Begin VB.Frame FrameTrackingInfo 
          Caption         =   "Tracking Info."
          Height          =   3975
-         Left            =   -67620
+         Left            =   7380
          TabIndex        =   43
          Top             =   480
          Width           =   4695
@@ -3392,44 +3411,7 @@ Sub FlexSort(Grid As MSHFlexGrid, Mode As String)
         'do nothing
     End If
 End Sub
-Public Sub GetAttachmentList(strJobNum As String, Grid As MSHFlexGrid)
-    Dim rs As New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    Dim strSQL1 As String
-    strSQL1 = "SELECT idFilename, idFileType, idFileSize, idDateStamp,idGUID FROM attachments WHERE idJobNum = '" & strJobNum & "' order by idDateStamp DESC"
-    Set rs = cn_global.Execute(strSQL1)
-    If rs.RecordCount = 0 Then
-    Grid.Clear
-    Grid.Visible = False
-    SSTab1.TabCaption(1) = "Attachments"
-    Exit Sub
-    End If
-    
-    Grid.Cols = 6
-    Grid.Rows = rs.RecordCount + 1
-    
-    Grid.TextMatrix(0, 1) = "Filename"
-     Grid.TextMatrix(0, 2) = "Size"
-     Grid.TextMatrix(0, 3) = "Type"
-      Grid.TextMatrix(0, 4) = "Date/Time"
-     Grid.TextMatrix(0, 5) = "GUID"
-    
-    
-    With rs
-        Do Until .EOF
-            Grid.TextMatrix(.AbsolutePosition, 1) = !idFileName & "." & !idFileType
-            Grid.TextMatrix(.AbsolutePosition, 2) = Round((!idFileSize / 1024), 2) & " KB"
-            Grid.TextMatrix(.AbsolutePosition, 3) = !idFileType
-            Grid.TextMatrix(.AbsolutePosition, 4) = !idDateStamp
-            Grid.TextMatrix(.AbsolutePosition, 5) = !idGUID
-            .MoveNext
-        Loop
-    End With
-    SSTab1.TabCaption(1) = "Attachments (" & rs.RecordCount & ")"
-    SizeTheSheet Grid
-    Grid.Visible = True
-    
-End Sub
+
 Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -3586,6 +3568,30 @@ NextLoop:
     Exit Sub
 errs:
     Resume Next
+End Sub
+Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
+    On Error Resume Next
+    Dim z, Y As Integer
+    z = 1
+    Y = 600
+    TargetGrid.ScrollBars = flexScrollBarNone
+    Dim Col(), i, b As Integer
+    ReDim Col(TargetGrid.Cols)
+    For i = 0 To TargetGrid.Rows - 1
+        For b = 0 To TargetGrid.Cols - 1
+            If TextWidth(TargetGrid.TextMatrix(i, b)) > Col(b) Then Col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
+        Next b
+    Next i
+    For b = 0 To TargetGrid.Cols - 1
+        If b = 4 Then
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
+        Else
+            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
+        End If
+        TargetGrid.ColAlignment(b) = flexAlignLeftCenter
+    Next b
+    TargetGrid.ScrollBars = flexScrollBarBoth
+    TargetGrid.ColWidth(0) = 0
 End Sub
 Public Sub GetTimeLineData()
     Dim rs      As New ADODB.Recordset
@@ -3769,56 +3775,14 @@ Public Sub LiveSearch(ByVal strSearchString As String) '
 LeaveSub:
     HideData
 End Sub
-Public Sub LoadAttachment(strGUID As String)
-    On Error GoTo errs
-    Dim strFullFileName As String
-    Dim strSQL1         As String
-    Dim rs              As New ADODB.Recordset
-    ShowData
-    frmWait.Show
-    DoEvents
-    If Dir$(strTempFileLoc, vbDirectory) = "" Then MkDir strTempFileLoc
-    Set rs = New ADODB.Recordset
-    cn_global.CursorLocation = adUseClient
-    strSQL1 = "Select * from attachments where idGUID = '" & strGUID & "'"
-    Set rs = cn_global.Execute(strSQL1)
-    ' On Error GoTo procNoPicture
-    'If Recordset is Empty, Then Exit
-    '    If RS Is Nothing Then
-    '        GoTo procNoPicture
-    '    End If
-    Set strStream = New ADODB.Stream
-    With rs
-        strStream.Type = adTypeBinary
-        strStream.Open
-        strStream.Write rs.Fields("idFile").Value
-        strFullFileName = strTempFileLoc & !idFileName & "." & !idFileType
-        strStream.SaveToFile strFullFileName, adSaveCreateOverWrite
-        HideData
-        frmWait.Hide
-        DoEvents
-        Debug.Print ShellExecute(Me.hwnd, "open", strFullFileName, vbNullString, vbNullString, 4) 'SW_SHOWNORMAL
-    
-        'strStream.Close
-        
-    End With
-    Set rs = Nothing
-    Set strStream = Nothing
-    'LoadAttachment = True
-    Exit Sub
-errs:
- HideData
-        frmWait.Hide
-        DoEvents
-    ErrHandle Err.Number, Err.Description, "LoadAttachment"
-End Sub
+
 Public Sub OpenPacket(JobNum As String) 'Opens Packet - Fills HistoryGrid, Fills Fields, Does not refresh MyPackets
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim b       As Integer
     Dim R       As Integer
     Dim CRow    As Integer
-    On Error GoTo ErrHandle
+   ' On Error GoTo ErrHandle
     If Trim$(JobNum) = "" Then Exit Sub
     txtJobNo.Text = JobNum
     SetBoxesForEdit "All"
@@ -4134,66 +4098,7 @@ Public Sub ReSizeCellHeight(MyRow As Long, MyCol As Long)
         FlexGridHist.RowHeight(MyRow) = LinesOfText * HeightOfLine + 200
     End If
 End Sub
-Public Function SaveAttachment(sFileName As String, strFileTitle As String, strJobNum As String)
-    On Error GoTo procNoPicture
-    Dim cmd As ADODB.Command
-    Set cmd = New ADODB.Command
-    Dim mystream As ADODB.Stream
-    Set mystream = New ADODB.Stream
-    mystream.Type = adTypeBinary
-    Dim FileExtSplit() As String
-    Dim strSQL1        As String
-    'Set rs = New ADODB.Recordset
-    ShowData
-    frmWait.Show
-    DoEvents
-    cn_global.CursorLocation = adUseClient
-    mystream.Open
 
-    mystream.LoadFromFile sFileName
-    If mystream.Size > lngMaxFileSize Then
-    
-     HideData
-    frmWait.Hide
-    DoEvents
-    Dim blah
-    blah = MsgBox("File is too large." & vbCrLf & vbCrLf & "Max size is " & Round((lngMaxFileSize / 1024), 2) & " KB the file is " & Round((mystream.Size / 1024), 2) & " KB.", vbExclamation + vbOKOnly, "We're gonna need a bigger hard-drive...")
-    Set mystream = Nothing
-    Set cmd = Nothing
-    
-    Exit Function
-    End If
-    
-    
-    FileExtSplit = Split(strFileTitle, ".")
-    strSQL1 = "INSERT INTO attachments (idFile, idFileName, idFileType,idFileSize, idJobNum) VALUES (?,?,?,?,?)"
-    cmd.ActiveConnection = cn_global
-    cmd.CommandText = strSQL1
-    cmd.Parameters.Append cmd.CreateParameter("@idFile", adVarBinary, adParamInput, mystream.Size, mystream.Read)
-    cmd.Parameters.Append cmd.CreateParameter("@idFileName", adBSTR, adParamInput, , FileExtSplit(0))
-    cmd.Parameters.Append cmd.CreateParameter("@idFileType", adBSTR, adParamInput, , FileExtSplit((UBound(FileExtSplit))))
-    cmd.Parameters.Append cmd.CreateParameter("@idFileType", adBigInt, adParamInput, , mystream.Size)
-    cmd.Parameters.Append cmd.CreateParameter("@idFileName", adBSTR, adParamInput, , strJobNum)
-    cmd.CommandType = adCmdText
-    cmd.Execute
-    mystream.Close
-    Set mystream = Nothing
-    Set cmd = Nothing
-    
-    SaveAttachment = True
-    GetAttachmentList strCurJobNum, FlexAttach
-procExitSub:
-    HideData
-    frmWait.Hide
-    DoEvents
-    
-    Exit Function
-procNoPicture:
-  ErrHandle Err.Number, Err.Description, "SaveAttachment"
-  
-    SaveAttachment = False
-    GoTo procExitSub
-End Function
 Public Sub SetComboBoxHeight(ComboBox As ImageCombo, ByVal NewHeight As Long)
     Dim lpRect As RECT
     Dim wi     As Long
@@ -4383,30 +4288,7 @@ Public Sub ShowData()
     DoEvents
     StartTimer
 End Sub
-Public Sub SizeTheSheet(TargetGrid As MSHFlexGrid)
-    On Error Resume Next
-    Dim z, Y As Integer
-    z = 1
-    Y = 600
-    TargetGrid.ScrollBars = flexScrollBarNone
-    Dim Col(), i, b As Integer
-    ReDim Col(TargetGrid.Cols)
-    For i = 0 To TargetGrid.Rows - 1
-        For b = 0 To TargetGrid.Cols - 1
-            If TextWidth(TargetGrid.TextMatrix(i, b)) > Col(b) Then Col(b) = TextWidth(TargetGrid.TextMatrix(i, b))
-        Next b
-    Next i
-    For b = 0 To TargetGrid.Cols - 1
-        If b = 4 Then
-            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
-        Else
-            TargetGrid.ColWidth(b) = (Col(b) * z) + Y
-        End If
-        TargetGrid.ColAlignment(b) = flexAlignLeftCenter
-    Next b
-    TargetGrid.ScrollBars = flexScrollBarBoth
-    TargetGrid.ColWidth(0) = 0
-End Sub
+
 Public Sub SubmitClose()
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String, strSQL2 As String
@@ -5090,6 +4972,21 @@ errs:
     bolRunning = False
     ErrHandle Err.Number, Err.Description, "ShowAllOpen"
 End Sub
+
+Private Sub chkNew_MouseUp(Button As Integer, Shift As Integer, X As Single, Y As Single)
+
+If CBool(chkNew.Value) Then
+txtRFQNum.Text = FindFreeRFQNum
+If txtRFQNum.Text <> "" Then txtRFQNum.Enabled = False
+Else
+txtRFQNum.Text = ""
+txtRFQNum.Enabled = True
+
+End If
+
+
+End Sub
+
 Private Sub cmbPlant_Click()
     cmbPlant.BackColor = vbWindowBackground
     If cmbPlant.Text <> "" And txtJobNo.Text <> "" And txtPartNoRev.Text <> "" And txtSalesNo.Text <> "" And txtDrawNoRev.Text <> "" And txtCustPoNo.Text <> "" And optCreate.Value = True Or bolHasTicket = True And bolOptionClicked = True Then
@@ -5517,6 +5414,13 @@ Private Sub cmdTimeLine_Click()
     frmTimeLine.chkDayLines.Value = 1
     frmTimeLine.DrawTimeLine
     frmTimeLine.Show
+End Sub
+
+Private Sub Command2_Click()
+frmAttachments.Show
+
+GetAttachmentList strCurJobNum, frmAttachments.GridFileList
+
 End Sub
 
 Private Sub FlexAttach_Click()
@@ -6303,6 +6207,24 @@ Private Sub tmrScroll_Timer()
     pbScrollBox.CurrentY = 22 'TheY
     pbScrollBox.Print strCommentText
 End Sub
+Private Sub tmrTabState_Timer()
+    Select Case SSTabRFQFunc.Tab
+        Case 0 ' RFQInfo
+        
+        Case 1 'Estimating
+            Select Case SSTabEstimating.Tab
+                Case 0 'assign
+                
+                Case 1 'complete
+                
+            End Select
+        Case 2 'Engineering
+        
+        Case 3 'Links
+        
+    End Select
+End Sub
+
 Private Sub txtCustPoNo_Change()
     PositionMaxChar txtCustPoNo
     txtCustPoNo.BackColor = vbWindowBackground
