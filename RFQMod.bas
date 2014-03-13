@@ -1,7 +1,31 @@
 Attribute VB_Name = "RFQMod"
+Option Explicit
 Private Const lngRFQStart As Long = 130000
 Private Const lngRFQEnd As Long = 140000
+Public Function RFQSubmitNew(RFQNum As String, Customer As String, NeebByDate As Date, ProductType As String, Description As String, Creator As String, Quantity As Integer)
+Dim rs      As New ADODB.Recordset
+Dim strSQL1 As String, strSQL2 As String, strJobNum As String, strSQL3 As String
+Dim FormatDate, FormatTime As String
+'strJobNum = txtJobNo.Text
+On Error GoTo errs
+    'ShowData
+    FormatDate = Format$(Date, strDBDateFormat)
+    FormatTime = Format$(Time, "hh:mm:ss")
+    'strSQL2 = "SELECT idJobNum From packetlist Where idJobNum = '" & strJobNum & "'"
+    
+    strSQL1 = "INSERT INTO rfqmain (idRFQNum,idCustomer,idNeedBy, idProductType,idRecievedDate, idDescription, idCreator, idQuantity)" & " VALUES ('" & RFQNum & "," & Customer & "," & needbydate & "," & ProductType & "," & Description & "," & Creator & "," & Quantity & "')"
+    strSQL3 = "INSERT INTO packetentrydb (idJobNum,idAction,idUser,idUserFrom,idUserTo,idComment) VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','CREATED','" & strLocalUser & "','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "')"
+    
+    
+    
+    Set rs = New ADODB.Recordset
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL2)
 
+
+
+
+End Function
 Public Function FindFreeRFQNum() As String
     Dim arrRFQList As Variant
     Dim i          As Long
