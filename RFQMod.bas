@@ -2,19 +2,21 @@ Attribute VB_Name = "RFQMod"
 Option Explicit
 Private Const lngRFQStart As Long = 130000
 Private Const lngRFQEnd As Long = 140000
-Public Function RFQSubmitNew(RFQNum As String, Customer As String, NeebByDate As Date, ProductType As String, Description As String, Creator As String, Quantity As Integer)
+Public Const lngReqdColor As Long = &HC0FFC0
+
+Public Function RFQSubmitNew(RFQNum As String, Customer As String, NeedByDate As Date, ProductType As String, Description As String, Creator As String, Quantity As Integer)
 Dim rs      As New ADODB.Recordset
 Dim strSQL1 As String, strSQL2 As String, strJobNum As String, strSQL3 As String
 Dim FormatDate, FormatTime As String
 'strJobNum = txtJobNo.Text
-On Error GoTo errs
+'On Error GoTo errs
     'ShowData
     FormatDate = Format$(Date, strDBDateFormat)
     FormatTime = Format$(Time, "hh:mm:ss")
     'strSQL2 = "SELECT idJobNum From packetlist Where idJobNum = '" & strJobNum & "'"
     
-    strSQL1 = "INSERT INTO rfqmain (idRFQNum,idCustomer,idNeedBy, idProductType,idRecievedDate, idDescription, idCreator, idQuantity)" & " VALUES ('" & RFQNum & "," & Customer & "," & needbydate & "," & ProductType & "," & Description & "," & Creator & "," & Quantity & "')"
-    strSQL3 = "INSERT INTO packetentrydb (idJobNum,idAction,idUser,idUserFrom,idUserTo,idComment) VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','CREATED','" & strLocalUser & "','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "')"
+    strSQL1 = "INSERT INTO rfqmain (idRFQNum,idCustomer,idNeedBy, idProductType,idRecievedDate, idDescription, idCreator, idQuantity)" & " VALUES ('" & RFQNum & "," & Customer & "," & NeedByDate & "," & ProductType & "," & Description & "," & Creator & "," & Quantity & "')"
+    'strSQL3 = "INSERT INTO packetentrydb (idJobNum,idAction,idUser,idUserFrom,idUserTo,idComment) VALUES ('" & Replace$(txtJobNo.Text, "'", "''") & "','CREATED','" & strLocalUser & "','NULL','NULL','" & Replace$(strTicketComment, "'", "''") & "')"
     
     
     
@@ -25,6 +27,45 @@ On Error GoTo errs
 
 
 
+
+
+End Function
+Public Function RFQTabStatus()
+
+
+
+
+End Function
+Public Function GetComboItems()
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    cn_global.CursorLocation = adUseClient
+    strSQL1 = "SELECT * From comboitems Order By idTimeOffType"
+    Set rs = cn_global.Execute(strSQL1)
+    cmbTimeOffType.Clear
+    cmbLocation.Clear
+    cmbLocation2.Clear
+    frmAddNewEmp.cmbLocation1.Clear
+    frmAddNewEmp.cmbLocation2.Clear
+    cmbTimeOffType.AddItem "", 0
+    cmbLocation.AddItem "", 0
+    cmbLocation2.AddItem "", 0
+    frmAddNewEmp.cmbLocation1.AddItem "", 0
+    frmAddNewEmp.cmbLocation2.AddItem "", 0
+    Do Until rs.EOF
+        With rs
+            If !idLocation1 <> "" Then
+                cmbLocation.AddItem !idLocation1, .AbsolutePosition
+                frmAddNewEmp.cmbLocation1.AddItem !idLocation1, .AbsolutePosition
+            End If
+            If !idLocation2 <> "" Then
+                cmbLocation2.AddItem !idLocation2, .AbsolutePosition
+                frmAddNewEmp.cmbLocation2.AddItem !idLocation2, .AbsolutePosition
+            End If
+            If !idTimeOffType <> "" Then cmbTimeOffType.AddItem !idTimeOffType, .AbsolutePosition
+            .MoveNext
+        End With
+    Loop
 End Function
 Public Function FindFreeRFQNum() As String
     Dim arrRFQList As Variant
@@ -68,22 +109,18 @@ Public Function GetAttachmentList(strJobNum As String, Grid As MSHFlexGrid)
     strSQL1 = "SELECT idFilename, idFileType, idFileSize, idDateStamp,idGUID FROM attachments WHERE idJobNum = '" & strJobNum & "' order by idDateStamp DESC"
     Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount = 0 Then
-    Grid.Clear
-    Grid.Visible = False
-    Form1.SSTab1.TabCaption(1) = "Attachments"
-    Exit Function
+        Grid.Clear
+        Grid.Visible = False
+        Form1.SSTab1.TabCaption(1) = "Attachments"
+        Exit Function
     End If
-    
     Grid.Cols = 6
     Grid.Rows = rs.RecordCount + 1
-    
     Grid.TextMatrix(0, 1) = "Filename"
-     Grid.TextMatrix(0, 2) = "Size"
-     Grid.TextMatrix(0, 3) = "Type"
-      Grid.TextMatrix(0, 4) = "Date/Time"
-     Grid.TextMatrix(0, 5) = "GUID"
-    
-    
+    Grid.TextMatrix(0, 2) = "Size"
+    Grid.TextMatrix(0, 3) = "Type"
+    Grid.TextMatrix(0, 4) = "Date/Time"
+    Grid.TextMatrix(0, 5) = "GUID"
     With rs
         Do Until .EOF
             Grid.TextMatrix(.AbsolutePosition, 1) = !idFileName & "." & !idFileType
@@ -97,7 +134,6 @@ Public Function GetAttachmentList(strJobNum As String, Grid As MSHFlexGrid)
     Form1.SSTab1.TabCaption(1) = "Attachments (" & rs.RecordCount & ")"
     Form1.SizeTheSheet Grid
     Grid.Visible = True
-    
 End Function
 Public Function LoadAttachment(strGUID As String)
     On Error GoTo errs

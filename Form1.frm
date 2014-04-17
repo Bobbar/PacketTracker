@@ -221,7 +221,7 @@ Begin VB.Form Form1
       TabCaption(1)   =   "RFQs"
       TabPicture(1)   =   "Form1.frx":0D78
       Tab(1).ControlEnabled=   -1  'True
-      Tab(1).Control(0)=   "SSTabRFQFunc"
+      Tab(1).Control(0)=   "id"
       Tab(1).Control(0).Enabled=   0   'False
       Tab(1).Control(1)=   "FrameRFQNum"
       Tab(1).Control(1).Enabled=   0   'False
@@ -239,9 +239,9 @@ Begin VB.Form Form1
       Begin VB.Frame frmRFQTimers 
          Caption         =   "Timers"
          Height          =   3435
-         Left            =   9600
+         Left            =   9300
          TabIndex        =   178
-         Top             =   3240
+         Top             =   840
          Visible         =   0   'False
          Width           =   2295
          Begin VB.Timer tmrEnabler 
@@ -326,10 +326,13 @@ Begin VB.Form Form1
          _ExtentX        =   21405
          _ExtentY        =   8599
          _Version        =   393216
+         Tabs            =   4
+         Tab             =   2
+         TabsPerRow      =   4
          TabHeight       =   520
          TabCaption(0)   =   "History"
          TabPicture(0)   =   "Form1.frx":0D94
-         Tab(0).ControlEnabled=   -1  'True
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).ControlCount=   0
          TabCaption(1)   =   "Search"
          TabPicture(1)   =   "Form1.frx":0DB0
@@ -337,8 +340,12 @@ Begin VB.Form Form1
          Tab(1).ControlCount=   0
          TabCaption(2)   =   "Reports"
          TabPicture(2)   =   "Form1.frx":0DCC
-         Tab(2).ControlEnabled=   0   'False
+         Tab(2).ControlEnabled=   -1  'True
          Tab(2).ControlCount=   0
+         TabCaption(3)   =   "Tab 3"
+         TabPicture(3)   =   "Form1.frx":0DE8
+         Tab(3).ControlEnabled=   0   'False
+         Tab(3).ControlCount=   0
       End
       Begin VB.Frame FrameRFQNum 
          Height          =   1455
@@ -390,7 +397,7 @@ Begin VB.Form Form1
             Width           =   540
          End
       End
-      Begin TabDlg.SSTab SSTabRFQFunc 
+      Begin TabDlg.SSTab id 
          Height          =   4395
          Left            =   2220
          TabIndex        =   133
@@ -400,7 +407,6 @@ Begin VB.Form Form1
          _ExtentY        =   7752
          _Version        =   393216
          Tabs            =   4
-         Tab             =   3
          TabsPerRow      =   4
          TabHeight       =   441
          BeginProperty Font {0BE35203-8F91-11CE-9DE3-00AA004BB851} 
@@ -413,25 +419,25 @@ Begin VB.Form Form1
             Strikethrough   =   0   'False
          EndProperty
          TabCaption(0)   =   "RFQ Info"
-         TabPicture(0)   =   "Form1.frx":0DE8
-         Tab(0).ControlEnabled=   0   'False
+         TabPicture(0)   =   "Form1.frx":0E04
+         Tab(0).ControlEnabled=   -1  'True
          Tab(0).Control(0)=   "Frame1"
+         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).ControlCount=   1
          TabCaption(1)   =   "Estimating"
-         TabPicture(1)   =   "Form1.frx":0E04
+         TabPicture(1)   =   "Form1.frx":0E20
          Tab(1).ControlEnabled=   0   'False
-         Tab(1).Control(0)=   "SSTabEstimating"
+         Tab(1).Control(0)=   "SSTabEst"
          Tab(1).ControlCount=   1
          TabCaption(2)   =   "Engineering"
-         TabPicture(2)   =   "Form1.frx":0E20
+         TabPicture(2)   =   "Form1.frx":0E3C
          Tab(2).ControlEnabled=   0   'False
          Tab(2).Control(0)=   "SSTabEng"
          Tab(2).ControlCount=   1
          TabCaption(3)   =   "Sales"
-         TabPicture(3)   =   "Form1.frx":0E3C
-         Tab(3).ControlEnabled=   -1  'True
+         TabPicture(3)   =   "Form1.frx":0E58
+         Tab(3).ControlEnabled=   0   'False
          Tab(3).Control(0)=   "frmSales"
-         Tab(3).Control(0).Enabled=   0   'False
          Tab(3).ControlCount=   1
          Begin TabDlg.SSTab SSTabEng 
             Height          =   3915
@@ -445,7 +451,7 @@ Begin VB.Form Form1
             Tabs            =   1
             TabHeight       =   520
             TabCaption(0)   =   "Assign"
-            TabPicture(0)   =   "Form1.frx":0E58
+            TabPicture(0)   =   "Form1.frx":0E74
             Tab(0).ControlEnabled=   -1  'True
             Tab(0).Control(0)=   "Label37"
             Tab(0).Control(0).Enabled=   0   'False
@@ -473,9 +479,9 @@ Begin VB.Form Form1
          End
          Begin VB.Frame frmSales 
             Height          =   2355
-            Left            =   180
+            Left            =   -74820
             TabIndex        =   180
-            Top             =   420
+            Top             =   360
             Width           =   6555
             Begin VB.ComboBox cmbWLReason 
                Height          =   315
@@ -510,7 +516,7 @@ Begin VB.Form Form1
                _ExtentX        =   3096
                _ExtentY        =   556
                _Version        =   393216
-               Format          =   180617217
+               Format          =   260177921
                CurrentDate     =   41711
             End
             Begin MSComCtl2.DTPicker dtCustDelivery 
@@ -522,7 +528,7 @@ Begin VB.Form Form1
                _ExtentX        =   3096
                _ExtentY        =   556
                _Version        =   393216
-               Format          =   180617217
+               Format          =   260177921
                CurrentDate     =   41711
             End
             Begin VB.Label Label36 
@@ -556,7 +562,7 @@ Begin VB.Form Form1
                Width           =   1710
             End
          End
-         Begin TabDlg.SSTab SSTabEstimating 
+         Begin TabDlg.SSTab SSTabEst 
             Height          =   3915
             Left            =   -74880
             TabIndex        =   155
@@ -569,13 +575,13 @@ Begin VB.Form Form1
             TabsPerRow      =   2
             TabHeight       =   441
             TabCaption(0)   =   "Assign"
-            TabPicture(0)   =   "Form1.frx":0E74
+            TabPicture(0)   =   "Form1.frx":0E90
             Tab(0).ControlEnabled=   -1  'True
             Tab(0).Control(0)=   "Frame3"
             Tab(0).Control(0).Enabled=   0   'False
             Tab(0).ControlCount=   1
             TabCaption(1)   =   "Complete"
-            TabPicture(1)   =   "Form1.frx":0E90
+            TabPicture(1)   =   "Form1.frx":0EAC
             Tab(1).ControlEnabled=   0   'False
             Tab(1).Control(0)=   "Frame5"
             Tab(1).ControlCount=   1
@@ -686,9 +692,9 @@ Begin VB.Form Form1
          End
          Begin VB.Frame Frame1 
             Height          =   2415
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   136
-            Top             =   360
+            Top             =   300
             Width           =   6495
             Begin VB.CommandButton Command1 
                Caption         =   "Command1"
@@ -709,9 +715,9 @@ Begin VB.Form Form1
                   Strikethrough   =   0   'False
                EndProperty
                Height          =   405
-               ItemData        =   "Form1.frx":0EAC
+               ItemData        =   "Form1.frx":0EC8
                Left            =   2580
-               List            =   "Form1.frx":0EB9
+               List            =   "Form1.frx":0ED5
                Style           =   2  'Dropdown List
                TabIndex        =   142
                Top             =   1860
@@ -746,9 +752,9 @@ Begin VB.Form Form1
                   Strikethrough   =   0   'False
                EndProperty
                Height          =   405
-               ItemData        =   "Form1.frx":0ECC
+               ItemData        =   "Form1.frx":0EE8
                Left            =   2580
-               List            =   "Form1.frx":0ED9
+               List            =   "Form1.frx":0EF5
                Style           =   2  'Dropdown List
                TabIndex        =   140
                Top             =   1140
@@ -766,9 +772,9 @@ Begin VB.Form Form1
                   Strikethrough   =   0   'False
                EndProperty
                Height          =   405
-               ItemData        =   "Form1.frx":0EEC
+               ItemData        =   "Form1.frx":0F08
                Left            =   120
-               List            =   "Form1.frx":0EF9
+               List            =   "Form1.frx":0F15
                Style           =   2  'Dropdown List
                TabIndex        =   139
                Top             =   1140
@@ -826,7 +832,7 @@ Begin VB.Form Form1
                   Italic          =   0   'False
                   Strikethrough   =   0   'False
                EndProperty
-               Format          =   260046849
+               Format          =   260374529
                CurrentDate     =   41656
             End
             Begin VB.Label Label27 
@@ -996,6 +1002,7 @@ Begin VB.Form Form1
          _ExtentY        =   9128
          _Version        =   393216
          Tabs            =   5
+         Tab             =   1
          TabsPerRow      =   5
          TabHeight       =   706
          WordWrap        =   0   'False
@@ -1010,28 +1017,28 @@ Begin VB.Form Form1
             Strikethrough   =   0   'False
          EndProperty
          TabCaption(0)   =   "History"
-         TabPicture(0)   =   "Form1.frx":0F0C
-         Tab(0).ControlEnabled=   -1  'True
+         TabPicture(0)   =   "Form1.frx":0F28
+         Tab(0).ControlEnabled=   0   'False
          Tab(0).Control(0)=   "FrameHistory"
-         Tab(0).Control(0).Enabled=   0   'False
          Tab(0).ControlCount=   1
          TabCaption(1)   =   "Attachments"
-         TabPicture(1)   =   "Form1.frx":143C
-         Tab(1).ControlEnabled=   0   'False
+         TabPicture(1)   =   "Form1.frx":1458
+         Tab(1).ControlEnabled=   -1  'True
          Tab(1).Control(0)=   "FrameAttachments"
+         Tab(1).Control(0).Enabled=   0   'False
          Tab(1).ControlCount=   1
          TabCaption(2)   =   "Search"
-         TabPicture(2)   =   "Form1.frx":15FD
+         TabPicture(2)   =   "Form1.frx":1619
          Tab(2).ControlEnabled=   0   'False
          Tab(2).Control(0)=   "FrameSearch"
          Tab(2).ControlCount=   1
          TabCaption(3)   =   "Incoming"
-         TabPicture(3)   =   "Form1.frx":1ACF
+         TabPicture(3)   =   "Form1.frx":1AEB
          Tab(3).ControlEnabled=   0   'False
          Tab(3).Control(0)=   "FrameIncoming"
          Tab(3).ControlCount=   1
          TabCaption(4)   =   "On-Hand"
-         TabPicture(4)   =   "Form1.frx":1C69
+         TabPicture(4)   =   "Form1.frx":1C85
          Tab(4).ControlEnabled=   0   'False
          Tab(4).Control(0)=   "FrameOnHand"
          Tab(4).ControlCount=   1
@@ -1138,7 +1145,7 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":235B
+               Picture         =   "Form1.frx":2377
                Style           =   1  'Graphical
                TabIndex        =   128
                TabStop         =   0   'False
@@ -1213,7 +1220,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":3EEF
+               Picture         =   "Form1.frx":3F0B
                ToolTipText     =   "Open grid in a new window"
                Top             =   1080
                Width           =   450
@@ -1322,7 +1329,7 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":3FE4
+               Picture         =   "Form1.frx":4000
                Style           =   1  'Graphical
                TabIndex        =   115
                TabStop         =   0   'False
@@ -1398,7 +1405,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":5B78
+               Picture         =   "Form1.frx":5B94
                ToolTipText     =   "Open grid in a new window"
                Top             =   1080
                Width           =   450
@@ -1407,7 +1414,7 @@ Begin VB.Form Form1
          Begin VB.Frame FrameHistory 
             ClipControls    =   0   'False
             Height          =   4575
-            Left            =   120
+            Left            =   -74880
             TabIndex        =   27
             Top             =   480
             Width           =   11775
@@ -1554,7 +1561,7 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":5C6D
+               Picture         =   "Form1.frx":5C89
                Style           =   1  'Graphical
                TabIndex        =   37
                TabStop         =   0   'False
@@ -1632,7 +1639,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":7801
+               Picture         =   "Form1.frx":781D
                ToolTipText     =   "Open grid in a new window"
                Top             =   1560
                Width           =   450
@@ -1786,7 +1793,7 @@ Begin VB.Form Form1
                Height          =   840
                Left            =   600
                MaskColor       =   &H00FFFFFF&
-               Picture         =   "Form1.frx":78F6
+               Picture         =   "Form1.frx":7912
                Style           =   1  'Graphical
                TabIndex        =   13
                TabStop         =   0   'False
@@ -1858,7 +1865,7 @@ Begin VB.Form Form1
                Appearance      =   0  'Flat
                Height          =   450
                Left            =   600
-               Picture         =   "Form1.frx":948A
+               Picture         =   "Form1.frx":94A6
                ToolTipText     =   "Open grid in a new window"
                Top             =   1680
                Width           =   450
@@ -1882,7 +1889,7 @@ Begin VB.Form Form1
          End
          Begin VB.Frame FrameAttachments 
             Height          =   4575
-            Left            =   -74880
+            Left            =   120
             TabIndex        =   5
             Top             =   480
             Width           =   11775
@@ -2532,7 +2539,7 @@ Begin VB.Form Form1
             Appearance      =   0  'Flat
             Height          =   555
             Left            =   4080
-            Picture         =   "Form1.frx":957F
+            Picture         =   "Form1.frx":959B
             ToolTipText     =   "Add Note"
             Top             =   2520
             Width           =   540
@@ -2697,7 +2704,7 @@ Begin VB.Form Form1
                ForeColor       =   &H80000008&
                Height          =   750
                Left            =   1320
-               Picture         =   "Form1.frx":9BA5
+               Picture         =   "Form1.frx":9BC1
                ScaleHeight     =   750
                ScaleWidth      =   765
                TabIndex        =   45
@@ -5110,6 +5117,7 @@ Private Sub chkNew_MouseUp(Button As Integer, Shift As Integer, X As Single, Y A
 If CBool(chkNew.Value) Then
 txtRFQNum.Text = FindFreeRFQNum
 If txtRFQNum.Text <> "" Then txtRFQNum.Enabled = False
+
 Else
 txtRFQNum.Text = ""
 txtRFQNum.Enabled = True
@@ -5118,7 +5126,15 @@ End If
 
 
 End Sub
+Private Sub SetupNewRFQ()
+txtRFQCustomer.BackColor = lngReqdColor
+txtRFQDescription.BackColor = lngReqdColor
+cmbProductType.BackColor = lngReqdColor
 
+
+
+
+End Sub
 Private Sub cmbPlant_Click()
     cmbPlant.BackColor = vbWindowBackground
     If cmbPlant.Text <> "" And txtJobNo.Text <> "" And txtPartNoRev.Text <> "" And txtSalesNo.Text <> "" And txtDrawNoRev.Text <> "" And txtCustPoNo.Text <> "" And optCreate.Value = True Or bolHasTicket = True And bolOptionClicked = True Then
@@ -6364,7 +6380,7 @@ Private Sub tmrTabState_Timer()
         Case 0 ' RFQInfo
         
         Case 1 'Estimating
-            Select Case SSTabEstimating.Tab
+            Select Case SSTabEst.Tab
                 Case 0 'assign
                 
                 Case 1 'complete
