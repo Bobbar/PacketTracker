@@ -242,6 +242,7 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
+            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
