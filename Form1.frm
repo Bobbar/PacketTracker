@@ -242,7 +242,6 @@ Begin VB.Form Form1
             Alignment       =   1
             AutoSize        =   1
             Object.Width           =   21484
-            Key             =   ""
             Object.Tag             =   ""
          EndProperty
       EndProperty
@@ -268,7 +267,6 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
-      Tab             =   2
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -284,8 +282,9 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":0D5C
-      Tab(0).ControlEnabled=   0   'False
+      Tab(0).ControlEnabled=   -1  'True
       Tab(0).Control(0)=   "Frame1"
+      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":128C
@@ -294,9 +293,8 @@ Begin VB.Form Form1
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":175E
-      Tab(2).ControlEnabled=   -1  'True
+      Tab(2).ControlEnabled=   0   'False
       Tab(2).Control(0)=   "Frame5"
-      Tab(2).Control(0).Enabled=   0   'False
       Tab(2).ControlCount=   1
       TabCaption(3)   =   "On Hand Packets"
       TabPicture(3)   =   "Form1.frx":18F8
@@ -489,7 +487,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame5 
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   73
          Top             =   480
          Width           =   11775
@@ -900,7 +898,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   69
          Top             =   480
          Width           =   11775
@@ -2675,8 +2673,6 @@ Public Sub GetMyPackets(Optional Verbose As Boolean = True)
     Dim i         As Long
     On Error GoTo errs
     strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE" & " ticketdb.packetentrydb.idDate=(SELECT MAX(s2.idDate) FROM ticketdb.packetentrydb s2 WHERE ticketdb.packetentrydb.idJobNum = s2.idJobNum" & " AND packetlist.idMailbox='" & strLocalUser & "') ORDER BY idDate DESC"
-    Debug.Print strSQL1
-    
     cn_global.CursorLocation = adUseClient
     ShowData
     Set rs = cn_global.Execute(strSQL1)
@@ -4661,7 +4657,7 @@ Private Sub FlexGridHist_MouseDown(Button As Integer, _
             FlexGridHist.RowSel = intRowSel + 1
         End If
     End If
-    If Button = 2 Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
+    If Button = 2 And bolIsAdmin Then PopupMenu mnuPopup, vbPopupMenuRightButton, SSTab1.Left + Frame1.Left + FlexGridHist.Left + FlexGridHist.ColWidth(0), (SSTab1.Top + Frame1.Top + FlexGridHist.Top + FlexGridHist.CellTop + FlexGridHist.CellHeight)
 End Sub
 Private Sub FlexGridHist_Scroll()
     FlexHistLastTopRow = FlexGridHist.TopRow
@@ -4790,7 +4786,7 @@ Private Sub Form_Load()
     strSortMode = "A"
     frmSplash.lblStatus.Caption = "Connecting to server..."
     DoEvents
-    strServerAddress = "10.35.1.40"
+    strServerAddress = "ohbre-pwadmin01"
     strUsername = "TicketApp"
     strPassword = "yb4w4"
     If ConnectToDB Then
