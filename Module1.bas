@@ -33,7 +33,7 @@ Public strSQLDriver As String
 Public bolHook      As Boolean
 Public strINILoc    As String
 Public strUserTo    As String, strSelectUserTo As String, strUserFrom As String, strCurUser As String
-Public strTicketAction, strTicketStatus As String
+Public strTicketAction As String, strTicketStatus As String
 Public bolHasTicket      As Boolean
 Public strServerAddress  As String, strUsername As String, strPassword As String, strSearchUser As String, strPlant As String
 Public strUserIndex()    As String
@@ -51,13 +51,13 @@ Public bolPrinting       As Boolean
 Public FlexINLastSel(2)  As Integer
 Public FlexOUTLastSel(2) As Integer
 Public DrawDayLines      As Boolean
-Public MouseX, MouseY, MouseXPrev, MouseYPrev As Long
+Public MouseX As Long, MouseY As Long, MouseXPrev As Long, MouseYPrev As Long
 Public strConfirmClickCase As String
 Public ProgHasFocus        As Boolean
 Public FlexHistLastTopRow  As Integer
 Public Const intRowH       As Integer = 400
 Public strLocalUser        As String
-Public intMovement, intConfirmMovement, intMovementAccel          As Integer
+Public intMovement  As Integer, intConfirmMovement  As Integer, intMovementAccel          As Integer
 Public bolOptionClicked     As Boolean
 Public HistoryIcons()       As StdPicture
 Public HelpPics()           As StdPicture
@@ -69,9 +69,9 @@ Public TicketHours(99)      As Single
 Public TicketAction(99)     As String
 Public TicketActionText(99) As String
 Public TicketDate(99)       As String
-Public TotalTime            As Single
+Public TotalTime            As Long
 Public LStep                As Single
-Public Entry, Clicks As Integer
+Public Entry As Integer, Clicks As Integer
 Public strTimelineComments() As String
 Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public StartTime As Long

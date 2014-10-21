@@ -30,7 +30,7 @@ Begin VB.Form Form1
    Begin VB.PictureBox frmConfirm 
       Appearance      =   0  'Flat
       AutoRedraw      =   -1  'True
-      BackColor       =   &H0080FFFF&
+      BackColor       =   &H00878181&
       BorderStyle     =   0  'None
       ForeColor       =   &H80000008&
       Height          =   1155
@@ -160,7 +160,7 @@ Begin VB.Form Form1
          Top             =   2400
       End
       Begin VB.Timer tmrScroll 
-         Interval        =   5
+         Interval        =   8
          Left            =   120
          Top             =   960
       End
@@ -2631,9 +2631,10 @@ Public Sub GetTimeLineData()
             Entry = Entry + 1
         End With
     Loop
-    If TotalTime / 1440 > 60 Then
+    If TotalTime / 1440 > 150 Then
         DrawDayLines = False
-        frmTimeLine.chkDayLines.Value = 0
+    Else
+        DrawDayLines = True
     End If
     TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
     HideData
@@ -2947,6 +2948,7 @@ Private Sub SetBoxesForEdit(EnabledControl As String)
         EditMode = False
     End If
 End Sub
+
 Private Sub cmdEdit_Click()
     On Error GoTo errs
     Dim blah
@@ -3110,8 +3112,8 @@ Private Sub cmdTimeLine_Click()
         DoEvents
     Loop
     GetTimeLineData
-    DrawDayLines = True
-    frmTimeLine.chkDayLines.Value = 1
+    'DrawDayLines = True
+    'frmTimeLine.chkDayLines.Value = 1
     frmTimeLine.DrawTimeLine
     frmTimeLine.Show
 End Sub
@@ -3944,6 +3946,7 @@ Public Sub RefreshFields() 'Fills fields, does not refresh History Grid.
         txtTicketOwner.Text = GetFullName(!idUser)
         txtTicketDescription.Text = !idDescription
         txtTicketStatus.Text = !idStatus
+        strCurrentPacketGUID = !idGUID
         strPlant = !idPlant
         cmbPlant.Text = strPlant
         If !idLastModifiedBy <> "NOONE" Then
@@ -4527,15 +4530,6 @@ Public Sub ClearOptBoxes()
     bolOptionClicked = False
 End Sub
 Private Sub cmdSubmit_Click()
-    'If Not DBConcurrent Then
-    '
-    '
-    'ShowBanner vbYellow, "The packet status has changed since last refresh.  Current status updated.", 350
-    'ClearOptBoxes
-    'RefreshAll
-    'SetControls
-    'Exit Sub
-    'End If
     cmdSubmit.BackColor = vbButtonFace
     lblChars.Visible = False
     If optFile.Value = True Then
@@ -5093,6 +5087,7 @@ Private Sub mnuRedirect_Click()
     If bolHasTicket Then
         frmRedirect.Show
         frmRedirect.GetPacket
+        UpdateUserList
     Else
         Dim blah
         blah = MsgBox("Please open a packet first!", vbOKOnly + vbExclamation, "No packet open")
@@ -5211,10 +5206,14 @@ WaitforBannerClose:
     End If
 End Sub
 Private Sub tmrButtonFlasher_Timer()
-    Dim iSteps    As Integer
-    Dim FadeColor As Long
+    Dim iSteps          As Integer
+    Dim FadeColor       As Long
+    Dim intLongInterval As Integer, intShortInterval As Integer
+    intLongInterval = 1000
+    intShortInterval = 50
     iSteps = 255
     If cmdSubmit.Enabled = True Then
+        tmrButtonFlasher.Interval = intShortInterval
         If iStep <= 0 Then iStep = iSteps
         FadeColor = RGB(r1 + (r2 - r1) / iSteps * iStep, g1 + (g2 - g1) / iSteps * iStep, b1 + (b2 - b1) / iSteps * iStep)
         pbSubmitBox.FillColor = FadeColor
@@ -5222,11 +5221,12 @@ Private Sub tmrButtonFlasher_Timer()
         RoundRect pbSubmitBox.hdc, 7, 5, 145, 50, 10, 10
         iStep = iStep - 8
     Else
+        tmrButtonFlasher.Interval = intLongInterval
         iStep = 0
         pbSubmitBox.FillColor = pbSubmitBox.BackColor
         pbSubmitBox.ForeColor = pbSubmitBox.BackColor
         RoundRect pbSubmitBox.hdc, 7, 5, 145, 50, 10, 10
-        Cls
+        pbSubmitBox.Cls
     End If
 End Sub
 Private Sub tmrConfirmSlider_Timer()
