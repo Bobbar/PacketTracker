@@ -349,7 +349,7 @@ Public Sub DrawTimeLine()
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
             End If
             dNote(i).Text = strTimelineComments(i)
-            dNote(i).Width = Printer.TextWidth(dNote(i).Text)
+            dNote(i).Width = frmTimeLine.pbDrawArea.TextWidth(dNote(i).Text)
             dAction(i).Text = TicketActionText(i)
             dAction(i).Width = frmTimeLine.pbDrawArea.TextWidth(dAction(i).Text)
             If dNote(i).Width > dAction(i).Width Then
