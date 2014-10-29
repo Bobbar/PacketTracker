@@ -1,14 +1,14 @@
 [History]
-1=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20141029152916	#P7#=0	#P8#=5	.
+1=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/Form1/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20141029155831	#P7#=0	#P8#=12	.
 2=#P0#=mb	#P1#=LoginUser	#P2#=TicketTracker/MyMod/LoginUser	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029152805	#P7#=0	#P8#=2	.
-3=#P0#=mb	#P1#=CheckForAdmin	#P2#=TicketTracker/MyMod/CheckForAdmin	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029151513	#P7#=0	#P8#=9	.
+3=#P0#=mb	#P1#=CheckForAdmin	#P2#=TicketTracker/MyMod/CheckForAdmin	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029155816	#P7#=0	#P8#=19	.
 4=#P0#=mb	#P1#=SubmitReOpen	#P2#=TicketTracker/Form1/SubmitReOpen	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029150921	#P7#=0	#P8#=1	.
 5=#P0#=mb	#P1#=SubmitMove	#P2#=TicketTracker/Form1/SubmitMove	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029150814	#P7#=0	#P8#=1	.
 6=#P0#=mb	#P1#=SubmitCreate	#P2#=TicketTracker/Form1/SubmitCreate	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029150713	#P7#=0	#P8#=32	.
 7=#P0#=mb	#P1#=CopyGridHistory	#P2#=TicketTracker/MyMod/CopyGridHistory	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029150552	#P7#=0	#P8#=-2	.
 8=#P0#=mb	#P1#=SubmitReceive	#P2#=TicketTracker/Form1/SubmitReceive	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029150359	#P7#=0	#P8#=1	.
 9=#P0#=mb	#P1#=GetMyPackets	#P2#=TicketTracker/Form1/GetMyPackets	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141029133119	#P7#=0	#P8#=19	.
-10=#P0#=mb	#P1#=cmdGo_Click	#P2#=TicketTracker/frmRedirect/cmdGo_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20141028164335	#P7#=0	#P8#=1	.
+10=#P0#=mb	#P1#=cmdGo_Click	#P2#=TicketTracker/frmRedirect/cmdGo_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20141028164335	#P7#=0	#P8#=13	.
 11=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/frmTimeLine/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20141028152033	#P7#=0	#P8#=19	.
 12=#P0#=mb	#P1#=DrawLines	#P2#=TicketTracker/frmTimeLine/DrawLines	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141028151546	#P7#=0	#P8#=26	.
 13=#P0#=mb	#P1#=ReDrawTimeLine	#P2#=TicketTracker/frmTimeLine/ReDrawTimeLine	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141028094304	#P7#=0	#P8#=9	.
@@ -38,7 +38,7 @@
 37=#P0#=mb	#P1#=GetNumberOfEntries	#P2#=TicketTracker/MyMod/GetNumberOfEntries	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141007135434	#P7#=0	#P8#=1	.
 38=#P0#=mb	#P1#=ColorCodeToRGB	#P2#=TicketTracker/MyMod/ColorCodeToRGB	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141007105615	#P7#=0	#P8#=18	.
 39=#P0#=mb	#P1#=CopyGrid	#P2#=TicketTracker/MyMod/CopyGrid	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141007105558	#P7#=0	#P8#=8	.
-40=#P0#=mb	#P1#=BannerClick	#P2#=TicketTracker/Form1/BannerClick	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141002150357	#P7#=0	#P8#=18	.
+40=#P0#=mb	#P1#=BannerClick	#P2#=TicketTracker/Form1/BannerClick	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20141002150357	#P7#=0	#P8#=2	.
 41=#P0#=mb	#P1#=MySort	#P2#=TicketTracker/MyMod/MySort	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20140930154109	#P7#=0	#P8#=16	.
 42=#P0#=mb	#P1#=DateRangeReport	#P2#=TicketTracker/modDateRangeReport/DateRangeReport	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20140930153135	#P7#=0	#P8#=1	.
 43=#P0#=mb	#P1#=ArrayPosition	#P2#=TicketTracker/MyMod/ArrayPosition	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20140930152947	#P7#=0	#P8#=1	.
@@ -83,8 +83,8 @@
 82=#P0#=mb	#P1#=cmbPrinters_Click	#P2#=TicketTracker/frmPrinters/cmbPrinters_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108114024	#P7#=0	#P8#=1	.
 83=#P0#=mb	#P1#=cmdPrintOnPack_Click	#P2#=TicketTracker/Form1/cmdPrintOnPack_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108113427	#P7#=0	#P8#=18	.
 84=#P0#=mb	#P1#=cmdPrintHistory_Click	#P2#=TicketTracker/Form1/cmdPrintHistory_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108113156	#P7#=0	#P8#=1	.
-85=#P0#=mb	#P1#=cmdRunReport_Click	#P2#=TicketTracker/frmReportFilter/cmdRunReport_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108110847	#P7#=0	#P8#=6	.
-86=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/frmReportFilter/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108110847	#P7#=0	#P8#=0	.
+85=#P0#=mb	#P1#=Form_Load	#P2#=TicketTracker/frmReportFilter/Form_Load	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108110847	#P7#=0	#P8#=0	.
+86=#P0#=mb	#P1#=cmdRunReport_Click	#P2#=TicketTracker/frmReportFilter/cmdRunReport_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108110847	#P7#=0	#P8#=6	.
 87=#P0#=mb	#P1#=cmdPrintReport_Click	#P2#=TicketTracker/Form1/cmdPrintReport_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140108110454	#P7#=0	#P8#=23	.
 88=#P0#=mb	#P1#=SizeTheSheet	#P2#=TicketTracker/Form1/SizeTheSheet	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20140107150758	#P7#=0	#P8#=7	.
 89=#P0#=mb	#P1#=cmbUsers_Click	#P2#=TicketTracker/frmUserSelect/cmbUsers_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20140106133948	#P7#=0	#P8#=-1	.
@@ -95,7 +95,7 @@
 94=#P0#=mb	#P1#=GetINIValue	#P2#=TicketTracker/MyMod/GetINIValue	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217150146	#P7#=0	#P8#=3	.
 95=#P0#=mb	#P1#=CreateINI	#P2#=TicketTracker/MyMod/CreateINI	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217135415	#P7#=0	#P8#=5	.
 96=#P0#=mb	#P1#=GetFullName	#P2#=TicketTracker/MyMod/GetFullName	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217104124	#P7#=0	#P8#=3	.
-97=#P0#=mb	#P1#=EnumRegistryValues	#P2#=TicketTracker/MyMod/EnumRegistryValues	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217093406	#P7#=0	#P8#=1	.
+97=#P0#=mb	#P1#=EnumRegistryValues	#P2#=TicketTracker/MyMod/EnumRegistryValues	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217093406	#P7#=0	#P8#=55	.
 98=#P0#=mb	#P1#=FindMySQLDriver	#P2#=TicketTracker/MyMod/FindMySQLDriver	#P3#=	#P4#=	#P5#=MembMethodPrivate	#P6#=20131217093349	#P7#=0	#P8#=2	.
 99=#P0#=mb	#P1#=txtComment_Change	#P2#=TicketTracker/frmComments/txtComment_Change	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131216154809	#P7#=0	#P8#=1	.
 100=#P0#=mb	#P1#=cmdOK_Click	#P2#=TicketTracker/frmComments/cmdOK_Click	#P3#=	#P4#=	#P5#=MembEventProcPrivate	#P6#=20131216154756	#P7#=0	#P8#=1	.
