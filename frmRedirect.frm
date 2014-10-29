@@ -39,6 +39,7 @@ Begin VB.Form frmRedirect
       Width           =   1575
    End
    Begin VB.TextBox txtOwner 
+      Enabled         =   0   'False
       Height          =   285
       Left            =   7800
       TabIndex        =   8
@@ -71,6 +72,7 @@ Begin VB.Form frmRedirect
       Width           =   1695
    End
    Begin VB.TextBox txtUserFrom 
+      Enabled         =   0   'False
       Height          =   285
       Left            =   5880
       TabIndex        =   3
@@ -79,6 +81,7 @@ Begin VB.Form frmRedirect
       Width           =   1695
    End
    Begin VB.TextBox txtUserTo 
+      Enabled         =   0   'False
       Height          =   285
       Left            =   3600
       TabIndex        =   2
@@ -87,6 +90,7 @@ Begin VB.Form frmRedirect
       Width           =   1935
    End
    Begin VB.TextBox txtAction 
+      Enabled         =   0   'False
       Height          =   285
       Left            =   1560
       TabIndex        =   1

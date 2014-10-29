@@ -4883,7 +4883,7 @@ Private Sub Form_Load()
     frmpBar.Left = 4440
     Exit Sub
 errs:
-4   ErrToss = True
+    ErrToss = True
     frmSplash.Print Err.Description
     Err.Clear
     DoEvents
@@ -4896,6 +4896,7 @@ Private Sub SetupAdmin()
     intFormHMin = intFormHMin + 300
     intFormHMax = intFormHMax + 300
 End Sub
+
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     EndProgram
 End Sub

@@ -233,7 +233,7 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
     On Error GoTo errs
     DBConcurrent = 0
     cn_global.CursorLocation = adUseClient
-    strSQL1 = "SELECT * FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & Form1.txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
+    strSQL1 = "SELECT idGUID, idStatus, idAction FROM ticketdb.packetentrydb LEFT JOIN (ticketdb.packetlist) ON (packetlist.idJobNum=packetentrydb.idJobNum) WHERE packetlist.idJobNum = '" & Form1.txtJobNo.Text & "' ORDER BY packetentrydb.idDate DESC"
     Set rs = cn_global.Execute(strSQL1)
     With rs
         If rs.RecordCount < 1 Then
@@ -554,12 +554,28 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount > 0 Then
         With rs
-            If CBool(!idAdmins) Then CheckForAdmin = True
+            If CBool(!idAdmins) Then
+                CheckForAdmin = True
+                LoginUser strLocalUser
+            End If
         End With
     Else
         CheckForAdmin = False
     End If
 End Function
+Public Sub LoginUser(strLocalUser As String)
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    strSQL1 = "SELECT * FROM users WHERE idUsers = '" & strLocalUser & "'"
+    cn_global.CursorLocation = adUseClient
+    rs.Open strSQL1, cn_global, adOpenKeyset, adLockOptimistic
+    With rs
+        !idLogIns = Int(!idLogIns) + 1
+        .Update
+    End With
+    Set rs = Nothing
+End Sub
+
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     Dim R, c As Integer
     Dim GridImg As Image

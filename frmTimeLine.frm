@@ -7,7 +7,6 @@ Begin VB.Form frmTimeLine
    ClientLeft      =   120
    ClientTop       =   450
    ClientWidth     =   13395
-   DrawMode        =   14  'Copy Pen
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -249,10 +248,10 @@ Begin VB.Form frmTimeLine
             BorderColor     =   &H0000FF00&
             BorderWidth     =   5
             Visible         =   0   'False
-            X1              =   780
-            X2              =   12115
-            Y1              =   5220
-            Y2              =   5220
+            X1              =   840
+            X2              =   12175
+            Y1              =   5520
+            Y2              =   5520
          End
       End
    End
