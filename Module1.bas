@@ -562,7 +562,7 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Else
         CheckForAdmin = False
         Dim blah
-       blah = MsgBox(UCase$(strLocalUser) & " is not as valid user.", vbCritical + vbOKOnly, "Username not Found")
+       blah = MsgBox(UCase$(strLocalUser) & " is not a valid user.", vbCritical + vbOKOnly, "Username not Found")
        EndProgram
     End If
 End Function
