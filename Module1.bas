@@ -22,57 +22,60 @@ Public Type tTxtBox
     Text As String
     Visible As Boolean
 End Type
-Public dLine()      As tLine
-Public dGrid()      As tLine
-Public dDayLine()   As tLine
-Public dPointLine   As tLine
-Public dAction()    As tTxtBox
-Public dNote()      As tTxtBox
-Public dTimer       As tTxtBox
-Public strSQLDriver As String
-Public bolHook      As Boolean
-Public strINILoc    As String
-Public strUserTo    As String, strSelectUserTo As String, strUserFrom As String, strCurUser As String
-Public strTicketAction As String, strTicketStatus As String
-Public bolHasTicket      As Boolean
-Public strServerAddress  As String, strUsername As String, strPassword As String, strSearchUser As String, strPlant As String
-Public strUserIndex()    As String
-Public bolOpenForm       As Boolean, bolOpenConfirm    As Boolean
-Public intFormHMax       As Integer, intFormHMin As Integer
-Public strReportType     As String
-Public dtStartDate       As Date
-Public dtEndDate         As Date
-Public sAddlMsg          As String
-Public bolCancelPrint    As Boolean
-Public strTicketComment  As String
-Public strLatestComment  As String
-Public strSortMode       As String
-Public bolPrinting       As Boolean
-Public FlexINLastSel(2)  As Integer
-Public FlexOUTLastSel(2) As Integer
-Public DrawDayLines      As Boolean
-Public MouseX As Long, MouseY As Long, MouseXPrev As Long, MouseYPrev As Long
-Public strConfirmClickCase As String
-Public ProgHasFocus        As Boolean
-Public FlexHistLastTopRow  As Integer
-Public Const intRowH       As Integer = 400
-Public strLocalUser        As String
-Public intMovement  As Integer, intConfirmMovement  As Integer, intMovementAccel          As Integer
-Public bolOptionClicked     As Boolean
-Public HistoryIcons()       As StdPicture
-Public HelpPics()           As StdPicture
-Public ButtonPics()         As StdPicture
-Public TabPics(3)           As StdPicture
-Public picDataPics(2)       As StdPicture
-Public WhichGrid            As MSHFlexGrid
-Public TicketHours(99)      As Single
-Public TicketAction(99)     As String
-Public TicketActionText(99) As String
-Public TicketDate(99)       As String
-Public TotalTime            As Long
-Public LStep                As Single
-Public Entry As Integer, Clicks As Integer
-Public strTimelineComments() As String
+Public dLine()                As tLine
+Public dGrid()                As tLine
+Public dDayLine()             As tLine
+Public dPointLine             As tLine
+Public dAction()              As tTxtBox
+Public dNote()                As tTxtBox
+Public dTimer                 As tTxtBox
+Public strSQLDriver           As String
+Public strINILoc              As String
+Public strUserTo              As String, strSelectUserTo As String, strUserFrom As String, strCurUser As String
+Public strTicketAction        As String, strTicketStatus As String
+Public bolHasTicket           As Boolean
+Public strSearchUser          As String, strPlant As String
+Public Const strServerAddress As String = "ohbre-pwadmin01"
+Public Const strUsername      As String = "TicketApp"
+Public Const strPassword      As String = "yb4w4"
+Public Const bolHook As Boolean = False ' change to false to disable mouse hook (change to false when run in dev mode or WILL CAUSE CRASHES)
+Public strUserIndex()         As String
+Public bolOpenForm            As Boolean, bolOpenConfirm    As Boolean
+Public intFormHMax            As Integer, intFormHMin As Integer
+Public strReportType          As String
+Public dtStartDate            As Date
+Public dtEndDate              As Date
+Public sAddlMsg               As String
+Public bolCancelPrint         As Boolean
+Public strTicketComment       As String
+Public strLatestComment       As String
+Public strSortMode            As String
+Public bolPrinting            As Boolean
+Public FlexINLastSel(2)       As Integer
+Public FlexOUTLastSel(2)      As Integer
+Public DrawDayLines           As Boolean
+Public MouseX                 As Long, MouseY As Long, MouseXPrev As Long, MouseYPrev As Long
+Public strConfirmClickCase    As String
+Public ProgHasFocus           As Boolean
+Public FlexHistLastTopRow     As Integer
+Public Const intRowH          As Integer = 400
+Public strLocalUser           As String
+Public intMovement            As Integer, intConfirmMovement  As Integer, intMovementAccel          As Integer
+Public bolOptionClicked       As Boolean
+Public HistoryIcons()         As StdPicture
+Public HelpPics()             As StdPicture
+Public ButtonPics()           As StdPicture
+Public TabPics(3)             As StdPicture
+Public picDataPics(2)         As StdPicture
+Public WhichGrid              As MSHFlexGrid
+Public TicketHours(99)        As Single
+Public TicketAction(99)       As String
+Public TicketActionText(99)   As String
+Public TicketDate(99)         As String
+Public TotalTime              As Long
+Public LStep                  As Single
+Public Entry                  As Integer, Clicks As Integer
+Public strTimelineComments()  As String
 Public Declare Function GetTickCount Lib "kernel32" () As Long
 Public StartTime As Long
 Private Const WM_ACTIVATEAPP = &H1C
@@ -251,15 +254,6 @@ Public Function DBConcurrent() As Integer 'Does the state of the packet stored l
 errs:
     ErrHandle Err.Number, Err.Description, "DBConcurrent"
 End Function
-Public Function GetEmail(strUsername As String) As String
-    Dim i As Integer
-    For i = 0 To UBound(strUserIndex, 2)
-        If strUserIndex(0, i) = strUsername Then
-            GetEmail = UCase$(strUserIndex(2, i))
-            Exit Function
-        End If
-    Next i
-End Function
 Public Function GetFullName(strUsername As String) As String
     Dim i As Integer
     For i = 0 To UBound(strUserIndex, 2)
@@ -280,6 +274,8 @@ Public Sub SendEmailToQueue(SendRec As String, _
     Set rs = New ADODB.Recordset
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
+    Set rs = Nothing
+    
 End Sub
 Public Sub StartTimer()
     total = 0
@@ -562,8 +558,8 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Else
         CheckForAdmin = False
         Dim blah
-       blah = MsgBox(UCase$(strLocalUser) & " is not a valid user.", vbCritical + vbOKOnly, "Username not Found")
-       EndProgram
+        blah = MsgBox(UCase$(strLocalUser) & " is not a valid user.", vbCritical + vbOKOnly, "Username not Found")
+        EndProgram
     End If
 End Function
 Public Sub LoginUser(strLocalUser As String)
@@ -578,7 +574,6 @@ Public Sub LoginUser(strLocalUser As String)
     End With
     Set rs = Nothing
 End Sub
-
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     Dim R, c As Integer
     Dim GridImg As Image

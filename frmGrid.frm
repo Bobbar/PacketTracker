@@ -104,7 +104,7 @@ Private Declare Function SendMessage _
                                       ByVal wMsg As Long, _
                                       ByVal wParam As Long, _
                                       lParam As Any) As Long
-Private LeftOffset, TopOffset As Integer
+Private LeftOffset As Integer, TopOffset As Integer
 Sub FlexSort(Mode As String)
     If FlexGrid.MouseRow = 0 And Mode = "A" Then
         FlexGrid.Col = FlexGrid.MouseCol
