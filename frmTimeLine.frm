@@ -3,10 +3,10 @@ Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTimeLine 
    BackColor       =   &H00808080&
    Caption         =   "History Timeline"
-   ClientHeight    =   8700
+   ClientHeight    =   8760
    ClientLeft      =   120
    ClientTop       =   450
-   ClientWidth     =   16320
+   ClientWidth     =   13395
    BeginProperty Font 
       Name            =   "Tahoma"
       Size            =   8.25
@@ -18,8 +18,8 @@ Begin VB.Form frmTimeLine
    EndProperty
    Icon            =   "frmTimeLine.frx":0000
    LinkTopic       =   "Form2"
-   ScaleHeight     =   8700
-   ScaleWidth      =   16320
+   ScaleHeight     =   8760
+   ScaleWidth      =   13395
    StartUpPosition =   2  'CenterScreen
    Begin VB.CommandButton cmdDone 
       Caption         =   "Done"
@@ -34,9 +34,9 @@ Begin VB.Form frmTimeLine
       Height          =   360
       Left            =   0
       TabIndex        =   2
-      Top             =   8340
-      Width           =   16320
-      _ExtentX        =   28787
+      Top             =   8400
+      Width           =   13395
+      _ExtentX        =   23627
       _ExtentY        =   635
       _Version        =   393216
       BeginProperty Panels {8E3867A5-8586-11D1-B16A-00C0F0283628} 
@@ -85,15 +85,6 @@ Begin VB.Form frmTimeLine
          TabStop         =   0   'False
          Top             =   0
          Width           =   11895
-         Begin VB.CommandButton Command1 
-            Caption         =   "Command1"
-            Height          =   360
-            Left            =   1800
-            TabIndex        =   13
-            Top             =   120
-            Visible         =   0   'False
-            Width           =   990
-         End
          Begin VB.Timer tmrActionShow 
             Interval        =   10
             Left            =   9240
@@ -597,14 +588,6 @@ Private Sub cmdDone_Click()
     UnloadControls
     Unload Me
 End Sub
-
-Private Sub Command1_Click()
-Printer.Height = pbDrawArea.Height
-Printer.Width = pbDrawArea.Width * 3
-
-Call Printer.PaintPicture(pbDrawArea.Image, 0, 0, pbDrawArea.Width, pbDrawArea.Height, 0, 0, pbDrawArea.Width, pbDrawArea.Height)
- Printer.EndDoc
-End Sub
 Private Sub Form_Load()
     picWindow.Left = 0
     picWindow.Width = (frmTimeLine.Width - VScroll1.Width) - 225
@@ -619,10 +602,11 @@ Private Sub Form_Load()
     MouseXPrev = 0
     MouseYPrev = 0
     If Not DrawDayLines Then
-        frmTimeLine.chkDayLines.Value = 0
+    frmTimeLine.chkDayLines.Value = 0
     Else
-        frmTimeLine.chkDayLines.Value = 1
+    frmTimeLine.chkDayLines.Value = 1
     End If
+    
 End Sub
 Private Sub CoordinateMouse()
     On Error Resume Next
