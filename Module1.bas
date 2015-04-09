@@ -210,6 +210,11 @@ Public Declare Function RoundRect _
                             ByVal Y3 As Long) As Long
 Public strCurrentPacketCreator As String, strCurrentPacketOwner As String
 Public strCurrentPacketGUID    As String
+Public Declare Function TranslateColor _
+                Lib "olepro32.dll" _
+                Alias "OleTranslateColor" (ByVal clr As OLE_COLOR, _
+                                           ByVal palet As Long, _
+                                           Col As Long) As Long
 Public Sub ErrHandle(lngErrNum As Long, strErrDescription As String, strOrigSub As String)
     Dim blah
     Select Case lngErrNum
@@ -261,12 +266,14 @@ Public Function GetEmail(strUsername As String) As String
     Next i
 End Function
 Public Function GetFullName(strUsername As String) As String
-    Dim i As Integer
-    For i = 0 To UBound(strUserIndex, 2)
+    Dim i As Integer, u As Integer
+    u = UBound(strUserIndex, 2)
+    For i = 0 To u
         If strUserIndex(0, i) = strUsername Then
             GetFullName = UCase$(strUserIndex(1, i))
             Exit Function
         End If
+        If i = u And GetFullName = "" Then GetFullName = "{" & strUsername & "}"
     Next i
 End Function
 Public Sub SendEmailToQueue(SendRec As String, _
@@ -307,26 +314,26 @@ Public Function ReturnEmpInfo(strUsername As Variant) As UserInfo
 End Function
 Public Sub MySort(ByRef pvarArray As Variant)
     Dim i               As Long
-    Dim c               As Integer
+    Dim C               As Integer
     Dim v               As Integer
     Dim lngHighValIndex As Long
     Dim varSwap()       As Variant
     Dim lngMax          As Long
     ReDim varSwap(UBound(pvarArray, 1))
     lngMax = UBound(pvarArray, 2)
-    For c = 0 To lngMax
-        lngHighValIndex = lngMax - c
+    For C = 0 To lngMax
+        lngHighValIndex = lngMax - C
         For v = 0 To UBound(varSwap)
-            varSwap(v) = pvarArray(v, lngMax - c)
+            varSwap(v) = pvarArray(v, lngMax - C)
         Next v
-        For i = 0 To lngMax - c
+        For i = 0 To lngMax - C
             If pvarArray(0, i) < pvarArray(0, lngHighValIndex) Then lngHighValIndex = i
         Next
         For v = 0 To UBound(varSwap)
-            pvarArray(v, lngMax - c) = pvarArray(v, lngHighValIndex)
+            pvarArray(v, lngMax - C) = pvarArray(v, lngHighValIndex)
             pvarArray(v, lngHighValIndex) = varSwap(v)
         Next v
-    Next c
+    Next C
 End Sub
 Public Function GetINIValue(sUser As Variant) As Integer
     With m_cIni
@@ -549,7 +556,7 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim i
-    strSQL1 = "SELECT * FROM users WHERE idUsers = '" & strLocalUser & "'"
+    strSQL1 = "SELECT idAdmins,idUsers,idEnabled FROM users WHERE idUsers = '" & strLocalUser & "'"
     cn_global.CursorLocation = adUseClient
     Set rs = cn_global.Execute(strSQL1)
     If rs.RecordCount > 0 Then
@@ -558,14 +565,39 @@ Public Function CheckForAdmin(strLocalUser As String) As Boolean
                 CheckForAdmin = True
             End If
             LoginUser strLocalUser
+            If Not CBool(!idEnabled) Then
+                BadUser 1
+            End If
         End With
     Else
         CheckForAdmin = False
-        Dim blah
-       blah = MsgBox(UCase$(strLocalUser) & " is not a valid user.", vbCritical + vbOKOnly, "Username not Found")
-       EndProgram
+        BadUser 0
     End If
 End Function
+Public Function IsEnabled(strCheckUser As String) As Boolean
+    IsEnabled = False
+    Dim rs      As New ADODB.Recordset
+    Dim strSQL1 As String
+    Dim i
+    strSQL1 = "SELECT idEnabled,idUsers FROM users WHERE idUsers = '" & strCheckUser & "'"
+    cn_global.CursorLocation = adUseClient
+    Set rs = cn_global.Execute(strSQL1)
+    With rs
+        IsEnabled = CBool(!idEnabled)
+    End With
+End Function
+Private Sub BadUser(intType As Integer)
+    '0 = not found
+    '1 = account disabled
+    Dim blah
+    If intType = 0 Then
+        blah = MsgBox(UCase$(strLocalUser) & " is not a valid user.", vbCritical + vbOKOnly, "Username not Found")
+        EndProgram
+    ElseIf intType = 1 Then
+        blah = MsgBox(UCase$(strLocalUser) & " is disabled.", vbCritical + vbOKOnly, "Username disabled")
+        EndProgram
+    End If
+End Sub
 Public Sub LoginUser(strLocalUser As String)
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -580,7 +612,7 @@ Public Sub LoginUser(strLocalUser As String)
 End Sub
 
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, c As Integer
+    Dim R, C As Integer
     Dim GridImg As Image
     bolNewHistWindow = True
     dest.Redraw = False
@@ -605,17 +637,17 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     dest.FixedRows = 0
     dest.FixedCols = 0
     For R = 0 To Source.Rows - 1
-        For c = 0 To 2
-            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
+        For C = 0 To 2
+            dest.TextMatrix(R, C) = Source.TextMatrix(R, C)
             dest.Row = R
-            dest.Col = c
+            dest.Col = C
             Source.Row = R
-            Source.Col = c
+            Source.Col = C
             dest.CellFontBold = Source.CellFontBold
             dest.CellFontItalic = Source.CellFontItalic
             dest.CellAlignment = Source.CellAlignment
             dest.CellFontSize = Source.CellFontSize
-        Next c
+        Next C
         Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
         dest.Row = R
         dest.Col = 0
@@ -633,7 +665,7 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     Source.Redraw = True
 End Sub
 Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, c As Integer
+    Dim R, C As Integer
     Dim GridImg As Image
     bolNewHistWindow = False
     dest.Redraw = False
@@ -644,9 +676,9 @@ Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
     dest.FixedCols = Source.FixedCols
     'Dest.Font.Size = Source.Font.Size
     For R = 0 To Source.Rows - 1
-        For c = 0 To Source.Cols - 1
-            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
-        Next c
+        For C = 0 To Source.Cols - 1
+            dest.TextMatrix(R, C) = Source.TextMatrix(R, C)
+        Next C
         Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
     Next R
     Form1.SizeTheSheet dest

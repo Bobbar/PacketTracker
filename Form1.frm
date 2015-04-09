@@ -22,7 +22,6 @@ Begin VB.Form Form1
    EndProperty
    Icon            =   "Form1.frx":0000
    LinkTopic       =   "Form1"
-   LockControls    =   -1  'True
    MaxButton       =   0   'False
    ScaleHeight     =   10140
    ScaleWidth      =   12210
@@ -268,6 +267,7 @@ Begin VB.Form Form1
       _ExtentY        =   9128
       _Version        =   393216
       Tabs            =   4
+      Tab             =   1
       TabsPerRow      =   4
       TabHeight       =   706
       WordWrap        =   0   'False
@@ -283,14 +283,14 @@ Begin VB.Form Form1
       EndProperty
       TabCaption(0)   =   "History"
       TabPicture(0)   =   "Form1.frx":0D5C
-      Tab(0).ControlEnabled=   -1  'True
+      Tab(0).ControlEnabled=   0   'False
       Tab(0).Control(0)=   "Frame1"
-      Tab(0).Control(0).Enabled=   0   'False
       Tab(0).ControlCount=   1
       TabCaption(1)   =   "Search"
       TabPicture(1)   =   "Form1.frx":128C
-      Tab(1).ControlEnabled=   0   'False
+      Tab(1).ControlEnabled=   -1  'True
       Tab(1).Control(0)=   "Frame4"
+      Tab(1).Control(0).Enabled=   0   'False
       Tab(1).ControlCount=   1
       TabCaption(2)   =   "Incoming Packets"
       TabPicture(2)   =   "Form1.frx":175E
@@ -673,7 +673,7 @@ Begin VB.Form Form1
       End
       Begin VB.Frame Frame4 
          Height          =   4575
-         Left            =   -74880
+         Left            =   120
          TabIndex        =   70
          Top             =   480
          Width           =   11775
@@ -855,6 +855,15 @@ Begin VB.Form Form1
             _NumberOfBands  =   1
             _Band(0).Cols   =   2
          End
+         Begin VB.CommandButton cmdExcelSearch 
+            Caption         =   "To Excel"
+            Height          =   360
+            Left            =   300
+            TabIndex        =   130
+            ToolTipText     =   "Export to Excel workbook"
+            Top             =   2280
+            Width           =   990
+         End
          Begin VB.Label lblColorKey 
             Alignment       =   2  'Center
             Appearance      =   0  'Flat
@@ -899,7 +908,7 @@ Begin VB.Form Form1
       Begin VB.Frame Frame1 
          ClipControls    =   0   'False
          Height          =   4575
-         Left            =   120
+         Left            =   -74880
          TabIndex        =   69
          Top             =   480
          Width           =   11775
@@ -1152,22 +1161,6 @@ Begin VB.Form Form1
          TabIndex        =   83
          Top             =   2730
          Width           =   2175
-         Begin VB.PictureBox pbData 
-            Appearance      =   0  'Flat
-            AutoRedraw      =   -1  'True
-            AutoSize        =   -1  'True
-            BorderStyle     =   0  'None
-            ForeColor       =   &H80000008&
-            Height          =   750
-            Left            =   1320
-            Picture         =   "Form1.frx":920E
-            ScaleHeight     =   750
-            ScaleWidth      =   765
-            TabIndex        =   49
-            TabStop         =   0   'False
-            Top             =   360
-            Width           =   765
-         End
          Begin VB.CommandButton cmdRefresh 
             Caption         =   "Refresh"
             Height          =   360
@@ -1182,12 +1175,48 @@ Begin VB.Form Form1
             Alignment       =   1  'Right Justify
             Caption         =   "Auto Refresh"
             Height          =   255
-            Left            =   120
+            Left            =   60
             TabIndex        =   44
             TabStop         =   0   'False
             Top             =   195
             Value           =   1  'Checked
             Width           =   1260
+         End
+         Begin VB.PictureBox pbData 
+            Appearance      =   0  'Flat
+            AutoRedraw      =   -1  'True
+            AutoSize        =   -1  'True
+            BorderStyle     =   0  'None
+            ForeColor       =   &H80000008&
+            Height          =   750
+            Left            =   1320
+            Picture         =   "Form1.frx":920E
+            ScaleHeight     =   750
+            ScaleWidth      =   765
+            TabIndex        =   49
+            TabStop         =   0   'False
+            Top             =   240
+            Width           =   765
+         End
+         Begin VB.Label lblWorking 
+            AutoSize        =   -1  'True
+            BackStyle       =   0  'Transparent
+            Caption         =   "Working..."
+            BeginProperty Font 
+               Name            =   "Tahoma"
+               Size            =   6.75
+               Charset         =   0
+               Weight          =   400
+               Underline       =   0   'False
+               Italic          =   0   'False
+               Strikethrough   =   0   'False
+            EndProperty
+            ForeColor       =   &H00808080&
+            Height          =   165
+            Left            =   1380
+            TabIndex        =   129
+            Top             =   960
+            Width           =   630
          End
          Begin VB.Label lblQryTime 
             Alignment       =   2  'Center
@@ -2145,11 +2174,7 @@ Private Declare Function MoveWindow _
                               ByVal nWidth As Long, _
                               ByVal nHeight As Long, _
                               ByVal bRepaint As Long) As Long
-Private Declare Function TranslateColor _
-                Lib "olepro32.dll" _
-                Alias "OleTranslateColor" (ByVal clr As OLE_COLOR, _
-                                           ByVal palet As Long, _
-                                           Col As Long) As Long
+
 Private bolNoHits      As Boolean
 Private intRowSel      As Integer
 Private strCommentText As String
@@ -2185,7 +2210,7 @@ errs:
         End If
     End If
 End Sub
-Private Function GetRealColor(ByVal Color As OLE_COLOR) As Long
+Public Function GetRealColor(ByVal Color As OLE_COLOR) As Long
     Dim R As Long
     R = TranslateColor(Color, 0, GetRealColor)
     If R <> 0 Then 'raise an error
@@ -2826,6 +2851,7 @@ errs:
 End Sub
 Public Sub ShowData()
     Set pbData.Picture = picDataPics(2)
+    lblWorking.Visible = True
     DoEvents
     StartTimer
 End Sub
@@ -2846,6 +2872,7 @@ Public Sub HideData()
     lngAvgQry = lngAddQry / UBound(lngQryTimes)
     lblQryTime.Caption = Round(lngAvgQry, 2) & " ms"
     Set pbData.Picture = picDataPics(0)
+    lblWorking.Visible = False
 End Sub
 Public Sub RefreshAll()
     Dim ConcurrentStatus As Integer
@@ -3133,6 +3160,19 @@ Private Sub GetFadeColor()
     g2 = (Color2 And (Not &HFFFF00FF)) \ &H100&
     b2 = (Color2 And (Not &HFF00FFFF)) \ &HFFFF&
 End Sub
+Private Sub cmdExcelSearch_Click()
+
+If Flexgrid1.Rows > 1 Then
+cmdExcelSearch.Enabled = False
+cmdExcelSearch.Caption = "Working..."
+FlexToExcel Flexgrid1
+cmdExcelSearch.Caption = "To Excel"
+cmdExcelSearch.Enabled = True
+
+End If
+
+End Sub
+
 Private Sub FlexGrid1_Click()
     On Error Resume Next
     Set WhichGrid = Flexgrid1
@@ -3780,6 +3820,14 @@ Public Sub SubmitMove()
         ClearOptBoxes
         RefreshAll
         SetControls
+        Exit Sub
+    End If
+    If Not IsEnabled(strSelectUserTo) Then
+        Dim blah1
+        blah1 = MsgBox("Cannot send to " & strSelectUserTo & ". That account is disabled!", vbExclamation + vbOKOnly, "Error while sending")
+        cmdSubmit.Enabled = False
+        cmbUsers.Visible = False
+        cmbUsers.ComboItems.Item(1).Selected = True
         Exit Sub
     End If
     Hits = GetINIValue(strSelectUserTo)
@@ -5329,9 +5377,12 @@ Private Sub tmrRefresher_Timer()
 End Sub
 Private Sub tmrReSizer_Timer()
     On Error Resume Next
+    Dim intOffset As Integer
+    intOffset = 650
     cmdShowMore.Enabled = False
     If bolOpenForm = True Then   ' Open
         Form1.Height = Form1.Height + intMovement
+        If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
         If Form1.Height + intMovement >= intFormHMax Then
             tmrReSizer.Enabled = False
             Form1.Height = intFormHMax
@@ -5339,7 +5390,7 @@ Private Sub tmrReSizer_Timer()
             cmdShowMore.Caption = "Hide Tabs"
             Label17.Caption = "á"
             SSTab1.ToolTipText = ""
-            If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - 600
+            If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
             cmdShowMore.Enabled = True
             Form1.Refresh
             Exit Sub
@@ -5354,7 +5405,7 @@ Private Sub tmrReSizer_Timer()
             cmdShowMore.Caption = "Show Tabs"
             Label17.Caption = "â"
             SSTab1.ToolTipText = "Click to expand"
-            If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - 600
+            If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
             cmdShowMore.Enabled = True
             Form1.Refresh
             Exit Sub
