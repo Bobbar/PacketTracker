@@ -57,7 +57,7 @@ Public ProgHasFocus        As Boolean
 Public FlexHistLastTopRow  As Integer
 Public Const intRowH       As Integer = 400
 Public strLocalUser        As String
-Public intMovement  As Integer, intConfirmMovement  As Integer, intMovementAccel          As Integer
+Public intMovement  As Single, intConfirmMovement  As Integer, intMovementAccel          As Single
 Public bolOptionClicked     As Boolean
 Public HistoryIcons()       As StdPicture
 Public HelpPics()           As StdPicture
@@ -65,12 +65,13 @@ Public ButtonPics()         As StdPicture
 Public TabPics(3)           As StdPicture
 Public picDataPics(2)       As StdPicture
 Public WhichGrid            As MSHFlexGrid
-Public TicketHours(99)      As Single
-Public TicketAction(99)     As String
-Public TicketActionText(99) As String
-Public TicketDate(99)       As String
+Public TicketHours(200)      As Single
+Public TicketAction(200)     As String
+Public TicketActionText(200) As String
+Public TicketDate(200)       As String
+Public intLastEntry As Integer
 Public TotalTime            As Long
-Public LStep                As Single
+Public LStep                As Double
 Public Entry As Integer, Clicks As Integer
 Public strTimelineComments() As String
 Public Declare Function GetTickCount Lib "kernel32" () As Long
@@ -314,26 +315,26 @@ Public Function ReturnEmpInfo(strUsername As Variant) As UserInfo
 End Function
 Public Sub MySort(ByRef pvarArray As Variant)
     Dim i               As Long
-    Dim C               As Integer
+    Dim c               As Integer
     Dim v               As Integer
     Dim lngHighValIndex As Long
     Dim varSwap()       As Variant
     Dim lngMax          As Long
     ReDim varSwap(UBound(pvarArray, 1))
     lngMax = UBound(pvarArray, 2)
-    For C = 0 To lngMax
-        lngHighValIndex = lngMax - C
+    For c = 0 To lngMax
+        lngHighValIndex = lngMax - c
         For v = 0 To UBound(varSwap)
-            varSwap(v) = pvarArray(v, lngMax - C)
+            varSwap(v) = pvarArray(v, lngMax - c)
         Next v
-        For i = 0 To lngMax - C
+        For i = 0 To lngMax - c
             If pvarArray(0, i) < pvarArray(0, lngHighValIndex) Then lngHighValIndex = i
         Next
         For v = 0 To UBound(varSwap)
-            pvarArray(v, lngMax - C) = pvarArray(v, lngHighValIndex)
+            pvarArray(v, lngMax - c) = pvarArray(v, lngHighValIndex)
             pvarArray(v, lngHighValIndex) = varSwap(v)
         Next v
-    Next C
+    Next c
 End Sub
 Public Function GetINIValue(sUser As Variant) As Integer
     With m_cIni
@@ -612,7 +613,7 @@ Public Sub LoginUser(strLocalUser As String)
 End Sub
 
 Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, C As Integer
+    Dim R, c As Integer
     Dim GridImg As Image
     bolNewHistWindow = True
     dest.Redraw = False
@@ -623,7 +624,7 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     dest.BandDisplay = Source.BandDisplay
     dest.FillStyle = Source.FillStyle
     dest.FocusRect = Source.FocusRect
-    dest.GridLines = Source.GridLines
+    dest.Gridlines = Source.Gridlines
     dest.GridLinesFixed = Source.GridLinesFixed
     dest.GridLinesUnpopulated = Source.GridLinesUnpopulated
     dest.MergeCells = Source.MergeCells
@@ -637,17 +638,17 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     dest.FixedRows = 0
     dest.FixedCols = 0
     For R = 0 To Source.Rows - 1
-        For C = 0 To 2
-            dest.TextMatrix(R, C) = Source.TextMatrix(R, C)
+        For c = 0 To 2
+            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
             dest.Row = R
-            dest.Col = C
+            dest.Col = c
             Source.Row = R
-            Source.Col = C
+            Source.Col = c
             dest.CellFontBold = Source.CellFontBold
             dest.CellFontItalic = Source.CellFontItalic
             dest.CellAlignment = Source.CellAlignment
             dest.CellFontSize = Source.CellFontSize
-        Next C
+        Next c
         Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
         dest.Row = R
         dest.Col = 0
@@ -665,7 +666,7 @@ Public Sub CopyGridHistory(Source As MSHFlexGrid, dest As MSHFlexGrid)
     Source.Redraw = True
 End Sub
 Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
-    Dim R, C As Integer
+    Dim R, c As Integer
     Dim GridImg As Image
     bolNewHistWindow = False
     dest.Redraw = False
@@ -676,9 +677,9 @@ Public Sub CopyGrid(Source As MSHFlexGrid, dest As MSHFlexGrid)
     dest.FixedCols = Source.FixedCols
     'Dest.Font.Size = Source.Font.Size
     For R = 0 To Source.Rows - 1
-        For C = 0 To Source.Cols - 1
-            dest.TextMatrix(R, C) = Source.TextMatrix(R, C)
-        Next C
+        For c = 0 To Source.Cols - 1
+            dest.TextMatrix(R, c) = Source.TextMatrix(R, c)
+        Next c
         Call Form1.FlexGridRowColor(dest, R, GetFlexGridRowColor(Source, R))
     Next R
     Form1.SizeTheSheet dest

@@ -1,0 +1,17 @@
+-- Full Trigger DDL Statements
+-- Note: Only CREATE TRIGGER statements are allowed
+DELIMITER $$
+
+USE `ticketdb`$$
+
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `ticketdb`.`reports_ADEL`
+AFTER DELETE ON `ticketdb`.`reports`
+FOR EACH ROW
+-- Edit trigger body code below this line. Do not edit lines above this one
+BEGIN
+delete from reportsgroups where idReportID = old.idReportID;
+
+END$$
+

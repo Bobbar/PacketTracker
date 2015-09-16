@@ -1,0 +1,42 @@
+-- Full Trigger DDL Statements
+-- Note: Only CREATE TRIGGER statements are allowed
+DELIMITER $$
+
+USE `ticketdb`$$
+
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `ticketdb`.`SetGUIDEntry`
+BEFORE INSERT ON `ticketdb`.`packetentrydb`
+FOR EACH ROW
+-- Edit trigger body code below this line. Do not edit lines above this one
+BEGIN
+SET NEW.idGUIDEntry = UUID();
+End$$
+
+CREATE
+DEFINER=`root`@`localhost`
+TRIGGER `ticketdb`.`packetentrydb_AINS`
+AFTER INSERT ON `ticketdb`.`packetentrydb`
+FOR EACH ROW
+-- Edit trigger body code below this line. Do not edit lines above this one
+BEGIN
+IF new.idAction='CREATED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser, idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='INTRANSIT' THEN
+UPDATE `packetlist` SET idMailbox=new.idUserTo, idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='RECEIVED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser, idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='FILED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUserTo, idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='REOPENED' THEN
+UPDATE `packetlist` SET idMailbox=new.idUser, idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+IF new.idAction='NULL' THEN
+UPDATE `packetlist` SET idMailbox='NULL', idCreateDate=idCreateDate WHERE idJobNum=new.idJobNum;
+END IF;
+END$$
