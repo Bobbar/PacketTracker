@@ -2178,7 +2178,7 @@ Private Declare Function MoveWindow _
 Private bolNoHits      As Boolean
 Private intRowSel      As Integer
 Private strCommentText As String
-Private intMovement    As Integer, intMovementAccel As Integer, intMovementAccelRate As Integer
+Private intMovement    As Single, intMovementAccel As Single, intMovementAccelRate As Single
 Public Sub GetUserIndex()
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
@@ -2662,6 +2662,9 @@ Public Sub GetTimeLineData()
         DrawDayLines = True
     End If
     TicketActionText(Entry - 1) = TicketActionText(Entry - 1) + " (Ongoing)"
+    intLastEntry = Entry ' - 1
+    frmTimeLine.sldEntries.Max = Entry '- 1
+    frmTimeLine.sldEntries.Value = Entry '- 1
     HideData
 End Sub
 Public Sub SetupGrids()
@@ -3357,7 +3360,7 @@ Public Sub RefreshHistory() 'Redraws History Grid
     Dim rs      As New ADODB.Recordset
     Dim strSQL1 As String
     Dim b       As Integer
-    On Error GoTo errs
+   ' On Error GoTo errs
     If Me.ActiveControl.Name = "FlexGridHist" Then Exit Sub
     If txtJobNo.Text = "" Then Exit Sub
     If bolHasTicket = False Then Exit Sub
@@ -4654,9 +4657,10 @@ Private Sub cmdSubmit_Click()
 End Sub
 Private Sub cmdShowMore_Click()
     intMovement = 0
-    intMovementAccel = 1
-    intMovementAccelRate = 5
-    tmrReSizer.Enabled = True
+    intMovementAccel = 0.1
+    intMovementAccelRate = 0.1
+   ' tmrReSizer.Enabled = True
+   ReSizer
 End Sub
 Private Sub FlexGrid1_DblClick()
     On Error Resume Next
@@ -4803,7 +4807,7 @@ Private Sub Form_Load()
     FindMySQLDriver
     mnuAdmin.Visible = False
     mnuPopup.Visible = False
-    bolHook = True ' change to false to disable mouse hook (change to false when run in dev mode or WILL CAUSE CRASHES)
+    bolHook = False ' change to false to disable mouse hook (change to false when run in dev mode or WILL CAUSE CRASHES)
     intQryIndex = 0
     If bolHook Then
         Hook Me.hwnd, True
@@ -4905,7 +4909,7 @@ Private Sub Form_Load()
     UpdateUserList
     If ErrToss = True Then
         frmSplash.lblStatus.Caption = "ERRORS WHILE LOADING!"
-        Wait 5000
+        Wait 2000
     End If
     frmSplash.Hide
     ClearFields
@@ -5374,6 +5378,64 @@ Private Sub tmrRefresher_Timer()
     If EditMode = True Then Exit Sub
     RefreshAll
     txtDateTime.Text = Date & " " & Time
+End Sub
+Private Sub ReSizer()
+    On Error Resume Next
+    Dim Done As Boolean
+    Dim PauseTime As Integer
+    PauseTime = 0.1
+    
+    Done = False
+    Dim intOffset As Integer
+    intOffset = 1000
+    cmdShowMore.Enabled = False
+    If bolOpenForm = True Then   ' Open
+        Do Until Done
+            Form1.Height = Form1.Height + intMovement
+            DoEvents
+            If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
+            If Form1.Height + intMovement >= intFormHMax Then
+                tmrReSizer.Enabled = False
+                Done = True
+                Form1.Height = intFormHMax
+                bolOpenForm = False
+                cmdShowMore.Caption = "Hide Tabs"
+                Label17.Caption = "á"
+                SSTab1.ToolTipText = ""
+                If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
+                cmdShowMore.Enabled = True
+                Form1.Refresh
+                Exit Sub
+            End If
+            If (Form1.Height / 2) >= (intFormHMax / 2) Then intMovementAccelRate = intMovementAccelRate * -1
+            intMovement = intMovement + intMovementAccel
+            intMovementAccel = intMovementAccel + intMovementAccelRate
+            'Debug.Print intMovementAccelRate
+            Wait PauseTime
+        Loop
+    End If
+    If bolOpenForm = False Then  'Close
+        Do Until Done
+            Form1.Height = Form1.Height - intMovement
+            DoEvents
+            If Form1.Height - intMovement <= intFormHMin Then
+                tmrReSizer.Enabled = False
+                Done = True
+                Form1.Height = intFormHMin
+                bolOpenForm = True
+                cmdShowMore.Caption = "Show Tabs"
+                Label17.Caption = "â"
+                SSTab1.ToolTipText = "Click to expand"
+                If Me.Top + Me.Height > Screen.Height - 200 Then Me.Top = Screen.Height - Me.Height - intOffset
+                cmdShowMore.Enabled = True
+                Form1.Refresh
+                Exit Sub
+            End If
+            intMovement = intMovement + intMovementAccel
+            intMovementAccel = intMovementAccel + intMovementAccelRate
+            Wait PauseTime
+        Loop
+    End If
 End Sub
 Private Sub tmrReSizer_Timer()
     On Error Resume Next

@@ -1,4 +1,5 @@
 VERSION 5.00
+Object = "{6B7E6392-850A-101B-AFC0-4210102A8DA7}#1.3#0"; "comctl32.ocx"
 Object = "{831FDD16-0C5C-11D2-A9FC-0000F8754DA1}#2.1#0"; "MSCOMCTL.OCX"
 Begin VB.Form frmTimeLine 
    BackColor       =   &H00808080&
@@ -24,9 +25,9 @@ Begin VB.Form frmTimeLine
    Begin VB.CommandButton cmdDone 
       Caption         =   "Done"
       Height          =   240
-      Left            =   5400
+      Left            =   5460
       TabIndex        =   3
-      Top             =   6450
+      Top             =   6540
       Width           =   2295
    End
    Begin MSComctlLib.StatusBar StatusBar1 
@@ -44,9 +45,9 @@ Begin VB.Form frmTimeLine
    End
    Begin VB.PictureBox picWindow 
       BorderStyle     =   0  'None
-      Height          =   6975
+      Height          =   7635
       Left            =   0
-      ScaleHeight     =   6975
+      ScaleHeight     =   7635
       ScaleWidth      =   13395
       TabIndex        =   0
       TabStop         =   0   'False
@@ -83,7 +84,7 @@ Begin VB.Form frmTimeLine
          ScaleWidth      =   11895
          TabIndex        =   1
          TabStop         =   0   'False
-         Top             =   0
+         Top             =   480
          Width           =   11895
          Begin VB.Timer tmrActionShow 
             Interval        =   10
@@ -254,6 +255,20 @@ Begin VB.Form frmTimeLine
             Y2              =   5520
          End
       End
+      Begin ComctlLib.Slider sldEntries 
+         Height          =   435
+         Left            =   0
+         TabIndex        =   13
+         ToolTipText     =   "Change "
+         Top             =   0
+         Width           =   12015
+         _ExtentX        =   21193
+         _ExtentY        =   767
+         _Version        =   327682
+         Min             =   1
+         SelStart        =   1
+         Value           =   1
+      End
    End
    Begin VB.CommandButton cmdCantSeeMe 
       Caption         =   "Command1"
@@ -282,26 +297,46 @@ Dim ret As Long
 Dim a   As POINTAPI
 Dim b   As Long
 Dim c   As Long
+
+Private Function lngTotaltime(Ents As Integer) As Long
+Dim i As Integer
+Dim tmpTime As Long
+
+tmpTime = DateDiff("n", TicketDate(0), TicketDate(Ents - 1))
+
+'For i = 0 To Ents
+'
+'tmpTime = tmpTime + TicketHours(i)
+'
+'
+'
+'Next i
+lngTotaltime = tmpTime
+
+
+End Function
 Public Sub DrawTimeLine()
     Dim i, Days As Integer
     Dim DStep As Single
+    'Dim intLastEntry As Integer
+    'intLastEntry = Entry - 20
     On Error Resume Next
-    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime) ' + TicketHours(Entry - 1))
+    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (lngTotaltime(intLastEntry))  ' + TicketHours(Entry - 1))
     frmTimeLine.pbDrawArea.FillColor = &H80C0FF
-    ReDim dLine(Entry - 1)
+    ReDim dLine(intLastEntry - 1)
     dLine(0).Color = &H80C0FF
     dLine(0).Height = 300
     dLine(0).Left = 470
     dLine(0).Top = 120
     dLine(0).Width = 315
-    ReDim dGrid(Entry - 1)
+    ReDim dGrid(intLastEntry - 1)
     dGrid(0).Color = &HE0E0E0
     dGrid(0).Height = 300
     dGrid(0).Left = 0
     dGrid(0).Top = 120
     dGrid(0).Width = 11895
-    ReDim dAction(Entry - 1)
-    ReDim dNote(Entry - 1)
+    ReDim dAction(intLastEntry - 1)
+    ReDim dNote(intLastEntry - 1)
     dAction(0).Text = TicketActionText(0)
     dAction(0).Color = &H80C0FF
     dAction(0).Left = dLine(0).Left + dLine(0).Width + 200
@@ -310,9 +345,9 @@ Public Sub DrawTimeLine()
     dAction(0).Visible = True
     dNote(0).Height = 210
     dGrid(0).Width = frmTimeLine.Width
-    Days = TotalTime / 1440 '(TotalTime + TicketHours(Entry - 1)) / 1440
+    Days = lngTotaltime(intLastEntry) / 1440 'TotalTime / 1440
     Days = Round(Days, 1)
-    For i = 0 To Entry - 1
+    For i = 0 To intLastEntry - 1
         With frmTimeLine
             If i Mod 2 <> 0 Then 'number is odd
                 dGrid(i).Color = &HC0C0C0
@@ -343,9 +378,12 @@ Public Sub DrawTimeLine()
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
-            If i = Entry - 1 Then
-                dLine(i).Width = 38
-                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+            If i = intLastEntry - 1 Then
+                '                dLine(i).Width = 38
+                '                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width - 38
+                dLine(i).Width = 200
+                dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width ' - 100
+                dLine(i).FillStyle = 7
             End If
             dNote(i).Text = strTimelineComments(i)
             dNote(i).Width = frmTimeLine.pbDrawArea.TextWidth(dNote(i).Text)
@@ -390,39 +428,50 @@ Public Sub DrawTimeLine()
     dDayLine(0).X1 = 470
     dDayLine(0).X2 = 470
     For i = 1 To Days
-        dDayLine(i).Y1 = frmTimeLine.lnScale.Y1
+        '        dDayLine(i).Y1 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200 'frmTimeLine.lnScale.Y1
+        '        dDayLine(i).Y2 = dGrid(0).Top
+        '        dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
+        '        dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
+        dDayLine(i).Y1 = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200
         dDayLine(i).Y2 = dGrid(0).Top
-        dDayLine(i).X1 = dDayLine(i - 1).X1 + DStep
-        dDayLine(i).X2 = dDayLine(i - 1).X2 + DStep
+        dDayLine(i).X1 = dDayLine(0).X1 + DStep * i
+        dDayLine(i).X2 = dDayLine(0).X2 + DStep * i
     Next i
-    With frmTimeLine
-        frmTimeLine.DrawLines
-        .Image1.ZOrder 0
-    End With
+    DrawLines
+    Image1.ZOrder 0
     frmTimeLine.lblPacketAge.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 200 + 40
     If frmTimeLine.Width <= 10755 Then frmTimeLine.lblPacketAge.Left = frmTimeLine.Frame1.Left + frmTimeLine.Frame1.Width + 10
-    frmTimeLine.lblPacketAge.Caption = "Packet Age: " & (IIf((TotalTime + TicketHours(Entry - 1)) > 1440, Round((TotalTime + TicketHours(Entry - 1)) / 1440, 1) & "days", Round((TotalTime + TicketHours(Entry - 1)) / 60, 1) & "hrs"))
-    If frmTimeLine.lblPacketAge.Top + 30 >= frmTimeLine.Height Then
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 40
+    frmTimeLine.lblPacketAge.Caption = "Packet Age: " & (IIf((lngTotaltime(intLastEntry) + TicketHours(intLastEntry - 1)) > 1440, Round((lngTotaltime(intLastEntry) + TicketHours(intLastEntry - 1)) / 1440, 1) & "days", Round((lngTotaltime(intLastEntry) + TicketHours(intLastEntry - 1)) / 60, 1) & "hrs"))
+    '    If frmTimeLine.lblPacketAge.Top + 30 >= frmTimeLine.Height Then
+    '        frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 40
+    '    Else
+    '        frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+    '    End If
+    'If frmTimeLine.lblPacketAge.Top + 1100 >= frmTimeLine.Height Then
+    frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 2500
+    'Else
+    '   frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+    'End If
+    ' If frmTimeLine.Visible = True Then
+    '    frmTimeLine.VScroll1.Max = frmTimeLine.VScroll1.Max
+    ' Else
+    If frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight > 0 Then
+        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight
     Else
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+        frmTimeLine.VScroll1.Max = 0
     End If
-    If frmTimeLine.Visible = True Then
-        frmTimeLine.VScroll1.Max = frmTimeLine.VScroll1.Max
-    Else
-        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.Height - frmTimeLine.picWindow.Height
-    End If
+    ' End If
     frmTimeLine.Frame1.Top = dGrid(UBound(dGrid)).Top + dGrid(0).Height + 500
 End Sub
 Public Sub ReDrawTimeLine()
     Dim i, Days As Integer
     Dim DStep As Single
-    On Error Resume Next
-    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (TotalTime) ' + TicketHours(Entry - 1))
+    'On Error Resume Next
+    LStep = (frmTimeLine.lnScale.X2 - frmTimeLine.lnScale.X1) / (lngTotaltime(intLastEntry)) ' + TicketHours(Entry - 1))
     dGrid(0).Width = frmTimeLine.Width + 20
-    Days = TotalTime / 1440 '(TotalTime + TicketHours(Entry - 1)) / 1440
+    Days = lngTotaltime(intLastEntry) / 1440 'TotalTime / 1440
     Days = Round(Days, 1)
-    For i = 0 To Entry ' - 1
+    For i = 1 To intLastEntry - 1
         With frmTimeLine
             dGrid(i).Width = .Width
             If TicketHours(i) * LStep < 30 Then 'Less than 1 pixel wide
@@ -432,7 +481,7 @@ Public Sub ReDrawTimeLine()
                 dLine(i).Width = TicketHours(i) * LStep
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width
             End If
-            If i = Entry - 1 Then
+            If i = intLastEntry - 1 Then
                 dLine(i).Width = 200
                 dLine(i).Left = dLine(i - 1).Left + dLine(i - 1).Width ' - 100
                 dLine(i).FillStyle = 7
@@ -472,12 +521,16 @@ Public Sub ReDrawTimeLine()
             dDayLine(i).X2 = dDayLine(0).X2 + DStep * i
         Next i
     End If
-    If frmTimeLine.lblPacketAge.Top + 1100 >= frmTimeLine.Height Then
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 2500
+    ' If frmTimeLine.lblPacketAge.Top + 1100 >= frmTimeLine.Height Then
+    frmTimeLine.pbDrawArea.Height = frmTimeLine.lblPacketAge.Top + 2500
+    'Else
+    '  frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+    ' End If
+    If frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight > 0 Then
+        frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight
     Else
-        frmTimeLine.pbDrawArea.Height = frmTimeLine.picWindow.Height
+        frmTimeLine.VScroll1.Max = 0
     End If
-    frmTimeLine.VScroll1.Max = frmTimeLine.pbDrawArea.ScaleHeight - frmTimeLine.picWindow.ScaleHeight
     DrawLines
 End Sub
 Public Sub DrawLines()
@@ -577,10 +630,12 @@ End Sub
 Private Sub chkShowAll_Click()
     If chkShowAll.Value = 0 Then
         tmrActionShow.Enabled = True
+        DrawTimeLine
+        'ReDrawTimeLine
     Else
         tmrActionShow.Enabled = False
         DrawTimeLine
-        ReDrawTimeLine
+        'ReDrawTimeLine
     End If
 End Sub
 Private Sub cmdDone_Click()
@@ -615,7 +670,7 @@ Private Sub CoordinateMouse()
     b = a.X * Screen.TwipsPerPixelX
     c = a.Y * Screen.TwipsPerPixelY
     MouseX = b
-    MouseY = c + VScroll1.Value
+    MouseY = c + VScroll1.Value - sldEntries.Height
 End Sub
 Private Sub Form_QueryUnload(Cancel As Integer, UnloadMode As Integer)
     UnloadControls
@@ -623,9 +678,11 @@ End Sub
 Private Sub Form_Resize()
     On Error Resume Next
     'Me.Height = 7320
+    If frmTimeLine.Width < (Frame1.Width + Frame1.Left + 550) Then frmTimeLine.Width = (Frame1.Width + Frame1.Left + 550)
     picWindow.Left = 0
     picWindow.Width = (frmTimeLine.Width) ' - VScroll1.Width)
     picWindow.Height = frmTimeLine.Height - StatusBar1.Height
+    sldEntries.Width = frmTimeLine.Width - (VScroll1.Width * 2)
     'pbDrawArea.Height = picWindow.Height
     pbDrawArea.Left = 0
     pbDrawArea.Width = picWindow.Width - VScroll1.Width * 2
@@ -644,6 +701,7 @@ Private Sub Form_Resize()
     pbDrawArea.Refresh
     'cmdCantSeeMe.SetFocus
 End Sub
+
 Private Sub pbDrawArea_MouseMove(Button As Integer, _
                                  Shift As Integer, _
                                  X As Single, _
@@ -698,16 +756,26 @@ Private Sub pbDrawArea_MouseMove(Button As Integer, _
     End If
 End Sub
 
+Private Sub sldEntries_Scroll()
+intLastEntry = sldEntries.Value
+
+
+DrawTimeLine
+
+'ReDrawTimeLine
+
+End Sub
+
 Private Sub tmrActionShow_Timer()
 Call CoordinateMouse
 End Sub
 
 Private Sub VScroll1_Change()
-    pbDrawArea.Top = -(VScroll1.Value)
+    pbDrawArea.Top = -(VScroll1.Value) + sldEntries.Height
     pbDrawArea.Refresh
     cmdCantSeeMe.SetFocus
 End Sub
 Private Sub VScroll1_Scroll()
-    pbDrawArea.Top = -(VScroll1.Value)
+    pbDrawArea.Top = -(VScroll1.Value) + sldEntries.Height
     pbDrawArea.Refresh
 End Sub
